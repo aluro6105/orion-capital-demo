@@ -98,11 +98,11 @@ export default function HomePage() {
   const [openFaq, setOpenFaq] = useState(null);
 
   const displayFaqs = faqs.length > 0 ? faqs.slice(0, 5) : [
-    { id: 1, question: '¿Cómo abro una cuenta?', answer: 'Registro en menos de 30 segundos. Tu cuenta demo con $10,000 queda activada inmediatamente.' },
-    { id: 2, question: '¿Los precios son datos reales de mercado?', answer: 'Sí, usamos datos de mercado de alta fidelidad via WebSocket con actualizaciones tick a tick.' },
-    { id: 3, question: '¿Qué instrumentos están disponibles?', answer: 'Acciones (AAPL, MSFT, NVDA...), ETFs (SPY, QQQ), Forex (EUR/USD) y Crypto (BTC, ETH). Más de 15 instrumentos.' },
-    { id: 4, question: '¿Cuánto capital tiene la cuenta demo?', answer: 'La cuenta demo se activa con $10,000 virtuales. Puedes resetearla desde el dashboard en cualquier momento.' },
-    { id: 5, question: '¿Hay comisiones?', answer: 'Sin comisiones ocultas. Sin letra pequeña. Siempre transparentes con nuestros usuarios.' },
+    { id: 1, question: '¿Cómo abro una cuenta en NEXUS?', answer: 'Registro en menos de 30 segundos. Tu cuenta demo con $10,000 queda activada inmediatamente, sin ningún depósito previo.' },
+    { id: 2, question: '¿Los precios son datos reales de mercado?', answer: 'Sí, NEXUS utiliza datos de mercado de alta fidelidad con actualizaciones en tiempo real para ofrecerte una experiencia lo más cercana posible al mercado real.' },
+    { id: 3, question: '¿Qué instrumentos están disponibles en NEXUS?', answer: 'Acciones (AAPL, MSFT, NVDA...), Fondos cotizados (SPY, QQQ), Divisas (EUR/USD) y Criptomonedas (BTC, ETH). Más de 15 instrumentos disponibles.' },
+    { id: 4, question: '¿Cuánto capital tiene la cuenta demo?', answer: 'La cuenta demo de NEXUS se activa con $10,000 virtuales. Puedes resetearla desde el panel de control en cualquier momento.' },
+    { id: 5, question: '¿Existen comisiones en NEXUS?', answer: 'Sin comisiones ocultas ni letra pequeña. NEXUS es completamente transparente con sus usuarios en todo momento.' },
   ];
 
   return (
@@ -466,18 +466,26 @@ export default function HomePage() {
               <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Premios & Logros</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {awards.slice(0, 6).map(a => (
-                <div key={a.id} className="flex items-start gap-4 bg-white border border-gray-100 rounded-2xl p-5 hover:border-amber-200 hover:shadow-md transition-all group">
-                  <div className="w-11 h-11 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                    <Award className="h-5 w-5 text-amber-500" />
+              {awards.slice(0, 6).map((a, idx) => {
+                const awardIcons = [Trophy, Medal, BadgeCheck, Gem, Award, StarIcon];
+                const awardColors = ['#f59e0b', '#2196F3', '#00C853', '#7C3AED', '#ef5350', '#06b6d4'];
+                const awardBgs = ['#f59e0b15', '#2196F315', '#00C85315', '#7C3AED15', '#ef535015', '#06b6d415'];
+                const AIcon = awardIcons[idx % awardIcons.length];
+                const aColor = awardColors[idx % awardColors.length];
+                const aBg = awardBgs[idx % awardBgs.length];
+                return (
+                  <div key={a.id} className="flex items-start gap-4 bg-white border border-gray-100 rounded-2xl p-5 hover:shadow-md transition-all group" style={{ borderColor: 'transparent' }} onMouseEnter={e => e.currentTarget.style.borderColor = aColor + '40'} onMouseLeave={e => e.currentTarget.style.borderColor = 'transparent'}>
+                    <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform border" style={{ background: aBg, borderColor: aColor + '30' }}>
+                      <AIcon className="h-5 w-5" style={{ color: aColor }} />
+                    </div>
+                    <div>
+                      <div className="font-bold text-gray-900 text-sm mb-0.5">{a.title}</div>
+                      <div className="text-xs font-semibold" style={{ color: aColor }}>{a.issuer} · {a.year}</div>
+                      {a.description && <p className="text-xs text-gray-400 mt-1.5 leading-relaxed line-clamp-2">{a.description}</p>}
+                    </div>
                   </div>
-                  <div>
-                    <div className="font-bold text-gray-900 text-sm mb-0.5">{a.title}</div>
-                    <div className="text-xs text-amber-500">{a.issuer} · {a.year}</div>
-                    {a.description && <p className="text-xs text-gray-400 mt-1.5 leading-relaxed line-clamp-2">{a.description}</p>}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
