@@ -14,7 +14,7 @@ export default function PublicFooter() {
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#2196F3] to-[#7C3AED] flex items-center justify-center">
                 <BarChart3 className="h-4 w-4 text-white" />
               </div>
-              <span className="font-bold text-white text-sm">Nexus</span>
+              <span className="font-black text-white text-sm tracking-widest">NEXUS</span>
             </div>
             <p className="text-xs text-white/40 leading-relaxed">
               La plataforma de trading más avanzada. Tecnología institucional al alcance de todos.
@@ -71,8 +71,8 @@ export default function PublicFooter() {
         </div>
 
         <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-white/25">© 2026 Nexus Trading. Todos los derechos reservados.</p>
-          <p className="text-xs text-white/25">Nexus · Trading · Markets</p>
+          <p className="text-xs text-white/25">© 2026 NEXUS Trading. Todos los derechos reservados.</p>
+          <p className="text-xs text-white/25">NEXUS · Trading · Markets</p>
         </div>
       </div>
     </footer>
