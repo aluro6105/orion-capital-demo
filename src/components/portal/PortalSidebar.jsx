@@ -19,6 +19,7 @@ const NAV = [
   { label: 'Messages', page: 'Portal_Messages', icon: MessageSquare },
   { label: 'Support', page: 'Portal_Support', icon: HelpCircle },
   { label: 'Settings', page: 'Portal_Settings', icon: Settings },
+  { label: 'Admin', page: 'Admin', icon: Settings, adminOnly: true },
 ];
 
 export default function PortalSidebar({ currentPage, onClose }) {

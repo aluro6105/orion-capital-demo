@@ -1,174 +1,254 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
+import PortalLayout from '../components/portal/PortalLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Save, Shield, Users, Settings } from 'lucide-react';
+import {
+  Settings, Award, MessageSquare, HelpCircle, Users, Plus, Trash2, CheckCircle2, XCircle, Edit3, Save
+} from 'lucide-react';
 import { toast } from 'sonner';
 
-export default function AdminPage() {
-  const queryClient = useQueryClient();
-  const [saving, setSaving] = useState(false);
+const TABS = [
+  { id: 'settings', label: 'Configuración', icon: Settings },
+  { id: 'awards', label: 'Premios', icon: Award },
+  { id: 'testimonials', label: 'Testimonios', icon: MessageSquare },
+  { id: 'faqs', label: 'FAQs', icon: HelpCircle },
+  { id: 'instruments', label: 'Instrumentos', icon: Users },
+];
 
-  const { data: user } = useQuery({
-    queryKey: ['me'],
-    queryFn: () => base44.auth.me(),
-  });
-
-  const { data: adminSettings } = useQuery({
+function SettingsTab() {
+  const { data: settings = [] } = useQuery({
     queryKey: ['admin-settings'],
     queryFn: () => base44.entities.AdminSettings.list(),
-    initialData: [],
   });
+  const qc = useQueryClient();
+  const cfg = settings[0];
+  const [form, setForm] = useState({ cash_default: 100000, fee_type: 'fixed', fee_value: 0 });
 
-  const { data: users } = useQuery({
-    queryKey: ['users'],
-    queryFn: () => base44.entities.User.list(),
-    initialData: [],
-  });
+  useEffect(() => { if (cfg) setForm({ cash_default: cfg.cash_default || 100000, fee_type: cfg.fee_type || 'fixed', fee_value: cfg.fee_value || 0 }); }, [cfg]);
 
-  const settings = adminSettings?.[0];
-
-  const [form, setForm] = useState({
-    cash_default: 100000,
-    fee_type: 'fixed',
-    fee_value: 0,
-    max_ws_symbols_per_user: 20,
-  });
-
-  useEffect(() => {
-    if (settings) {
-      setForm({
-        cash_default: settings.cash_default || 100000,
-        fee_type: settings.fee_type || 'fixed',
-        fee_value: settings.fee_value || 0,
-        max_ws_symbols_per_user: settings.max_ws_symbols_per_user || 20,
-      });
-    }
-  }, [settings]);
-
-  const handleSave = async () => {
-    setSaving(true);
-    if (settings) {
-      await base44.entities.AdminSettings.update(settings.id, form);
-    } else {
-      await base44.entities.AdminSettings.create(form);
-    }
-    queryClient.invalidateQueries({ queryKey: ['admin-settings'] });
-    toast.success('Admin settings saved');
-    setSaving(false);
+  const save = async () => {
+    if (cfg) await base44.entities.AdminSettings.update(cfg.id, form);
+    else await base44.entities.AdminSettings.create(form);
+    qc.invalidateQueries({ queryKey: ['admin-settings'] });
+    toast.success('Configuración guardada');
   };
 
-  if (user && user.role !== 'admin') {
-    return (
-      <div className="min-h-screen bg-[#131722] text-white flex items-center justify-center">
-        <div className="text-center">
-          <Shield className="h-16 w-16 text-[#787b86] mx-auto mb-4" />
-          <h1 className="text-xl font-bold mb-2">Admin Access Required</h1>
-          <p className="text-[#787b86] text-sm">You need admin privileges to access this page.</p>
+  return (
+    <div className="space-y-6 max-w-lg">
+      <div className="bg-[#0f1117] border border-[#1e2130] rounded-xl p-5 space-y-4">
+        <h3 className="font-semibold text-white">Cuenta Demo</h3>
+        <div>
+          <Label className="text-xs text-[#8b8fa8] uppercase">Capital inicial por defecto ($)</Label>
+          <Input type="number" value={form.cash_default} onChange={e => setForm(p => ({ ...p, cash_default: +e.target.value }))}
+            className="mt-1 bg-[#131722] border-[#1e2130] text-white" />
         </div>
       </div>
-    );
-  }
+      <div className="bg-[#0f1117] border border-[#1e2130] rounded-xl p-5 space-y-4">
+        <h3 className="font-semibold text-white">Comisiones simuladas</h3>
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <Label className="text-xs text-[#8b8fa8] uppercase">Tipo</Label>
+            <Select value={form.fee_type} onValueChange={v => setForm(p => ({ ...p, fee_type: v }))}>
+              <SelectTrigger className="mt-1 bg-[#131722] border-[#1e2130] text-white"><SelectValue /></SelectTrigger>
+              <SelectContent className="bg-[#1e2130] border-[#2a2e3f]">
+                <SelectItem value="fixed" className="text-white">Fijo ($)</SelectItem>
+                <SelectItem value="percentage" className="text-white">Porcentaje (%)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div>
+            <Label className="text-xs text-[#8b8fa8] uppercase">Valor</Label>
+            <Input type="number" step="0.01" value={form.fee_value} onChange={e => setForm(p => ({ ...p, fee_value: +e.target.value }))}
+              className="mt-1 bg-[#131722] border-[#1e2130] text-white" />
+          </div>
+        </div>
+      </div>
+      <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4">
+        <p className="text-xs text-amber-400">⚠️ Las API keys del proveedor WebSocket se configuran en el backend para máxima seguridad. Nunca se exponen al frontend.</p>
+      </div>
+      <Button onClick={save} className="bg-[#2196F3] hover:bg-[#1976D2]"><Save className="h-4 w-4 mr-1.5" /> Guardar</Button>
+    </div>
+  );
+}
+
+function AwardsTab() {
+  const { data: awards = [] } = useQuery({ queryKey: ['awards-admin'], queryFn: () => base44.entities.Award.list() });
+  const qc = useQueryClient();
+  const [form, setForm] = useState({ title: '', year: new Date().getFullYear(), issuer: '', description: '', category: 'innovation', is_active: true });
+  const [editing, setEditing] = useState(null);
+
+  const save = async () => {
+    if (editing) await base44.entities.Award.update(editing, form);
+    else await base44.entities.Award.create(form);
+    qc.invalidateQueries({ queryKey: ['awards-admin'] });
+    toast.success(editing ? 'Premio actualizado' : 'Premio creado');
+    setForm({ title: '', year: new Date().getFullYear(), issuer: '', description: '', category: 'innovation', is_active: true });
+    setEditing(null);
+  };
 
   return (
-    <div className="min-h-screen bg-[#131722] text-white">
-      <div className="max-w-3xl mx-auto px-4 py-8">
-        <div className="flex items-center gap-3 mb-6">
-          <Shield className="h-7 w-7 text-[#2196F3]" />
-          <h1 className="text-3xl font-bold">Admin Panel</h1>
+    <div className="space-y-5">
+      <div className="bg-[#0f1117] border border-[#1e2130] rounded-xl p-5 space-y-3">
+        <h3 className="font-semibold text-white text-sm">{editing ? 'Editar premio' : 'Añadir premio'}</h3>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="col-span-2"><Label className="text-xs text-[#8b8fa8]">Título</Label><Input value={form.title} onChange={e => setForm(p => ({...p, title: e.target.value}))} className="mt-1 bg-[#131722] border-[#1e2130] text-white" /></div>
+          <div><Label className="text-xs text-[#8b8fa8]">Año</Label><Input type="number" value={form.year} onChange={e => setForm(p => ({...p, year: +e.target.value}))} className="mt-1 bg-[#131722] border-[#1e2130] text-white" /></div>
+          <div><Label className="text-xs text-[#8b8fa8]">Emisor</Label><Input value={form.issuer} onChange={e => setForm(p => ({...p, issuer: e.target.value}))} className="mt-1 bg-[#131722] border-[#1e2130] text-white" /></div>
+          <div className="col-span-2"><Label className="text-xs text-[#8b8fa8]">Descripción</Label><Textarea value={form.description} onChange={e => setForm(p => ({...p, description: e.target.value}))} rows={2} className="mt-1 bg-[#131722] border-[#1e2130] text-white resize-none" /></div>
         </div>
-
-        <Card className="bg-[#1e222d] border-[#2a2e39] mb-6">
-          <CardHeader className="border-b border-[#2a2e39]">
-            <CardTitle className="text-lg flex items-center gap-2 text-white">
-              <Settings className="h-5 w-5" /> Platform Settings
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-5 space-y-4">
-            <div>
-              <Label className="text-xs text-[#787b86] uppercase">Default Starting Cash</Label>
-              <Input
-                type="number" value={form.cash_default}
-                onChange={e => setForm(p => ({ ...p, cash_default: parseFloat(e.target.value) }))}
-                className="mt-1 bg-[#131722] border-[#2a2e39] text-white font-mono"
-              />
+        <div className="flex gap-2">
+          <Button onClick={save} className="bg-[#2196F3] hover:bg-[#1976D2] text-xs"><Plus className="h-3.5 w-3.5 mr-1" />{editing ? 'Actualizar' : 'Añadir'}</Button>
+          {editing && <Button variant="outline" onClick={() => { setEditing(null); setForm({ title: '', year: new Date().getFullYear(), issuer: '', description: '', category: 'innovation', is_active: true }); }} className="border-[#1e2130] text-[#d1d4dc] text-xs">Cancelar</Button>}
+        </div>
+      </div>
+      <div className="space-y-2">
+        {awards.map(a => (
+          <div key={a.id} className="flex items-center gap-3 p-3 bg-[#0f1117] border border-[#1e2130] rounded-xl">
+            <div className="flex-1">
+              <div className="text-sm font-semibold text-white">{a.title}</div>
+              <div className="text-xs text-[#8b8fa8]">{a.issuer} · {a.year}</div>
             </div>
-            <div>
-              <Label className="text-xs text-[#787b86] uppercase">Fee Type</Label>
-              <Select value={form.fee_type} onValueChange={v => setForm(p => ({ ...p, fee_type: v }))}>
-                <SelectTrigger className="mt-1 bg-[#131722] border-[#2a2e39] text-white">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="bg-[#1e222d] border-[#2a2e39]">
-                  <SelectItem value="fixed" className="text-[#d1d4dc]">Fixed ($)</SelectItem>
-                  <SelectItem value="percentage" className="text-[#d1d4dc]">Percentage (%)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label className="text-xs text-[#787b86] uppercase">Fee Value ({form.fee_type === 'fixed' ? '$' : '%'})</Label>
-              <Input
-                type="number" step="0.01" value={form.fee_value}
-                onChange={e => setForm(p => ({ ...p, fee_value: parseFloat(e.target.value) }))}
-                className="mt-1 bg-[#131722] border-[#2a2e39] text-white font-mono"
-              />
-            </div>
-            <div>
-              <Label className="text-xs text-[#787b86] uppercase">Max Symbols per User (Watchlist)</Label>
-              <Input
-                type="number" value={form.max_ws_symbols_per_user}
-                onChange={e => setForm(p => ({ ...p, max_ws_symbols_per_user: parseInt(e.target.value) }))}
-                className="mt-1 bg-[#131722] border-[#2a2e39] text-white font-mono"
-              />
-            </div>
-            <Button onClick={handleSave} disabled={saving} className="bg-[#2196F3] hover:bg-[#2196F3]/90">
-              <Save className="h-4 w-4 mr-2" /> Save Settings
-            </Button>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-[#1e222d] border-[#2a2e39]">
-          <CardHeader className="border-b border-[#2a2e39]">
-            <CardTitle className="text-lg flex items-center gap-2 text-white">
-              <Users className="h-5 w-5" /> Users ({users.length})
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="text-[#787b86] text-xs uppercase border-b border-[#2a2e39]">
-                    <th className="text-left p-3 font-medium">Name</th>
-                    <th className="text-left p-3 font-medium">Email</th>
-                    <th className="text-left p-3 font-medium">Role</th>
-                    <th className="text-left p-3 font-medium">Joined</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {users.map(u => (
-                    <tr key={u.id} className="border-t border-[#131722] hover:bg-[#2a2e39]/30">
-                      <td className="p-3 text-white font-medium">{u.full_name || '—'}</td>
-                      <td className="p-3 text-[#d1d4dc]">{u.email}</td>
-                      <td className="p-3">
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
-                          u.role === 'admin' ? 'bg-[#2196F3]/20 text-[#2196F3]' : 'bg-[#787b86]/20 text-[#787b86]'
-                        }`}>{u.role}</span>
-                      </td>
-                      <td className="p-3 text-[#787b86] text-xs font-mono">
-                        {u.created_date ? new Date(u.created_date).toLocaleDateString() : '—'}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </CardContent>
-        </Card>
+            <button onClick={() => { setEditing(a.id); setForm({ title: a.title, year: a.year, issuer: a.issuer, description: a.description || '', category: a.category || 'innovation', is_active: a.is_active !== false }); }}
+              className="p-1.5 rounded hover:bg-[#1e2130] text-[#8b8fa8] hover:text-white"><Edit3 className="h-3.5 w-3.5" /></button>
+            <button onClick={async () => { await base44.entities.Award.delete(a.id); qc.invalidateQueries({ queryKey: ['awards-admin'] }); toast.success('Eliminado'); }}
+              className="p-1.5 rounded hover:bg-[#ef5350]/10 text-[#8b8fa8] hover:text-[#ef5350]"><Trash2 className="h-3.5 w-3.5" /></button>
+          </div>
+        ))}
       </div>
     </div>
   );
+}
+
+function TestimonialsTab() {
+  const { data: testimonials = [] } = useQuery({ queryKey: ['testimonials-admin'], queryFn: () => base44.entities.Testimonial.list() });
+  const qc = useQueryClient();
+
+  const toggle = async (t) => {
+    await base44.entities.Testimonial.update(t.id, { approved: !t.approved });
+    qc.invalidateQueries({ queryKey: ['testimonials-admin'] });
+    toast.success(t.approved ? 'Desaprobado' : 'Aprobado');
+  };
+  const del = async (id) => {
+    await base44.entities.Testimonial.delete(id);
+    qc.invalidateQueries({ queryKey: ['testimonials-admin'] });
+    toast.success('Eliminado');
+  };
+
+  return (
+    <div className="space-y-2">
+      {testimonials.length === 0 && <p className="text-sm text-[#8b8fa8] text-center py-8">No hay testimonios aún.</p>}
+      {testimonials.map(t => (
+        <div key={t.id} className="flex items-start gap-3 p-4 bg-[#0f1117] border border-[#1e2130] rounded-xl">
+          <div className="flex-1">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold text-white">{t.name}</span>
+              <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${t.approved ? 'bg-[#26a69a]/20 text-[#26a69a]' : 'bg-yellow-500/20 text-yellow-400'}`}>
+                {t.approved ? 'APROBADO' : 'PENDIENTE'}
+              </span>
+            </div>
+            <div className="text-xs text-[#8b8fa8]">{t.role}{t.company ? ` · ${t.company}` : ''}</div>
+            <p className="text-xs text-white/60 mt-1.5 italic">"{t.text?.slice(0, 120)}…"</p>
+          </div>
+          <div className="flex gap-1">
+            <button onClick={() => toggle(t)} className={`p-1.5 rounded transition-colors ${t.approved ? 'hover:bg-[#ef5350]/10 text-[#26a69a] hover:text-[#ef5350]' : 'hover:bg-[#26a69a]/10 text-[#8b8fa8] hover:text-[#26a69a]'}`}>
+              {t.approved ? <XCircle className="h-4 w-4" /> : <CheckCircle2 className="h-4 w-4" />}
+            </button>
+            <button onClick={() => del(t.id)} className="p-1.5 rounded hover:bg-[#ef5350]/10 text-[#8b8fa8] hover:text-[#ef5350]"><Trash2 className="h-4 w-4" /></button>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function FaqsTab() {
+  const { data: faqs = [] } = useQuery({ queryKey: ['faqs-admin'], queryFn: () => base44.entities.Faq.list() });
+  const qc = useQueryClient();
+  const [form, setForm] = useState({ category: 'cuenta', question: '', answer: '', order_index: 0, is_active: true });
+  const [editing, setEditing] = useState(null);
+
+  const save = async () => {
+    if (!form.question || !form.answer) { toast.error('Pregunta y respuesta requeridas'); return; }
+    if (editing) await base44.entities.Faq.update(editing, form);
+    else await base44.entities.Faq.create(form);
+    qc.invalidateQueries({ queryKey: ['faqs-admin'] });
+    toast.success(editing ? 'FAQ actualizado' : 'FAQ creado');
+    setForm({ category: 'cuenta', question: '', answer: '', order_index: 0, is_active: true });
+    setEditing(null);
+  };
+
+  return (
+    <div className="space-y-5">
+      <div className="bg-[#0f1117] border border-[#1e2130] rounded-xl p-5 space-y-3">
+        <h3 className="font-semibold text-white text-sm">{editing ? 'Editar FAQ' : 'Añadir FAQ'}</h3>
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <Label className="text-xs text-[#8b8fa8]">Categoría</Label>
+            <Select value={form.category} onValueChange={v => setForm(p => ({...p, category: v}))}>
+              <SelectTrigger className="mt-1 bg-[#131722] border-[#1e2130] text-white text-sm"><SelectValue /></SelectTrigger>
+              <SelectContent className="bg-[#1e2130] border-[#2a2e3f]">
+                {['cuenta','mercado','trading','seguridad','precios'].map(c => <SelectItem key={c} value={c} className="text-white text-sm capitalize">{c}</SelectItem>)}
+              </SelectContent>
+            </Select>
+          </div>
+          <div><Label className="text-xs text-[#8b8fa8]">Orden</Label><Input type="number" value={form.order_index} onChange={e => setForm(p => ({...p, order_index: +e.target.value}))} className="mt-1 bg-[#131722] border-[#1e2130] text-white" /></div>
+          <div className="col-span-2"><Label className="text-xs text-[#8b8fa8]">Pregunta</Label><Input value={form.question} onChange={e => setForm(p => ({...p, question: e.target.value}))} className="mt-1 bg-[#131722] border-[#1e2130] text-white" /></div>
+          <div className="col-span-2"><Label className="text-xs text-[#8b8fa8]">Respuesta</Label><Textarea value={form.answer} onChange={e => setForm(p => ({...p, answer: e.target.value}))} rows={3} className="mt-1 bg-[#131722] border-[#1e2130] text-white resize-none" /></div>
+        </div>
+        <div className="flex gap-2">
+          <Button onClick={save} className="bg-[#2196F3] hover:bg-[#1976D2] text-xs"><Plus className="h-3.5 w-3.5 mr-1" />{editing ? 'Actualizar' : 'Añadir'}</Button>
+          {editing && <Button variant="outline" onClick={() => { setEditing(null); setForm({ category: 'cuenta', question: '', answer: '', order_index: 0, is_active: true }); }} className="border-[#1e2130] text-[#d1d4dc] text-xs">Cancelar</Button>}
+        </div>
+      </div>
+      <div className="space-y-2">
+        {faqs.map(f => (
+          <div key={f.id} className="flex items-center gap-3 p-3 bg-[#0f1117] border border-[#1e2130] rounded-xl">
+            <div className="flex-1">
+              <div className="text-sm text-white">{f.question}</div>
+              <div className="text-xs text-[#8b8fa8] mt-0.5">{f.category} · orden: {f.order_index}</div>
+            </div>
+            <button onClick={() => { setEditing(f.id); setForm({ category: f.category, question: f.question, answer: f.answer, order_index: f.order_index || 0, is_active: f.is_active !== false }); }}
+              className="p-1.5 rounded hover:bg-[#1e2130] text-[#8b8fa8] hover:text-white"><Edit3 className="h-3.5 w-3.5" /></button>
+            <button onClick={async () => { await base44.entities.Faq.delete(f.id); qc.invalidateQueries({ queryKey: ['faqs-admin'] }); toast.success('Eliminado'); }}
+              className="p-1.5 rounded hover:bg-[#ef5350]/10 text-[#8b8fa8] hover:text-[#ef5350]"><Trash2 className="h-3.5 w-3.5" /></button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function AdminContent() {
+  const [tab, setTab] = useState('settings');
+  const { user } = base44.auth;
+
+  return (
+    <div className="p-6 max-w-5xl mx-auto space-y-5">
+      <h1 className="text-2xl font-bold text-white">Panel de Administración</h1>
+      <div className="flex flex-wrap gap-1 bg-[#0f1117] border border-[#1e2130] rounded-xl p-1">
+        {TABS.map(t => {
+          const Icon = t.icon;
+          return (
+            <button key={t.id} onClick={() => setTab(t.id)}
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all ${tab === t.id ? 'bg-[#2196F3]/20 text-[#2196F3]' : 'text-[#8b8fa8] hover:text-white'}`}>
+              <Icon className="h-3.5 w-3.5" /> {t.label}
+            </button>
+          );
+        })}
+      </div>
+      {tab === 'settings' && <SettingsTab />}
+      {tab === 'awards' && <AwardsTab />}
+      {tab === 'testimonials' && <TestimonialsTab />}
+      {tab === 'faqs' && <FaqsTab />}
+    </div>
+  );
+}
+
+export default function AdminPage() {
+  return <PortalLayout currentPageName="Admin"><AdminContent /></PortalLayout>;
 }
