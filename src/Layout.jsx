@@ -15,12 +15,11 @@ const PUBLIC_PAGES = ['Home', 'About', 'Product', 'Awards', 'Testimonials', 'FAQ
 const FULLSCREEN_PAGES = ['Chart'];
 
 export default function Layout({ children, currentPageName }) {
-  // Redirect root/chart default to Home
-  useEffect(() => {
-    if (currentPageName === 'Chart' && !window.location.search.includes('symbol')) {
-      window.location.href = createPageUrl('Home');
-    }
-  }, [currentPageName]);
+  // Si la página raíz es Chart sin símbolo, redirigir a Home
+  if (currentPageName === 'Chart' && !window.location.search.includes('symbol')) {
+    window.location.replace(createPageUrl('Home'));
+    return null;
+  }
 
   // Portal pages render their own complete layout
   if (PORTAL_PAGES.includes(currentPageName)) {
