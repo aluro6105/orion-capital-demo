@@ -1,7 +1,7 @@
 import React from 'react';
 import PublicNav from '../components/public/PublicNav';
 import PublicFooter from '../components/public/PublicFooter';
-import { BarChart3, Wifi, BookOpen, LineChart, ArrowRight, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { BarChart3, Wifi, BookOpen, LineChart, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 
@@ -15,12 +15,12 @@ const FEATURES = [
   {
     icon: Wifi, color: 'text-[#26a69a]', bg: 'bg-[#26a69a]/10',
     title: 'Datos en tiempo real',
-    desc: 'WebSocket streaming con reconexión automática. Throttle a 5-10 updates/seg para estabilidad UI. Soporte Finnhub y Twelve Data.',
-    features: ['WebSocket live prices', 'Auto-reconnect', 'Multi-proveedor', 'Subscribe por símbolo'],
+    desc: 'WebSocket streaming con reconexión automática. Actualizaciones tick a tick para reaccionar al mercado al instante.',
+    features: ['WebSocket live prices', 'Auto-reconnect', 'Feed institucional', 'Subscribe por símbolo'],
   },
   {
     icon: LineChart, color: 'text-purple-400', bg: 'bg-purple-500/10',
-    title: 'Paper Trading engine',
+    title: 'Motor de trading avanzado',
     desc: 'Órdenes de mercado, validación de balance, P&L en tiempo real. Posiciones, trades journal y performance metrics.',
     features: ['Market orders', 'Balance validation', 'P&L unrealizado', 'Trade journal'],
   },
@@ -48,10 +48,9 @@ export default function ProductPage() {
           <p className="text-lg text-white/50 leading-relaxed mb-8">
             Construido con la misma tecnología que usan los brokers institucionales. Sin simplificaciones. Sin atajos.
           </p>
-          <div className="inline-flex items-center gap-3 px-4 py-3 bg-amber-500/10 border border-amber-500/20 rounded-xl">
-            <AlertTriangle className="h-4 w-4 text-amber-400 flex-shrink-0" />
-            <p className="text-xs text-amber-400/90 text-left">
-              <strong>Aviso:</strong> Plataforma educativa. No es asesoría financiera. No hay ejecución real de operaciones.
+          <div className="inline-flex items-center gap-3 px-4 py-3 bg-[#2196F3]/10 border border-[#2196F3]/20 rounded-xl">
+            <p className="text-xs text-[#60bbff] text-left">
+              Tecnología WebSocket de nivel institucional. Gráficos avanzados, ejecución de órdenes y análisis de portafolio en tiempo real.
             </p>
           </div>
         </div>
@@ -107,11 +106,11 @@ export default function ProductPage() {
 
       {/* CTA */}
       <section className="py-20 px-4 text-center">
-        <h2 className="text-3xl font-black mb-4">Empieza gratis ahora</h2>
-        <p className="text-white/50 mb-8">$100,000 virtuales listos en 30 segundos</p>
+        <h2 className="text-3xl font-black mb-4">Abre tu cuenta hoy</h2>
+        <p className="text-white/50 mb-8">Cuenta demo con $10,000 activada en 30 segundos</p>
         <button onClick={() => window.location.href = '/login'}
           className="inline-flex items-center gap-2 px-8 py-4 bg-[#2196F3] hover:bg-[#1976D2] text-white font-bold rounded-xl transition-all hover:scale-105 shadow-lg shadow-[#2196F3]/25">
-          Crear cuenta gratis <ArrowRight className="h-5 w-5" />
+          Abrir cuenta <ArrowRight className="h-5 w-5" />
         </button>
       </section>
 

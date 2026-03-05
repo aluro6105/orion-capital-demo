@@ -32,7 +32,7 @@ export default function TestimonialsPage() {
         </div>
         <h1 className="text-4xl sm:text-5xl font-black mb-4">Lo que dicen nuestros usuarios</h1>
         <p className="text-white/50 max-w-xl mx-auto">
-          Más de 10,000 traders han mejorado sus habilidades con SimuTrade TV-Lite. Estas son sus historias.
+          Miles de traders operan con Nexus. Estas son sus historias.
         </p>
       </section>
 
@@ -93,11 +93,11 @@ export default function TestimonialsPage() {
 
       {/* CTA */}
       <section className="py-16 px-4 bg-[#070910] text-center">
-        <h2 className="text-2xl font-black mb-3">¿Listo para ser el próximo caso de éxito?</h2>
-        <p className="text-white/50 mb-6">Únete gratis hoy y empieza a practicar con $100,000 virtuales.</p>
+        <h2 className="text-2xl font-black mb-3">¿Listo para empezar a operar?</h2>
+        <p className="text-white/50 mb-6">Abre tu cuenta hoy con $10,000 en cuenta demo.</p>
         <button onClick={() => window.location.href = '/login'}
           className="px-8 py-3 bg-[#2196F3] hover:bg-[#1976D2] text-white font-bold rounded-xl transition-all">
-          Crear cuenta gratis
+          Abrir cuenta
         </button>
       </section>
 
