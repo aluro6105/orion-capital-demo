@@ -24,16 +24,16 @@ const TICKER_DATA = [
 ];
 
 const TRUST_BADGES = [
-  { label: 'Sin dinero real', icon: Shield },
-  { label: '$100K virtuales', icon: TrendingUp },
+  { label: '$10K en cuenta demo', icon: TrendingUp },
   { label: 'Datos en tiempo real', icon: Zap },
   { label: '+5,000 traders', icon: Users },
+  { label: 'Activación inmediata', icon: Shield },
 ];
 
 const STATS = [
-  { value: '$100K', label: 'Capital virtual de inicio' },
+  { value: '$10K', label: 'Capital de cuenta demo' },
   { value: '15+', label: 'Instrumentos disponibles' },
-  { value: '0€', label: 'Coste de la plataforma' },
+  { value: '5+', label: 'Años en el mercado' },
   { value: '<1ms', label: 'Latencia WebSocket' },
 ];
 
@@ -61,10 +61,10 @@ const FEATURES = [
   },
   {
     icon: Shield,
-    title: 'Cero riesgo, 100% aprendizaje',
-    desc: '$100,000 virtuales para practicar, equivocarte y crecer. Sin miedo, sin pérdidas reales.',
+    title: 'Cuenta demo incluida',
+    desc: '$10,000 en cuenta demo para practicar estrategias. Empieza a operar al instante, sin depósito previo.',
     accent: '#f59e0b',
-    tag: 'Paper Trading',
+    tag: 'Demo Account',
   },
 ];
 
@@ -155,7 +155,7 @@ export default function HomePage() {
             {/* badge */}
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#2196F3]/10 border border-[#2196F3]/25 text-xs text-[#60bbff] font-semibold mb-8 tracking-wide">
               <span className="w-2 h-2 rounded-full bg-[#26a69a] animate-pulse" />
-              LIVE · Paper Trading con WebSocket
+              LIVE · Datos de mercado en tiempo real
             </div>
 
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.0] tracking-tight mb-6">
@@ -166,11 +166,11 @@ export default function HomePage() {
                 </span>
               </span>
               <br />
-              <span className="text-white/90">Sin riesgo real.</span>
+              <span className="text-white/90">Con tecnología real.</span>
             </h1>
 
             <p className="text-lg sm:text-xl text-white/45 leading-relaxed mb-10 max-w-lg">
-              La plataforma de paper trading más completa. Gráficos TradingView, precios en tiempo real y métricas institucionales. <strong className="text-white/70">Gratis.</strong>
+              La plataforma de trading más completa. Gráficos avanzados, precios en tiempo real y métricas de nivel institucional. Abre tu cuenta hoy.
             </p>
 
             <div className="flex flex-wrap gap-3 mb-12">
@@ -178,7 +178,7 @@ export default function HomePage() {
                 onClick={() => window.location.href = '/login'}
                 className="group flex items-center gap-2 px-8 py-4 bg-[#2196F3] hover:bg-[#42a5f5] text-white font-bold rounded-xl transition-all text-base shadow-2xl shadow-[#2196F3]/30 hover:shadow-[#2196F3]/50 hover:scale-[1.03]"
               >
-                Empezar gratis ahora
+                Abrir cuenta ahora
                 <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </button>
               <Link
@@ -213,7 +213,7 @@ export default function HomePage() {
                 <div className="w-2.5 h-2.5 rounded-full bg-[#f59e0b]/60" />
                 <div className="w-2.5 h-2.5 rounded-full bg-[#26a69a]/60" />
                 <div className="ml-3 flex-1 h-5 bg-white/5 rounded-md px-2 flex items-center">
-                  <span className="text-[10px] text-white/20">simutrade.io/portal/charts</span>
+                  <span className="text-[10px] text-white/20">nexus.io/portal/charts</span>
                 </div>
               </div>
 
@@ -289,7 +289,7 @@ export default function HomePage() {
               {/* Portfolio mini row */}
               <div className="px-3 pb-3 flex items-center justify-between border-t border-white/5 pt-2">
                 <div className="text-[10px] text-white/30">Equity total</div>
-                <div className="text-xs font-bold text-white">$104,328.50</div>
+                <div className="text-xs font-bold text-white">$10,432.85</div>
                 <div className="text-[10px] font-bold text-[#26a69a] bg-[#26a69a]/10 px-2 py-0.5 rounded-full">+4.33%</div>
               </div>
             </div>
