@@ -24,7 +24,12 @@ export default function Layout({ children, currentPageName }) {
     return children;
   }
 
-  // Minimal layout for legacy pages (Explore, Portfolio, Trades, Settings, Admin, Summary)
+  // Public pages - no wrapper needed (they handle their own nav)
+  if (PUBLIC_PAGES.includes(currentPageName)) {
+    return children;
+  }
+
+  // Minimal layout for legacy pages
   return (
     <div className="min-h-screen bg-[#131722]">
       {children}
