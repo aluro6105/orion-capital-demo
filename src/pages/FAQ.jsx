@@ -60,7 +60,7 @@ export default function FAQPage() {
         </div>
         <h1 className="text-4xl sm:text-5xl font-black mb-4">Preguntas frecuentes</h1>
         <p className="text-white/50 max-w-xl mx-auto mb-8">
-          Todo lo que necesitas saber sobre Nexus.
+          Todo lo que necesitas saber sobre NEXUS.
         </p>
 
         {/* Search */}
