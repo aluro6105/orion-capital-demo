@@ -6,8 +6,10 @@ import React from 'react';
 const PORTAL_PAGES = [
   'Dashboard', 'Portal_Charts', 'Portal_Portfolio', 'Portal_Trades',
   'Portal_Funding', 'Portal_KYC', 'Portal_Reports', 'Portal_Messages',
-  'Portal_Support', 'Portal_Settings',
+  'Portal_Support', 'Portal_Settings', 'Admin',
 ];
+
+const PUBLIC_PAGES = ['Home', 'About', 'Product', 'Awards', 'Testimonials', 'FAQ'];
 
 const FULLSCREEN_PAGES = ['Chart'];
 
