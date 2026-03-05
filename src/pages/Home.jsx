@@ -76,9 +76,9 @@ const MARKETS = [
 ];
 
 const STEPS = [
-  { n: '1', title: 'Crea tu cuenta', desc: 'Registro en 30 segundos. Sin tarjeta. $100,000 virtuales al instante.' },
+  { n: '1', title: 'Abre tu cuenta', desc: 'Registro en 30 segundos. Cuenta demo con $10,000 activada al instante.' },
   { n: '2', title: 'Analiza mercados', desc: 'Accede a acciones, ETFs, forex y crypto con precios WebSocket en vivo.' },
-  { n: '3', title: 'Opera y mejora', desc: 'Compra, vende, analiza tu P&L y perfecciona tu estrategia sin riesgo.' },
+  { n: '3', title: 'Opera y crece', desc: 'Compra, vende, analiza tu P&L y perfecciona tu estrategia con datos reales.' },
 ];
 
 function StarRating({ rating }) {
@@ -118,10 +118,10 @@ export default function HomePage() {
   const [openFaq, setOpenFaq] = useState(null);
 
   const displayFaqs = faqs.length > 0 ? faqs.slice(0, 6) : [
-    { id: 1, question: '¿Es gratis SimuTrade TV-Lite?', answer: 'Sí, completamente gratis. Sin tarjeta de crédito ni compromisos.' },
-    { id: 2, question: '¿Los precios son reales?', answer: 'Usamos datos de mercado con alta fidelidad via WebSocket para una experiencia educativa auténtica.' },
-    { id: 3, question: '¿Puedo perder dinero real?', answer: 'No. Todo el trading se realiza con dinero virtual ($100,000 de inicio).' },
-    { id: 4, question: '¿Qué instrumentos están disponibles?', answer: 'Acciones, ETFs, Forex y Crypto. Más de 15 instrumentos en tiempo real.' },
+    { id: 1, question: '¿Cómo abro una cuenta?', answer: 'Registro en menos de 30 segundos. Tu cuenta demo con $10,000 queda activada inmediatamente.' },
+    { id: 2, question: '¿Los precios son datos reales de mercado?', answer: 'Sí, usamos datos de mercado de alta fidelidad via WebSocket con actualizaciones tick a tick.' },
+    { id: 3, question: '¿Qué instrumentos están disponibles?', answer: 'Acciones (AAPL, MSFT, NVDA...), ETFs (SPY, QQQ), Forex (EUR/USD) y Crypto (BTC, ETH). Más de 15 instrumentos.' },
+    { id: 4, question: '¿Cuánto capital tiene la cuenta demo?', answer: 'La cuenta demo se activa con $10,000 virtuales. Puedes resetearla desde el dashboard en cualquier momento.' },
   ];
 
   return (
@@ -380,18 +380,18 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <span className="text-xs font-bold text-purple-400 uppercase tracking-[0.2em] mb-4 block">Por qué SimuTrade</span>
+              <span className="text-xs font-bold text-purple-400 uppercase tracking-[0.2em] mb-4 block">Por qué Nexus</span>
               <h2 className="text-4xl sm:text-5xl font-black leading-tight mb-6">
                 Herramientas de<br /><span className="text-purple-400">nivel institucional.</span><br />Para todos.
               </h2>
               <p className="text-white/45 text-lg leading-relaxed mb-8">
-                Aprende con la misma tecnología que usan los traders profesionales. Sin costes ocultos, sin limitaciones artificiales.
+                Opera con la misma tecnología que usan los traders institucionales. Sin limitaciones artificiales.
               </p>
               <button
                 onClick={() => window.location.href = '/login'}
                 className="flex items-center gap-2 px-7 py-3.5 bg-white text-[#060810] font-bold rounded-xl hover:bg-white/90 transition-all text-sm"
               >
-                Crear cuenta gratis <ArrowRight className="h-4 w-4" />
+                Abrir cuenta <ArrowRight className="h-4 w-4" />
               </button>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -421,7 +421,7 @@ export default function HomePage() {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-14">
               <span className="text-xs font-bold text-[#26a69a] uppercase tracking-[0.2em] mb-3 block">Testimonios reales</span>
-              <h2 className="text-4xl sm:text-5xl font-black">Ellos ya operan<br />con SimuTrade</h2>
+              <h2 className="text-4xl sm:text-5xl font-black">Ellos ya operan<br />con Nexus</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {testimonials.slice(0, 6).map((t, idx) => (
@@ -521,18 +521,18 @@ export default function HomePage() {
             ¿Listo para operar<br />como un <span className="text-[#2196F3]">pro?</span>
           </h2>
           <p className="text-lg text-white/40 mb-10">
-            Sin tarjeta de crédito. Sin compromisos. $100,000 virtuales al instante.
+            Cuenta demo con $10,000 activada al instante. Sin esperas.
           </p>
           <button
             onClick={() => window.location.href = '/login'}
             className="group inline-flex items-center gap-3 px-10 py-5 bg-[#2196F3] hover:bg-[#42a5f5] text-white font-black rounded-2xl text-xl transition-all shadow-2xl shadow-[#2196F3]/30 hover:shadow-[#2196F3]/50 hover:scale-[1.04]"
           >
-            Crear cuenta gratis
+            Abrir cuenta ahora
             <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
           </button>
           <div className="flex items-center justify-center gap-6 mt-8 text-xs text-white/25">
-            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#26a69a]" />100% gratis</span>
-            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#26a69a]" />Sin riesgo real</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#26a69a]" />Cuenta demo $10K</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#26a69a]" />Datos en tiempo real</span>
             <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#26a69a]" />Activación inmediata</span>
           </div>
         </div>
