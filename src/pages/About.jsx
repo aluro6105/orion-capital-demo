@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPageUrl } from '@/utils';
 import PublicNav from '../components/public/PublicNav';
 import PublicFooter from '../components/public/PublicFooter';
 import { Zap, Target, Heart, Globe2, Cpu, Shield, Users, ArrowRight, CheckCircle2 } from 'lucide-react';
