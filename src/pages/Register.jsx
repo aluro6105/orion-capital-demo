@@ -209,14 +209,14 @@ export default function RegisterPage() {
                       onClick={() => handleChange('account_type', type)}
                       className={`p-4 rounded-lg border-2 text-left transition-all ${
                         form.account_type === type
-                          ? 'border-[#00C853] bg-[#00C853]/5'
-                          : 'border-gray-200 hover:border-gray-300'
+                          ? 'border-[#00C853] bg-[#00C853] shadow-lg shadow-[#00C853]/25'
+                          : 'border-gray-200 bg-white hover:border-gray-400 hover:bg-gray-50'
                       }`}
                     >
-                      <div className={`text-sm font-semibold mb-0.5 ${form.account_type === type ? 'text-[#00a844]' : 'text-gray-700'}`}>
+                      <div className={`text-sm font-bold mb-1 ${form.account_type === type ? 'text-white' : 'text-gray-800'}`}>
                         {label}
                       </div>
-                      <div className={`text-[11px] leading-tight ${form.account_type === type ? 'text-[#00a844]/60' : 'text-gray-400'}`}>
+                      <div className={`text-xs leading-tight font-medium ${form.account_type === type ? 'text-white/75' : 'text-gray-500'}`}>
                         {sub}
                       </div>
                     </button>
