@@ -417,7 +417,7 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <span className="text-xs font-bold text-purple-400 uppercase tracking-[0.2em] mb-4 block">Por qué Nexus</span>
+              <span className="text-xs font-bold text-purple-400 uppercase tracking-[0.2em] mb-4 block">Por qué NEXUS</span>
               <h2 className="text-4xl sm:text-5xl font-black leading-tight mb-6">
                 Herramientas de<br /><span className="text-purple-400">nivel institucional.</span><br />Para todos.
               </h2>
@@ -458,7 +458,7 @@ export default function HomePage() {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-14">
               <span className="text-xs font-bold text-[#26a69a] uppercase tracking-[0.2em] mb-3 block">Testimonios reales</span>
-              <h2 className="text-4xl sm:text-5xl font-black">Ellos ya operan<br />con Nexus</h2>
+              <h2 className="text-4xl sm:text-5xl font-black">Ellos ya operan<br />con NEXUS</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {testimonials.slice(0, 6).map((t, idx) => (
