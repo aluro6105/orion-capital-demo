@@ -136,7 +136,7 @@ export default function HomePage() {
 
             <div className="flex flex-wrap gap-3 mb-12">
               <button
-                onClick={() => window.location.href = '/login'}
+                onClick={() => window.location.href = createPageUrl('Register')}
                 className="group flex items-center gap-2 px-8 py-4 bg-[#00C853] hover:bg-[#00b34a] text-white font-bold rounded-full transition-all text-base shadow-lg shadow-[#00C853]/25 hover:scale-[1.03]"
               >
                 Únete gratis
