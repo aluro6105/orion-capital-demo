@@ -124,7 +124,7 @@ export default function ProductPage() {
         <div className="relative max-w-2xl mx-auto">
           <h2 className="text-4xl font-black mb-4 text-white">Abre tu cuenta hoy</h2>
           <p className="text-white/40 mb-8">Cuenta demo con $10,000 activada en 30 segundos</p>
-          <button onClick={() => window.location.href = '/login'}
+          <button onClick={() => window.location.href = createPageUrl('Register')}
             className="group inline-flex items-center gap-2 px-8 py-4 bg-[#00C853] hover:bg-[#00b34a] text-white font-bold rounded-full transition-all shadow-lg shadow-[#00C853]/25 hover:scale-[1.03]">
             Abrir cuenta gratis <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
           </button>
