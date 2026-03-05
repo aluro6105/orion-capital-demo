@@ -174,6 +174,54 @@ export default function RegisterPage() {
                 </div>
               </div>
 
+              {/* Contraseña */}
+              <div>
+                <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                  Contraseña <span className="text-red-400">*</span>
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-300" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    value={form.password}
+                    onChange={e => handleChange('password', e.target.value)}
+                    placeholder="Mínimo 8 caracteres"
+                    className={`${FIELD_CLASS} pl-10 pr-10`}
+                  />
+                  <button type="button" onClick={() => setShowPassword(p => !p)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+                {form.password && form.password.length < 8 && (
+                  <p className="text-xs text-red-400 mt-1">Mínimo 8 caracteres</p>
+                )}
+              </div>
+
+              {/* Confirmar contraseña */}
+              <div>
+                <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                  Confirmar contraseña <span className="text-red-400">*</span>
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-300" />
+                  <input
+                    type={showConfirm ? 'text' : 'password'}
+                    required
+                    value={form.confirm_password}
+                    onChange={e => handleChange('confirm_password', e.target.value)}
+                    placeholder="Repite tu contraseña"
+                    className={`${FIELD_CLASS} pl-10 pr-10 ${form.confirm_password && form.confirm_password !== form.password ? 'border-red-300 focus:border-red-400' : ''}`}
+                  />
+                  <button type="button" onClick={() => setShowConfirm(p => !p)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                    {showConfirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+                {form.confirm_password && form.confirm_password !== form.password && (
+                  <p className="text-xs text-red-400 mt-1">Las contraseñas no coinciden</p>
+                )}
+              </div>
+
               {/* Teléfono */}
               <div>
                 <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
