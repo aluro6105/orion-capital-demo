@@ -47,56 +47,56 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
-import Chart from './pages/Chart';
-import Explore from './pages/Explore';
-import Portfolio from './pages/Portfolio';
-import Trades from './pages/Trades';
-import Settings from './pages/Settings';
+import About from './pages/About';
 import Admin from './pages/Admin';
-import Summary from './pages/Summary';
+import Awards from './pages/Awards';
+import Chart from './pages/Chart';
 import Dashboard from './pages/Dashboard';
+import Explore from './pages/Explore';
+import FAQ from './pages/FAQ';
+import Home from './pages/Home';
 import portalCharts from './pages/Portal_Charts';
-import portalPortfolio from './pages/Portal_Portfolio';
-import portalTrades from './pages/Portal_Trades';
 import portalFunding from './pages/Portal_Funding';
 import portalKyc from './pages/Portal_KYC';
-import portalReports from './pages/Portal_Reports';
 import portalMessages from './pages/Portal_Messages';
-import portalSupport from './pages/Portal_Support';
+import portalPortfolio from './pages/Portal_Portfolio';
+import portalReports from './pages/Portal_Reports';
 import portalSettings from './pages/Portal_Settings';
-import Home from './pages/Home';
-import About from './pages/About';
+import portalSupport from './pages/Portal_Support';
+import portalTrades from './pages/Portal_Trades';
+import Portfolio from './pages/Portfolio';
 import Product from './pages/Product';
-import Awards from './pages/Awards';
+import Settings from './pages/Settings';
+import Summary from './pages/Summary';
 import Testimonials from './pages/Testimonials';
-import FAQ from './pages/FAQ';
+import Trades from './pages/Trades';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
-    "Chart": Chart,
-    "Explore": Explore,
-    "Portfolio": Portfolio,
-    "Trades": Trades,
-    "Settings": Settings,
+    "About": About,
     "Admin": Admin,
-    "Summary": Summary,
+    "Awards": Awards,
+    "Chart": Chart,
     "Dashboard": Dashboard,
+    "Explore": Explore,
+    "FAQ": FAQ,
+    "Home": Home,
     "Portal_Charts": portalCharts,
-    "Portal_Portfolio": portalPortfolio,
-    "Portal_Trades": portalTrades,
     "Portal_Funding": portalFunding,
     "Portal_KYC": portalKyc,
-    "Portal_Reports": portalReports,
     "Portal_Messages": portalMessages,
-    "Portal_Support": portalSupport,
+    "Portal_Portfolio": portalPortfolio,
+    "Portal_Reports": portalReports,
     "Portal_Settings": portalSettings,
-    "Home": Home,
-    "About": About,
+    "Portal_Support": portalSupport,
+    "Portal_Trades": portalTrades,
+    "Portfolio": Portfolio,
     "Product": Product,
-    "Awards": Awards,
+    "Settings": Settings,
+    "Summary": Summary,
     "Testimonials": Testimonials,
-    "FAQ": FAQ,
+    "Trades": Trades,
 }
 
 export const pagesConfig = {

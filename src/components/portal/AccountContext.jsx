@@ -37,8 +37,8 @@ export function AccountProvider({ children }) {
       user_id: user.id,
       user_email: user.email,
       type: 'DEMO',
-      cash_balance: 100000,
-      starting_cash: 100000,
+      cash_balance: 10000,
+      starting_cash: 10000,
       display_name: `${user.full_name || user.email.split('@')[0]} — DEMO`,
       status: 'active',
     });

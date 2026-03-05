@@ -11,9 +11,9 @@ const TEAM = [
 ];
 
 const VALUES = [
-  { icon: Target, title: 'Educación primero', desc: 'Cada función está diseñada para enseñar, no para vender.', color: 'text-[#2196F3]', bg: 'bg-[#2196F3]/10' },
-  { icon: Shield, title: 'Transparencia total', desc: 'Sin ejecución real. Sin asesoría encubierta. Siempre claros.', color: 'text-[#26a69a]', bg: 'bg-[#26a69a]/10' },
-  { icon: Zap, title: 'Tecnología real', desc: 'La misma tecnología que usan los brokers profesionales.', color: 'text-purple-400', bg: 'bg-purple-500/10' },
+  { icon: Target, title: 'Tecnología de primer nivel', desc: 'La misma infraestructura que usan los brokers institucionales, en tus manos.', color: 'text-[#2196F3]', bg: 'bg-[#2196F3]/10' },
+  { icon: Shield, title: 'Transparencia', desc: 'Sin costes ocultos. Sin letra pequeña. Siempre claros con nuestros usuarios.', color: 'text-[#26a69a]', bg: 'bg-[#26a69a]/10' },
+  { icon: Zap, title: 'Velocidad real', desc: 'WebSocket tick a tick, latencia mínima, actualizaciones en tiempo real.', color: 'text-purple-400', bg: 'bg-purple-500/10' },
   { icon: Heart, title: 'Comunidad', desc: 'Construido por traders para traders. Escuchamos a nuestra comunidad.', color: 'text-pink-400', bg: 'bg-pink-500/10' },
 ];
 
@@ -28,10 +28,10 @@ export default function AboutPage() {
         <div className="relative max-w-3xl mx-auto">
           <div className="inline-block text-xs font-semibold text-purple-400 uppercase tracking-widest mb-4">Quiénes somos</div>
           <h1 className="text-4xl sm:text-5xl font-black mb-6 leading-tight">
-            Democratizando el <span className="bg-gradient-to-r from-[#2196F3] to-purple-400 bg-clip-text text-transparent">aprendizaje</span> en trading
+            Tecnología de <span className="bg-gradient-to-r from-[#2196F3] to-purple-400 bg-clip-text text-transparent">trading</span> para todos
           </h1>
           <p className="text-lg text-white/50 leading-relaxed">
-            Somos un equipo de traders, ingenieros y educadores unidos por una misión: hacer que el aprendizaje del trading sea accesible, seguro y profesional para todos.
+            Somos un equipo de traders e ingenieros unidos por una misión: dar acceso a tecnología institucional de mercados financieros a cualquier persona del mundo.
           </p>
         </div>
       </section>
@@ -67,7 +67,7 @@ export default function AboutPage() {
               { year: '2022', title: 'El inicio', desc: 'Alejandro y María, ambos frustrados con la falta de herramientas educativas de trading de calidad, deciden construir lo que siempre quisieron tener.' },
               { year: '2023', title: 'Primer prototipo', desc: 'Lanzamos la beta privada con 200 usuarios. El feedback fue brutal pero revelador: la gente quería algo que se sintiera "real".' },
               { year: '2024', title: 'WebSocket & tiempo real', desc: 'Integramos streaming de datos via WebSocket. La plataforma empieza a sentirse como un broker de verdad. Llegamos a 10,000 usuarios.' },
-              { year: '2025', title: 'SimuTrade TV-Lite', desc: 'Rediseño completo inspirado en TradingView. Nuevo motor de paper trading, métricas avanzadas y la interfaz que tienes delante ahora.' },
+              { year: '2025', title: 'Nexus', desc: 'Rediseño completo de la plataforma. Motor de trading avanzado, métricas institucionales y la interfaz que tienes delante ahora.' },
             ].map((h, i) => (
               <div key={i} className="flex gap-6">
                 <div className="flex flex-col items-center">
@@ -114,7 +114,7 @@ export default function AboutPage() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-black">El equipo</h2>
-            <p className="text-white/50 mt-2">Las personas detrás de SimuTrade TV-Lite</p>
+            <p className="text-white/50 mt-2">Las personas detrás de Nexus</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {TEAM.map((m, i) => (
@@ -138,7 +138,7 @@ export default function AboutPage() {
             <Cpu className="h-10 w-10 text-[#2196F3] mx-auto mb-4" />
             <h2 className="text-3xl font-black">Nuestra tecnología</h2>
             <p className="text-white/50 mt-2 max-w-2xl mx-auto">
-              WebSocket streaming con múltiples proveedores de datos (Finnhub, Twelve Data), arquitectura segura con proxy de backend para proteger las API keys, y una interfaz construida con las mismas tecnologías que usan los mejores brokers del mundo.
+              WebSocket streaming con proveedores de datos institucionales, arquitectura segura con proxy de backend para proteger las conexiones, y una interfaz construida con las mismas tecnologías que usan los mejores brokers del mundo.
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

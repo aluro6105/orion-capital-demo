@@ -57,7 +57,7 @@ export default function AccountSetupModal({ onDone }) {
                     <span className="font-semibold text-white text-sm">Demo Account</span>
                     <span className="text-[10px] bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded font-bold">DEMO</span>
                   </div>
-                  <p className="text-xs text-[#8b8fa8] mt-0.5">Practice with $100,000 virtual cash. No real money required. No verification needed.</p>
+                  <p className="text-xs text-[#8b8fa8] mt-0.5">Practice with $10,000 virtual cash. No verification needed.</p>
                 </div>
                 {choice === 'DEMO' && <CheckCircle2 className="h-5 w-5 text-amber-400 flex-shrink-0" />}
               </div>
