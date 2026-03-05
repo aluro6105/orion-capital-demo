@@ -7,19 +7,19 @@ import { HelpCircle, Search, ChevronDown } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
 const STATIC_FAQS = [
-  { id: 's1', category: 'cuenta', question: '¿Cómo abro una cuenta?', answer: 'Introduce tu email y elige una contraseña. El proceso tarda menos de 30 segundos y tu cuenta demo queda activada al instante.' },
-  { id: 's2', category: 'cuenta', question: '¿Cuánto capital tiene la cuenta demo?', answer: 'La cuenta demo se activa con $10,000 virtuales. Puedes resetearla desde el dashboard en cualquier momento.' },
-  { id: 's3', category: 'cuenta', question: '¿Puedo tener múltiples cuentas?', answer: 'Puedes tener una cuenta Demo y una cuenta Real. La cuenta Real requiere verificación KYC para operar.' },
-  { id: 's4', category: 'mercado', question: '¿Los precios son datos reales?', answer: 'Sí, usamos datos de mercado de alta fidelidad a través de WebSocket con actualizaciones tick a tick.' },
-  { id: 's5', category: 'mercado', question: '¿Con qué frecuencia se actualizan los precios?', answer: 'Los precios se actualizan en tiempo real via WebSocket, con múltiples actualizaciones por segundo.' },
-  { id: 's6', category: 'mercado', question: '¿Qué instrumentos están disponibles?', answer: 'Acciones (AAPL, MSFT, NVDA, TSLA, AMZN), ETFs (SPY, QQQ, IWM), Forex (EUR/USD, GBP/USD, USD/JPY) y Crypto (BTC/USD, ETH/USD).' },
-  { id: 's7', category: 'trading', question: '¿Qué tipos de órdenes puedo usar?', answer: 'Órdenes de mercado (Market Order) con validación de balance en tiempo real. Las órdenes Limit están en desarrollo.' },
-  { id: 's8', category: 'trading', question: '¿Puedo hacer posiciones cortas?', answer: 'No en esta versión. El short selling está planificado para una fase futura.' },
-  { id: 's9', category: 'trading', question: '¿Cómo se calcula el P&L?', answer: 'El P&L no realizado se calcula en tiempo real: (precio actual - precio promedio) × cantidad. El P&L realizado se registra al cerrar posiciones.' },
-  { id: 's10', category: 'seguridad', question: '¿Es segura mi información?', answer: 'Sí. Toda la información se almacena de forma segura. Las conexiones de datos se realizan a través de un proxy de backend protegido.' },
-  { id: 's11', category: 'seguridad', question: '¿Qué datos guardáis de mí?', answer: 'Email, nombre, historial de operaciones y preferencias de cuenta. Nunca datos bancarios sin proceso de verificación previo.' },
-  { id: 's12', category: 'precios', question: '¿Cuánto cuesta la plataforma?', answer: 'Consulta nuestros planes disponibles en la sección de precios. Contamos con opciones para todos los perfiles de inversión.' },
-  { id: 's13', category: 'precios', question: '¿Habrá planes premium?', answer: 'Sí. Los planes premium añadirán más instrumentos, indicadores avanzados, herramientas de análisis multicharts y soporte prioritario.' },
+  { id: 's1', category: 'cuenta', question: '¿Cómo abro una cuenta en NEXUS?', answer: 'Introduce tu email y elige una contraseña. El proceso tarda menos de 30 segundos y tu cuenta demo queda activada al instante.' },
+  { id: 's2', category: 'cuenta', question: '¿Cuánto capital tiene la cuenta demo de NEXUS?', answer: 'La cuenta demo de NEXUS se activa con $10,000 virtuales. Puedes resetearla desde el panel de control en cualquier momento.' },
+  { id: 's3', category: 'cuenta', question: '¿Puedo tener múltiples cuentas?', answer: 'Puedes tener una cuenta Demo y una cuenta Real. La cuenta Real requiere verificación de identidad para operar.' },
+  { id: 's4', category: 'mercado', question: '¿Los precios son datos reales?', answer: 'Sí, NEXUS utiliza datos de mercado de alta fidelidad con actualizaciones en tiempo real para una experiencia lo más cercana al mercado real.' },
+  { id: 's5', category: 'mercado', question: '¿Con qué frecuencia se actualizan los precios?', answer: 'Los precios de NEXUS se actualizan en tiempo real, con múltiples actualizaciones por segundo para máxima precisión.' },
+  { id: 's6', category: 'mercado', question: '¿Qué instrumentos están disponibles?', answer: 'Acciones (AAPL, MSFT, NVDA, TSLA, AMZN), Fondos cotizados (SPY, QQQ, IWM), Divisas (EUR/USD, GBP/USD, USD/JPY) y Criptomonedas (BTC/USD, ETH/USD).' },
+  { id: 's7', category: 'trading', question: '¿Qué tipos de órdenes puedo usar?', answer: 'Órdenes de mercado con validación de saldo en tiempo real. Las órdenes limitadas están en desarrollo y estarán disponibles próximamente.' },
+  { id: 's8', category: 'trading', question: '¿Puedo hacer posiciones cortas?', answer: 'No en esta versión. Las posiciones cortas están planificadas para una fase futura de NEXUS.' },
+  { id: 's9', category: 'trading', question: '¿Cómo se calculan las ganancias y pérdidas?', answer: 'Las ganancias no realizadas se calculan en tiempo real: (precio actual - precio promedio) × cantidad. Las ganancias realizadas se registran al cerrar posiciones.' },
+  { id: 's10', category: 'seguridad', question: '¿Es segura mi información en NEXUS?', answer: 'Sí. Toda la información en NEXUS se almacena de forma segura. Las conexiones de datos se realizan a través de un sistema de backend protegido.' },
+  { id: 's11', category: 'seguridad', question: '¿Qué datos guarda NEXUS de mí?', answer: 'Correo electrónico, nombre, historial de operaciones y preferencias de cuenta. Nunca datos bancarios sin proceso de verificación previo.' },
+  { id: 's12', category: 'precios', question: '¿Cuánto cuesta la plataforma NEXUS?', answer: 'Consulta nuestros planes disponibles en la sección de precios. NEXUS cuenta con opciones para todos los perfiles de inversión.' },
+  { id: 's13', category: 'precios', question: '¿Habrá planes premium en NEXUS?', answer: 'Sí. Los planes premium de NEXUS añadirán más instrumentos, indicadores avanzados, herramientas de análisis multicharts y soporte prioritario.' },
 ];
 
 const CATEGORIES = [
