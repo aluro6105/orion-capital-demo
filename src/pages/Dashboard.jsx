@@ -68,14 +68,14 @@ function DashboardContent() {
 
   const handleResetDemo = async () => {
     if (!activeAccount || activeType !== 'DEMO') return;
-    if (!confirm('Reset demo account to $100,000? All positions and trades will be cleared.')) return;
+    if (!confirm('Reset demo account to $10,000? All positions and trades will be cleared.')) return;
     setResetting(true);
     // Delete positions and trades
     for (const p of positions) await base44.entities.BrokerPosition.delete(p.id);
     for (const t of recentTrades) await base44.entities.BrokerTrade.delete(t.id);
-    await base44.entities.BrokerAccount.update(activeAccount.id, { cash_balance: 100000, starting_cash: 100000 });
+    await base44.entities.BrokerAccount.update(activeAccount.id, { cash_balance: 10000, starting_cash: 10000 });
     queryClient.invalidateQueries();
-    toast.success('Demo account reset to $100,000');
+    toast.success('Demo account reset to $10,000');
     setResetting(false);
   };
 
@@ -100,7 +100,7 @@ function DashboardContent() {
           <div>
             <div className="text-sm font-semibold text-white">{activeAccount?.display_name}</div>
             <div className="text-xs text-[#8b8fa8]">
-              {activeType === 'DEMO' ? 'Paper trading — virtual funds only' : 'Live account — real funds'}
+              {activeType === 'DEMO' ? 'Demo account — $10,000 virtual funds' : 'Live account — real funds'}
             </div>
           </div>
         </div>
