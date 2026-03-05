@@ -30,7 +30,9 @@ const DEFAULT_INSTRUMENTS = [
 ];
 
 export default function ChartPage() {
-  const [activeSymbol, setActiveSymbol] = useState('AAPL');
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialSymbol = urlParams.get('symbol') || 'AAPL';
+  const [activeSymbol, setActiveSymbol] = useState(initialSymbol);
   const [timeframe, setTimeframe] = useState('5');
   const [chartType, setChartType] = useState('candles');
   const [indicators, setIndicators] = useState(['SMA20']);
