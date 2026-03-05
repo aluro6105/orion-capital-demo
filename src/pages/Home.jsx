@@ -538,7 +538,7 @@ export default function HomePage() {
             Cuenta demo con $10,000 activada al instante. Sin esperas.
           </p>
           <button
-            onClick={() => window.location.href = '/login'}
+            onClick={() => window.location.href = createPageUrl('Register')}
             className="group inline-flex items-center gap-3 px-10 py-5 bg-[#00C853] hover:bg-[#00b34a] text-white font-black rounded-full text-xl transition-all shadow-2xl shadow-[#00C853]/25 hover:scale-[1.04]"
           >
             Abrir cuenta ahora
