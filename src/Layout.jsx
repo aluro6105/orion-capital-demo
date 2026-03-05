@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { createPageUrl } from '@/utils';
 
 // Portal pages handle their own layout (sidebar + header).
 // Chart page is full-screen.
