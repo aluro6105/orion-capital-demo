@@ -8,7 +8,7 @@ import { base44 } from '@/api/base44Client';
 import {
   ArrowRight, Users, Shield, Globe, FileText,
   Star, ChevronDown, CheckCircle2, TrendingUp,
-  BarChart3, Zap, Award
+  BarChart3, Zap, Award, Trophy, Medal, Star as StarIcon, BadgeCheck, Gem
 } from 'lucide-react';
 
 // ─── STATIC DATA ─────────────────────────────────────────────────────────────
@@ -41,10 +41,10 @@ const STATS = [
 ];
 
 const FEATURES = [
-  { icon: BarChart3, title: 'Gráficos profesionales', desc: 'Velas japonesas, indicadores SMA, múltiples timeframes. Una interfaz idéntica a la de los brokers reales.', accent: '#00C853', tag: 'TradingView-like' },
-  { icon: Zap, title: 'Datos en tiempo real', desc: 'WebSocket con actualizaciones tick a tick. Precios en vivo para tomar decisiones como un profesional.', accent: '#2196F3', tag: 'WebSocket Live' },
-  { icon: TrendingUp, title: 'P&L y métricas reales', desc: 'Equity curve, win rate, drawdown máximo, P&L realizado e irealizado. Análisis de nivel institucional.', accent: '#7C3AED', tag: 'Analytics Pro' },
-  { icon: Shield, title: 'Cuenta demo incluida', desc: '$10,000 en cuenta demo para practicar estrategias. Empieza a operar al instante, sin depósito previo.', accent: '#f59e0b', tag: 'Demo Account' },
+  { icon: BarChart3, title: 'Gráficos profesionales', desc: 'Velas japonesas, indicadores técnicos, múltiples marcos temporales. Una interfaz idéntica a la de los brokers reales.', accent: '#00C853', tag: 'Análisis técnico' },
+  { icon: Zap, title: 'Datos en tiempo real', desc: 'Precios actualizados al instante mediante conexión directa. Opera con información de mercado real y precisa.', accent: '#2196F3', tag: 'Tiempo real' },
+  { icon: TrendingUp, title: 'Métricas avanzadas', desc: 'Curva de capital, tasa de acierto, caída máxima y ganancias realizadas. Análisis completo de tu rendimiento.', accent: '#7C3AED', tag: 'Analítica pro' },
+  { icon: Shield, title: 'Cuenta demo incluida', desc: '$10,000 en cuenta demo para practicar estrategias. Empieza a operar al instante, sin depósito previo.', accent: '#f59e0b', tag: 'Cuenta demo' },
 ];
 
 const MARKETS = [
