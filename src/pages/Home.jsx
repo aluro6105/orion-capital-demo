@@ -7,63 +7,79 @@ import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import {
   ArrowRight, Users, Shield, Globe, FileText,
-  Star, ChevronDown, CheckCircle2, TrendingUp, BarChart3, Zap
+  Star, ChevronDown, CheckCircle2, TrendingUp,
+  BarChart3, Zap, Award
 } from 'lucide-react';
 
-// ─── DATA ────────────────────────────────────────────────────────────────────
+// ─── STATIC DATA ─────────────────────────────────────────────────────────────
+
+const TICKER_DATA = [
+  { symbol: 'AAPL', price: '178.52', change: '+1.23%', up: true },
+  { symbol: 'MSFT', price: '415.20', change: '+0.87%', up: true },
+  { symbol: 'NVDA', price: '875.30', change: '+3.21%', up: true },
+  { symbol: 'BTCUSD', price: '62,450', change: '-0.42%', up: false },
+  { symbol: 'EURUSD', price: '1.0850', change: '+0.12%', up: true },
+  { symbol: 'SPY', price: '502.40', change: '+0.65%', up: true },
+  { symbol: 'TSLA', price: '245.60', change: '-1.18%', up: false },
+  { symbol: 'ETHUSD', price: '3,420', change: '+2.05%', up: true },
+  { symbol: 'AMZN', price: '191.80', change: '+1.54%', up: true },
+  { symbol: 'GBPUSD', price: '1.2640', change: '-0.08%', up: false },
+];
 
 const TRUST_CARDS = [
-  { icon: Users, title: 'Social', desc: 'Más de 5,000 traders activos en la plataforma a nivel global', color: '#00C853' },
-  { icon: FileText, title: 'Fiable', desc: 'Líder en tecnología de trading simulado desde 2020', color: '#00C853' },
-  { icon: Shield, title: 'Seguro', desc: 'Protegemos tu cuenta y tus activos con la máxima seguridad', color: '#00C853' },
-  { icon: Globe, title: 'Global', desc: 'Ofrecemos nuestros servicios en todo el mundo', color: '#00C853' },
+  { icon: Users, title: 'Social', desc: 'Más de 5,000 traders activos operando en la plataforma' },
+  { icon: FileText, title: 'Fiable', desc: 'Líder en tecnología de trading simulado desde 2020' },
+  { icon: Shield, title: 'Seguro', desc: 'Protegemos tu cuenta y tus activos con la máxima seguridad' },
+  { icon: Globe, title: 'Global', desc: 'Ofrecemos nuestros servicios en todo el mundo' },
 ];
 
-const AWARDS_TICKER = [
-  'Mejor plataforma de simulación · Fintech Awards 2025',
-  'Innovación en negociación de acciones · TechFinance 2025',
-  'La mejor plataforma educativa · Trader Awards 2026',
-  'Mejor broker simulado · Forbes Advisor\'s 2026',
-  'Lo mejor para invertir en criptos · Investopedia 2025',
+const STATS = [
+  { value: '$10K', label: 'Capital de cuenta demo' },
+  { value: '15+', label: 'Instrumentos disponibles' },
+  { value: '5+', label: 'Años en el mercado' },
+  { value: '<1ms', label: 'Latencia WebSocket' },
 ];
 
-const FEE_CARDS = [
-  { value: '$0', label: 'COMISIÓN EN ACCIONES', sub: 'Opera sin costes ocultos' },
-  { value: '0%', label: 'DE COMISIÓN EN ETF', sub: 'Diversifica sin comisiones' },
-  { value: '1%', label: 'EN CRIPTOACTIVOS', sub: 'La tarifa más competitiva' },
+const FEATURES = [
+  { icon: BarChart3, title: 'Gráficos profesionales', desc: 'Velas japonesas, indicadores SMA, múltiples timeframes. Una interfaz idéntica a la de los brokers reales.', accent: '#00C853', tag: 'TradingView-like' },
+  { icon: Zap, title: 'Datos en tiempo real', desc: 'WebSocket con actualizaciones tick a tick. Precios en vivo para tomar decisiones como un profesional.', accent: '#2196F3', tag: 'WebSocket Live' },
+  { icon: TrendingUp, title: 'P&L y métricas reales', desc: 'Equity curve, win rate, drawdown máximo, P&L realizado e irealizado. Análisis de nivel institucional.', accent: '#7C3AED', tag: 'Analytics Pro' },
+  { icon: Shield, title: 'Cuenta demo incluida', desc: '$10,000 en cuenta demo para practicar estrategias. Empieza a operar al instante, sin depósito previo.', accent: '#f59e0b', tag: 'Demo Account' },
 ];
 
-const CRYPTO_ICONS = [
-  { symbol: 'SOL', color: '#9945FF', bg: '#1a0a33' },
-  { symbol: 'EOS', color: '#ffffff', bg: '#1a1a2e' },
-  { symbol: 'FRAX', color: '#ffffff', bg: '#e91e8c' },
-  { symbol: 'DASH', color: '#008CE7', bg: '#0d1b2a' },
-  { symbol: 'LTC', color: '#b4b4b4', bg: '#1a1a2e' },
-  { symbol: 'XRP', color: '#00AAE4', bg: '#0d2137' },
-  { symbol: 'ETH', color: '#627EEA', bg: '#1a1a2e' },
-  { symbol: 'SHIB', color: '#E0A817', bg: '#1a1a0d' },
-  { symbol: 'BTC', color: '#F7931A', bg: '#1a0d00' },
+const MARKETS = [
+  { emoji: '📈', label: 'Acciones', symbols: ['AAPL', 'MSFT', 'NVDA', 'TSLA', 'AMZN'], color: '#2196F3' },
+  { emoji: '🏦', label: 'ETFs', symbols: ['SPY', 'QQQ', 'IWM'], color: '#7C3AED' },
+  { emoji: '💱', label: 'Forex', symbols: ['EUR/USD', 'GBP/USD', 'USD/JPY'], color: '#00C853' },
+  { emoji: '₿', label: 'Crypto', symbols: ['BTC/USD', 'ETH/USD'], color: '#f59e0b' },
 ];
 
-const PORTFOLIO_CARDS = [
-  { label: 'iShares Russell 2000 ETF', pct: '10%', color: '#1a1a2e', text: 'white' },
-  { label: 'Bitcoin', pct: '30%', color: '#F7931A', text: 'white' },
-  { label: 'Apple', pct: '7%', color: '#555', text: 'white' },
-  { label: 'SPDR S&P 500 ETF', pct: '14%', color: '#00C853', text: 'white' },
-  { label: 'Ethereum', pct: '5%', color: '#627EEA', text: 'white' },
+const STEPS = [
+  { n: '01', title: 'Abre tu cuenta', desc: 'Registro en 30 segundos. Cuenta demo con $10,000 activada al instante, sin depósito.' },
+  { n: '02', title: 'Analiza mercados', desc: 'Accede a acciones, ETFs, forex y crypto con precios WebSocket en vivo.' },
+  { n: '03', title: 'Opera y crece', desc: 'Compra, vende, analiza tu P&L y perfecciona tu estrategia con datos reales.' },
 ];
 
-const INSTITUTIONS = ['J.P.Morgan', 'UBS', 'Citi', 'Deutsche Bank', 'Goldman Sachs', 'BlackRock'];
+const CANDLES = [
+  {o:40,h:55,l:35,c:52,up:true},{o:52,h:60,l:48,c:48,up:false},{o:48,h:58,l:44,c:56,up:true},
+  {o:56,h:65,l:52,c:61,up:true},{o:61,h:63,l:54,c:55,up:false},{o:55,h:72,l:53,c:70,up:true},
+  {o:70,h:75,l:65,c:68,up:false},{o:68,h:80,l:65,c:78,up:true},{o:78,h:85,l:74,c:82,up:true},
+  {o:82,h:84,l:70,c:72,up:false},{o:72,h:82,l:70,c:80,up:true},{o:80,h:92,l:78,c:90,up:true},
+  {o:90,h:95,l:82,c:84,up:false},{o:84,h:96,l:82,c:94,up:true},{o:94,h:98,l:88,c:92,up:false},
+  {o:92,h:100,l:90,c:99,up:true},{o:99,h:102,l:88,c:90,up:false},{o:90,h:98,l:88,c:96,up:true},
+];
 
 function StarRating({ rating }) {
   return (
     <div className="flex gap-0.5">
-      {[1, 2, 3, 4, 5].map(i => (
-        <Star key={i} className={`h-4 w-4 ${i <= rating ? 'text-[#00C853] fill-[#00C853]' : 'text-gray-200 fill-gray-200'}`} />
+      {[1,2,3,4,5].map(i => (
+        <Star key={i} className={`h-3.5 w-3.5 ${i <= rating ? 'text-[#00C853] fill-[#00C853]' : 'text-gray-200 fill-gray-200'}`} />
       ))}
     </div>
   );
 }
+
+// ─── PAGE ─────────────────────────────────────────────────────────────────────
 
 export default function HomePage() {
   const { data: testimonials = [] } = useQuery({
@@ -86,94 +102,194 @@ export default function HomePage() {
     { id: 2, question: '¿Los precios son datos reales de mercado?', answer: 'Sí, usamos datos de mercado de alta fidelidad via WebSocket con actualizaciones tick a tick.' },
     { id: 3, question: '¿Qué instrumentos están disponibles?', answer: 'Acciones (AAPL, MSFT, NVDA...), ETFs (SPY, QQQ), Forex (EUR/USD) y Crypto (BTC, ETH). Más de 15 instrumentos.' },
     { id: 4, question: '¿Cuánto capital tiene la cuenta demo?', answer: 'La cuenta demo se activa con $10,000 virtuales. Puedes resetearla desde el dashboard en cualquier momento.' },
-    { id: 5, question: '¿Hay comisiones?', answer: 'Sin comisiones en acciones y ETFs. Solo 1% en criptoactivos. Sin costes ocultos.' },
+    { id: 5, question: '¿Hay comisiones?', answer: 'Sin comisiones ocultas. Sin letra pequeña. Siempre transparentes con nuestros usuarios.' },
   ];
 
   return (
     <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
-      {/* Nav with white bg */}
-      <div className="[&_nav]:bg-white [&_nav]:border-b [&_nav]:border-gray-100 [&_nav]:shadow-sm [&_a]:text-gray-700 [&_span.font-black]:text-gray-900">
-        <PublicNav currentPage="Home" />
-      </div>
+      <PublicNav currentPage="Home" />
 
-      {/* ══ HERO ══ */}
-      <section className="pt-20 min-h-screen flex items-center bg-white overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full grid lg:grid-cols-2 gap-0 items-center min-h-[calc(100vh-80px)]">
-          {/* Left */}
-          <div className="py-16 lg:py-0 pr-0 lg:pr-16 order-2 lg:order-1">
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.0] tracking-tight mb-6 text-gray-900 uppercase">
+      {/* ══════════════ HERO ══════════════ */}
+      <section className="relative min-h-screen flex items-center bg-white overflow-hidden pt-16">
+        {/* Subtle bg grid */}
+        <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(#000_1px,transparent_1px),linear-gradient(90deg,#000_1px,transparent_1px)] bg-[size:60px_60px]" />
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#f0fdf4] to-transparent pointer-events-none" />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full grid lg:grid-cols-2 gap-16 items-center py-20">
+          {/* Left: copy */}
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#00C853]/10 border border-[#00C853]/20 text-xs text-[#00a844] font-semibold mb-8 tracking-wide">
+              <span className="w-2 h-2 rounded-full bg-[#00C853] animate-pulse" />
+              LIVE · Datos de mercado en tiempo real
+            </div>
+
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.0] tracking-tight mb-6 text-gray-900">
               Sé el trader<br />
-              <span className="text-gray-900">que deseas</span><br />
-              <span className="text-[#00C853]">ser.</span>
+              <span className="bg-gradient-to-r from-[#00C853] to-[#2196F3] bg-clip-text text-transparent">
+                que deseas ser.
+              </span>
             </h1>
-            <p className="text-lg text-gray-500 mb-8 max-w-md leading-relaxed">
-              Opera en miles de acciones, criptos, ETFs... todo en una plataforma fácil de usar con tecnología de nivel institucional.
+
+            <p className="text-lg sm:text-xl text-gray-500 leading-relaxed mb-10 max-w-lg">
+              Opera en miles de acciones, criptos y ETFs con tecnología de nivel institucional. Practica sin riesgo, aprende de verdad.
             </p>
-            <button
-              onClick={() => window.location.href = '/login'}
-              className="inline-flex items-center gap-2 px-8 py-4 bg-[#00C853] hover:bg-[#00b34a] text-white font-bold rounded-full text-base transition-all shadow-lg hover:shadow-xl hover:scale-[1.02]"
-            >
-              Únete ya
-            </button>
-            <p className="mt-4 text-xs text-gray-400">* Los CFD son instrumentos complejos. Su capital está en riesgo.</p>
+
+            <div className="flex flex-wrap gap-3 mb-12">
+              <button
+                onClick={() => window.location.href = '/login'}
+                className="group flex items-center gap-2 px-8 py-4 bg-[#00C853] hover:bg-[#00b34a] text-white font-bold rounded-full transition-all text-base shadow-lg shadow-[#00C853]/25 hover:scale-[1.03]"
+              >
+                Únete gratis
+                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+              <Link
+                to={createPageUrl('Product')}
+                className="flex items-center gap-2 px-6 py-4 bg-white text-gray-700 font-semibold rounded-full border border-gray-200 hover:border-gray-400 transition-all text-base"
+              >
+                Ver la plataforma
+              </Link>
+            </div>
+
+            <div className="flex flex-wrap gap-5">
+              {[
+                { icon: CheckCircle2, label: '$10K en cuenta demo' },
+                { icon: CheckCircle2, label: 'Sin comisiones ocultas' },
+                { icon: CheckCircle2, label: 'Activación inmediata' },
+              ].map(({ icon: Icon, label }) => (
+                <div key={label} className="flex items-center gap-1.5 text-sm text-gray-500">
+                  <Icon className="h-4 w-4 text-[#00C853] flex-shrink-0" />
+                  {label}
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* Right: hero image */}
-          <div className="relative order-1 lg:order-2 h-[50vh] lg:h-screen">
-            <img
-              src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&q=80"
-              alt="Trader profesional"
-              className="absolute inset-0 w-full h-full object-cover object-center"
-            />
-            {/* Gradient overlay left side */}
-            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/20 to-transparent" />
-
-            {/* Floating badges */}
-            <div className="absolute bottom-1/3 left-4 lg:left-8 bg-white rounded-2xl shadow-2xl px-5 py-3 border border-gray-100">
-              <div className="text-xs text-gray-400 mb-0.5">Capital inicial</div>
-              <div className="text-xl font-black text-gray-900">$10,000</div>
-              <div className="text-xs font-semibold text-[#00C853]">Cuenta demo</div>
+          {/* Right: platform mockup (dark card) */}
+          <div className="relative hidden lg:block">
+            <div className="absolute -inset-4 bg-[#00C853]/5 rounded-3xl blur-2xl" />
+            <div className="relative bg-[#0c0f1c] border border-[#1e2538] rounded-2xl shadow-2xl overflow-hidden">
+              {/* Window chrome */}
+              <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5 bg-[#080b17]">
+                <div className="w-2.5 h-2.5 rounded-full bg-[#ef5350]/70" />
+                <div className="w-2.5 h-2.5 rounded-full bg-[#f59e0b]/70" />
+                <div className="w-2.5 h-2.5 rounded-full bg-[#00C853]/70" />
+                <div className="ml-3 flex-1 h-5 bg-white/5 rounded-md px-2 flex items-center">
+                  <span className="text-[10px] text-white/25">nexus.io/portal/charts</span>
+                </div>
+              </div>
+              {/* Header bar */}
+              <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/5 bg-[#090c19]">
+                <div className="flex items-center gap-3">
+                  <span className="text-sm font-bold text-white">AAPL</span>
+                  <span className="text-[10px] text-white/30">Apple Inc.</span>
+                  <span className="text-lg font-mono font-black text-white">$178.52</span>
+                  <span className="text-xs font-mono font-bold text-[#00C853] bg-[#00C853]/10 px-2 py-0.5 rounded">▲ +1.23%</span>
+                </div>
+                <div className="flex gap-1 text-[10px] text-white/30">
+                  {['1m','5m','1h','1D','1W'].map(t => (
+                    <button key={t} className={`px-2 py-0.5 rounded ${t === '1D' ? 'bg-[#00C853]/20 text-[#00C853]' : 'hover:bg-white/5'}`}>{t}</button>
+                  ))}
+                </div>
+              </div>
+              {/* Chart */}
+              <div className="relative h-44 bg-[#080b17] px-4 pt-4 pb-1">
+                {[0,25,50,75,100].map(p => (
+                  <div key={p} className="absolute left-4 right-0 border-t border-white/[0.04]" style={{ top: `${100 - p}%` }} />
+                ))}
+                <div className="flex items-end gap-1 h-full">
+                  {CANDLES.map((c, i) => {
+                    const bodyH = Math.abs(c.c - c.o);
+                    const bodyTop = 100 - Math.max(c.o, c.c);
+                    const color = c.up ? '#00C853' : '#ef5350';
+                    return (
+                      <div key={i} className="flex-1 relative flex flex-col items-center" style={{ height: '100%' }}>
+                        <div className="absolute left-1/2 -translate-x-1/2 w-px" style={{ top: `${100 - c.h}%`, height: `${c.h - c.l}%`, background: color, opacity: 0.5 }} />
+                        <div className="absolute left-0.5 right-0.5 rounded-sm" style={{ top: `${bodyTop}%`, height: `${Math.max(bodyH, 1.5)}%`, background: color, opacity: 0.85 }} />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              {/* Trade panel */}
+              <div className="grid grid-cols-2 gap-2 p-3 bg-[#080b17] border-t border-white/5">
+                <div className="bg-[#00C853]/10 border border-[#00C853]/20 rounded-xl p-3">
+                  <div className="text-[10px] text-[#00C853] font-semibold uppercase mb-1">Comprar</div>
+                  <div className="text-xs text-white/40 mb-1">10 acciones</div>
+                  <div className="text-sm font-bold text-[#00C853]">$1,785.20</div>
+                </div>
+                <div className="bg-[#ef5350]/10 border border-[#ef5350]/20 rounded-xl p-3">
+                  <div className="text-[10px] text-[#ef5350] font-semibold uppercase mb-1">Vender</div>
+                  <div className="text-xs text-white/40 mb-1">50 acciones</div>
+                  <div className="text-sm font-bold text-[#ef5350]">$8,926.00</div>
+                </div>
+              </div>
+              {/* Equity */}
+              <div className="px-3 pb-3 flex items-center justify-between border-t border-white/5 pt-2">
+                <div className="text-[10px] text-white/30">Equity total</div>
+                <div className="text-xs font-bold text-white">$10,432.85</div>
+                <div className="text-[10px] font-bold text-[#00C853] bg-[#00C853]/10 px-2 py-0.5 rounded-full">+4.33%</div>
+              </div>
             </div>
-            <div className="absolute top-1/3 right-4 lg:right-8 bg-white rounded-2xl shadow-2xl px-5 py-3 border border-gray-100">
-              <div className="text-xs text-gray-400 mb-0.5">Instrumentos</div>
-              <div className="text-xl font-black text-[#00C853]">15+</div>
-              <div className="text-xs text-gray-500">activos disponibles</div>
+
+            {/* Floating cards */}
+            <div className="absolute -bottom-4 -left-8 bg-white border border-gray-100 rounded-2xl px-4 py-3 shadow-xl flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-[#00C853]/15 flex items-center justify-center">
+                <TrendingUp className="h-4 w-4 text-[#00C853]" />
+              </div>
+              <div>
+                <div className="text-xs font-bold text-gray-900">Orden ejecutada</div>
+                <div className="text-[10px] text-gray-400">NVDA · Compra · $875.30</div>
+              </div>
+            </div>
+            <div className="absolute -top-4 -right-6 bg-white border border-[#00C853]/20 rounded-2xl px-4 py-3 shadow-xl">
+              <div className="text-[10px] text-gray-400 mb-0.5">P&L Hoy</div>
+              <div className="text-lg font-black text-[#00C853]">+$4,328</div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ══ AWARDS TICKER ══ */}
-      <div className="bg-[#0d1117] py-4 overflow-hidden">
-        <div className="flex gap-16 animate-[ticker_35s_linear_infinite] whitespace-nowrap">
-          {[...AWARDS_TICKER, ...AWARDS_TICKER].map((a, i) => (
-            <span key={i} className="inline-flex items-center gap-3 text-xs text-white/70">
-              <span className="flex gap-0.5">
-                {[1,2,3,4,5].map(s => <span key={s} className="w-2.5 h-2.5 text-[#00C853]">✦</span>)}
-              </span>
-              {a}
+      {/* ══════════════ TICKER ══════════════ */}
+      <div className="bg-gray-900 py-3 overflow-hidden border-y border-gray-800">
+        <div className="flex gap-10 animate-[ticker_40s_linear_infinite] whitespace-nowrap px-6">
+          {[...TICKER_DATA, ...TICKER_DATA].map((t, i) => (
+            <span key={i} className="inline-flex items-center gap-2 text-xs">
+              <span className="font-bold text-white/80 tracking-wide">{t.symbol}</span>
+              <span className="font-mono text-white/40">{t.price}</span>
+              <span className={`font-mono font-bold ${t.up ? 'text-[#00C853]' : 'text-[#ef5350]'}`}>{t.change}</span>
             </span>
           ))}
         </div>
       </div>
 
-      {/* ══ TRUST SECTION ══ */}
-      <section className="py-20 px-4 sm:px-6 bg-white">
-        <div className="max-w-5xl mx-auto text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-3">Confiable a nivel mundial</h2>
-          <p className="text-gray-500">Descubra por qué miles de traders de más de 100 países se han unido a NEXUS</p>
+      {/* ══════════════ STATS BAND ══════════════ */}
+      <div className="bg-[#00C853] py-10 px-4">
+        <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-8">
+          {STATS.map(s => (
+            <div key={s.label} className="text-center">
+              <div className="text-3xl sm:text-4xl font-black text-white mb-1">{s.value}</div>
+              <div className="text-xs text-white/75 font-medium">{s.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ══════════════ TRUST / WHY NEXUS ══════════════ */}
+      <section className="py-24 px-4 sm:px-6 bg-white">
+        <div className="max-w-5xl mx-auto text-center mb-14">
+          <span className="text-xs font-bold text-[#00C853] uppercase tracking-[0.2em] mb-3 block">Confiable a nivel mundial</span>
+          <h2 className="text-4xl sm:text-5xl font-black text-gray-900">¿Por qué elegir NEXUS?</h2>
+          <p className="text-gray-500 mt-4 max-w-xl mx-auto">Miles de traders de más de 100 países confían en nuestra plataforma.</p>
         </div>
         <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {TRUST_CARDS.map((c, i) => {
             const Icon = c.icon;
             return (
-              <div key={i} className="border border-gray-200 rounded-2xl p-8 text-center hover:shadow-lg transition-all hover:border-[#00C853]/30 group">
-                <div className="flex justify-center mb-4">
-                  <div className="w-14 h-14 rounded-full bg-[#00C853]/10 flex items-center justify-center group-hover:bg-[#00C853]/20 transition-colors">
-                    <Icon className="h-7 w-7 text-[#00C853]" />
-                  </div>
+              <div key={i} className="border border-gray-200 rounded-2xl p-8 text-center hover:shadow-lg hover:border-[#00C853]/30 transition-all group cursor-default">
+                <div className="w-14 h-14 rounded-full bg-[#00C853]/10 flex items-center justify-center mx-auto mb-4 group-hover:bg-[#00C853]/20 transition-colors">
+                  <Icon className="h-6 w-6 text-[#00C853]" />
                 </div>
-                <h3 className="font-bold text-gray-900 text-lg mb-2">{c.title}</h3>
+                <h3 className="font-bold text-gray-900 text-base mb-2">{c.title}</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">{c.desc}</p>
               </div>
             );
@@ -181,166 +297,132 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ══ DIVERSIFY / PORTFOLIO ══ */}
-      <section className="py-20 px-4 sm:px-6 bg-gray-50">
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left copy */}
-          <div>
-            <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-4">Diversifica tu cartera</h2>
-            <p className="text-gray-500 leading-relaxed mb-6">
-              Invierte en diversas clases de activos, incluidas acciones de 20 bolsas mundiales y más de 100 criptomonedas, y gestiona todas tus participaciones desde un único lugar.
-            </p>
-            <button
-              onClick={() => window.location.href = '/login'}
-              className="inline-flex items-center gap-2 px-6 py-3 border-2 border-[#00C853] text-[#00C853] font-semibold rounded-full hover:bg-[#00C853] hover:text-white transition-all text-sm"
-            >
-              Explora los principales mercados
-            </button>
+      {/* ══════════════ HOW IT WORKS ══════════════ */}
+      <section className="py-24 px-4 sm:px-6 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <span className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-3 block">Cómo funciona</span>
+            <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Empieza en <span className="text-[#00C853]">3 pasos</span></h2>
           </div>
-          {/* Right: stacked portfolio cards */}
-          <div className="relative h-64 flex items-center justify-center">
-            {PORTFOLIO_CARDS.map((c, i) => (
-              <div
-                key={i}
-                className="absolute rounded-2xl shadow-xl px-5 py-4 min-w-[130px] text-center"
-                style={{
-                  background: c.color,
-                  color: c.text,
-                  transform: `rotate(${(i - 2) * 8}deg) translate(${(i - 2) * 30}px, ${Math.abs(i - 2) * 10}px)`,
-                  zIndex: i === 2 ? 10 : 5 - Math.abs(i - 2),
-                }}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {STEPS.map((s, i) => (
+              <div key={i} className="relative text-center group">
+                <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white border-2 border-gray-100 text-[#00C853] text-3xl font-black mb-5 mx-auto group-hover:border-[#00C853] group-hover:bg-[#00C853]/5 transition-all shadow-sm">
+                  {s.n}
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">{s.title}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed max-w-xs mx-auto">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════ MARKETS ══════════════ */}
+      <section className="py-24 px-4 sm:px-6 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-14">
+            <span className="text-xs font-bold text-[#2196F3] uppercase tracking-[0.2em] mb-3 block">Mercados disponibles</span>
+            <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Acceso a todos<br />los mercados globales</h2>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="space-y-3">
+              {MARKETS.map((m, i) => (
+                <div key={i} className="flex items-center gap-5 bg-white border border-gray-100 rounded-2xl px-6 py-4 hover:border-gray-300 hover:shadow-md transition-all group cursor-pointer">
+                  <div className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center text-2xl flex-shrink-0 group-hover:scale-110 transition-transform">{m.emoji}</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-bold text-gray-900 mb-1">{m.label}</div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {m.symbols.map(s => (
+                        <span key={s} className="text-[10px] px-1.5 py-0.5 bg-gray-100 rounded text-gray-500 font-mono">{s}</span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="text-xs font-semibold flex-shrink-0" style={{ color: m.color }}>{m.symbols.length} activos</div>
+                </div>
+              ))}
+            </div>
+            {/* Live price mockup */}
+            <div className="bg-[#0c0f1c] border border-[#1e2538] rounded-2xl overflow-hidden shadow-xl">
+              <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/5">
+                <span className="text-xs font-semibold text-white/50 uppercase tracking-widest">Precios en vivo</span>
+                <span className="flex items-center gap-1.5 text-[10px] text-[#00C853]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00C853] animate-pulse" />LIVE
+                </span>
+              </div>
+              {[
+                { s: 'AAPL', n: 'Apple', p: '$178.52', c: '+1.23%', up: true },
+                { s: 'NVDA', n: 'Nvidia', p: '$875.30', c: '+3.21%', up: true },
+                { s: 'MSFT', n: 'Microsoft', p: '$415.20', c: '+0.87%', up: true },
+                { s: 'BTC/USD', n: 'Bitcoin', p: '$62,450', c: '-0.42%', up: false },
+                { s: 'EUR/USD', n: 'Euro / Dollar', p: '1.0850', c: '+0.12%', up: true },
+                { s: 'SPY', n: 'S&P 500 ETF', p: '$502.40', c: '+0.65%', up: true },
+                { s: 'ETH/USD', n: 'Ethereum', p: '$3,420', c: '+2.05%', up: true },
+              ].map((r, i) => (
+                <div key={i} className="flex items-center px-5 py-3 border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
+                  <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-xs font-bold text-white/50 mr-3 flex-shrink-0">{r.s[0]}</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-bold text-white">{r.s}</div>
+                    <div className="text-[10px] text-white/30 mt-0.5">{r.n}</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm font-mono font-semibold text-white">{r.p}</div>
+                    <div className={`text-[11px] font-mono font-bold ${r.up ? 'text-[#00C853]' : 'text-[#ef5350]'}`}>{r.c}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════ FEATURES (dark section) ══════════════ */}
+      <section className="py-24 px-4 sm:px-6 bg-[#0a0d14]">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <span className="text-xs font-bold text-[#00C853] uppercase tracking-[0.2em] mb-4 block">Por qué NEXUS</span>
+              <h2 className="text-4xl sm:text-5xl font-black leading-tight mb-6 text-white">
+                Herramientas de<br /><span className="text-[#00C853]">nivel institucional.</span><br />Para todos.
+              </h2>
+              <p className="text-white/50 text-lg leading-relaxed mb-8">
+                Opera con la misma tecnología que usan los traders profesionales. Sin limitaciones artificiales.
+              </p>
+              <button
+                onClick={() => window.location.href = '/login'}
+                className="flex items-center gap-2 px-7 py-3.5 bg-[#00C853] hover:bg-[#00b34a] text-white font-bold rounded-full transition-all text-sm"
               >
-                <div className="text-2xl font-black">{c.pct}</div>
-                <div className="text-[10px] opacity-80 mt-1">{c.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══ CRYPTO SECTION ══ */}
-      <section className="py-20 px-4 sm:px-6 bg-white">
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left: crypto grid */}
-          <div className="grid grid-cols-3 gap-3">
-            {CRYPTO_ICONS.map((c, i) => (
-              <div key={i}
-                className="aspect-square rounded-2xl flex items-center justify-center text-sm font-black shadow-md hover:scale-105 transition-transform cursor-pointer"
-                style={{ background: c.bg, color: c.color, fontSize: '11px' }}>
-                {c.symbol}
-              </div>
-            ))}
-          </div>
-          {/* Right copy */}
-          <div>
-            <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-4">Lo mejor de la inversión en cripto</h2>
-            <p className="text-gray-500 leading-relaxed mb-6">
-              Invierte y gestione más de 15 criptoactivos en una plataforma global de confianza que ofrece seguridad de primer nivel, herramientas potentes y comisiones transparentes. Opera sin complicaciones.
-            </p>
-            <button
-              onClick={() => window.location.href = '/login'}
-              className="inline-flex items-center gap-2 px-6 py-3 border-2 border-[#00C853] text-[#00C853] font-semibold rounded-full hover:bg-[#00C853] hover:text-white transition-all text-sm"
-            >
-              Invierte en cripto
-            </button>
-            <p className="mt-3 text-xs text-gray-400">Las inversiones en criptos son arriesgadas y altamente volátiles. Su capital está en riesgo.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* ══ COPY TRADING / SOCIAL SECTION ══ */}
-      <section className="py-20 px-4 sm:px-6 bg-[#0d1117] overflow-hidden">
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left copy */}
-          <div>
-            <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">Copia a los mejores traders de NEXUS</h2>
-            <p className="text-white/60 leading-relaxed mb-6">
-              Con nuestra innovadora función Social Trading, puedes copiar automáticamente las operaciones de otros inversores. Encuentra traders que se ajusten a tu estrategia y replica sus inversiones en tiempo real.
-            </p>
-            <button
-              onClick={() => window.location.href = '/login'}
-              className="inline-flex items-center gap-2 px-6 py-3 border-2 border-[#00C853] text-[#00C853] font-semibold rounded-full hover:bg-[#00C853] hover:text-white transition-all text-sm"
-            >
-              Descubre Social Trading
-            </button>
-            <p className="mt-4 text-xs text-white/30">El Social Trading no representa un consejo de inversión. Su capital está en riesgo.</p>
-          </div>
-          {/* Right: trader card mockup */}
-          <div className="relative">
-            <img
-              src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&q=80"
-              alt="Top trader"
-              className="rounded-3xl object-cover w-full h-72 lg:h-96"
-            />
-            <div className="absolute bottom-6 left-6 right-6 bg-[#1a1f2e]/90 backdrop-blur-md rounded-2xl p-4 border border-white/10">
-              <div className="flex items-center justify-between mb-2">
-                <div>
-                  <div className="text-white font-bold text-sm">Top Trader NEXUS</div>
-                  <div className="text-white/50 text-xs">Retorno 12 meses</div>
-                </div>
-                <div className="text-right">
-                  <div className="text-[#00C853] font-black text-xl">+18.4%</div>
-                  <div className="text-white/50 text-xs">RETURN (12M)</div>
-                </div>
-              </div>
-              {/* Mini chart */}
-              <div className="flex items-end gap-1 h-8">
-                {[3,5,4,7,6,8,7,9,8,10,9,11].map((v, i) => (
-                  <div key={i} className="flex-1 rounded-sm bg-[#00C853]" style={{ height: `${v * 8}%` }} />
-                ))}
-              </div>
+                Abrir cuenta gratis <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {FEATURES.map((f, i) => {
+                const Icon = f.icon;
+                return (
+                  <div key={i} className="bg-[#0f1117] border border-[#1e2130] rounded-2xl p-5 hover:border-white/10 transition-all group">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: `${f.accent}18` }}>
+                        <Icon className="h-4 w-4" style={{ color: f.accent }} />
+                      </div>
+                      <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold" style={{ background: `${f.accent}15`, color: f.accent }}>{f.tag}</span>
+                    </div>
+                    <h3 className="font-bold text-white text-sm mb-2">{f.title}</h3>
+                    <p className="text-xs text-white/45 leading-relaxed">{f.desc}</p>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
       </section>
 
-      {/* ══ FEE SECTION ══ */}
-      <section className="py-20 px-4 sm:px-6 bg-[#0d1117]">
-        <div className="max-w-5xl mx-auto text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-black text-white mb-2">Comisiones bajas, sin sorpresas</h2>
-        </div>
-        <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {FEE_CARDS.map((c, i) => (
-            <div key={i} className="bg-[#1a1f2e] border border-white/10 rounded-2xl p-8 text-center relative overflow-hidden group hover:border-[#00C853]/40 transition-all">
-              {/* bg chart decoration */}
-              <div className="absolute bottom-0 left-0 right-0 h-16 flex items-end gap-0.5 opacity-20">
-                {[2,4,3,6,5,7,6,8,7,9].map((v,j) => (
-                  <div key={j} className="flex-1 bg-[#00C853] rounded-t-sm" style={{ height: `${v * 8}%` }} />
-                ))}
-              </div>
-              <div className="relative">
-                <div className="text-5xl font-black text-white mb-1">{c.value}</div>
-                <div className="text-xs font-bold text-white/60 uppercase tracking-wider mb-3">{c.label}</div>
-                <div className="text-sm text-white/40">{c.sub}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-        <p className="text-center text-xs text-white/30 mt-6">* Se aplican otras comisiones. Para más información consulte la página de comisiones.</p>
-      </section>
-
-      {/* ══ INSTITUCIONES ══ */}
-      <section className="py-20 px-4 sm:px-6 bg-white">
-        <div className="max-w-4xl mx-auto text-center mb-10">
-          <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-2">Tus fondos en instituciones de primer nivel</h2>
-          <p className="text-gray-500 text-sm">En NEXUS trabajamos con los mejores socios financieros del mundo:</p>
-        </div>
-        <div className="max-w-4xl mx-auto">
-          <div className="flex flex-wrap justify-center items-center gap-x-10 gap-y-6">
-            {INSTITUTIONS.map((inst, i) => (
-              <span key={i} className="text-xl sm:text-2xl font-bold text-gray-400 hover:text-gray-700 transition-colors cursor-default tracking-tight">{inst}</span>
-            ))}
-          </div>
-          <p className="text-center text-xs text-gray-400 mt-6">* Estas instituciones son socios tecnológicos y no brindan servicios a todas las entidades del grupo.</p>
-        </div>
-      </section>
-
-      {/* ══ TESTIMONIALS ══ */}
+      {/* ══════════════ TESTIMONIALS ══════════════ */}
       {testimonials.length > 0 && (
-        <section className="py-20 px-4 sm:px-6 bg-gray-50">
+        <section className="py-24 px-4 sm:px-6 bg-gray-50">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-black text-gray-900">Lo que dicen nuestros traders</h2>
+            <div className="text-center mb-14">
+              <span className="text-xs font-bold text-[#00C853] uppercase tracking-[0.2em] mb-3 block">Testimonios reales</span>
+              <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Lo que dicen<br />nuestros traders</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {testimonials.slice(0, 6).map((t) => (
@@ -348,7 +430,7 @@ export default function HomePage() {
                   <StarRating rating={t.rating || 5} />
                   <p className="text-gray-600 text-sm leading-relaxed my-4">"{t.text}"</p>
                   <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#00C853] to-[#00695C] flex items-center justify-center text-sm font-bold text-white flex-shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#00C853] to-[#2196F3] flex items-center justify-center text-sm font-bold text-white flex-shrink-0">
                       {t.name[0]}
                     </div>
                     <div>
@@ -360,7 +442,7 @@ export default function HomePage() {
               ))}
             </div>
             <div className="text-center mt-8">
-              <Link to={createPageUrl('Testimonials')} className="text-sm text-[#00C853] hover:text-[#00b34a] transition-colors font-semibold">
+              <Link to={createPageUrl('Testimonials')} className="text-sm text-[#00C853] hover:text-[#00b34a] font-semibold transition-colors">
                 Ver todos los testimonios →
               </Link>
             </div>
@@ -368,59 +450,51 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* ══ TRADERS COMMUNITY PHOTO SECTION ══ */}
-      <section className="py-0 overflow-hidden">
-        <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[500px]">
-          <div className="relative">
-            <img
-              src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&q=80"
-              alt="Trading community"
-              className="w-full h-full object-cover min-h-[350px]"
-            />
-            <div className="absolute inset-0 bg-[#00C853]/10" />
-          </div>
-          <div className="bg-[#0d1117] flex flex-col justify-center px-8 sm:px-12 lg:px-16 py-16">
-            <span className="text-[#00C853] text-xs font-bold uppercase tracking-widest mb-4">Plataforma activa</span>
-            <h2 className="text-3xl sm:text-4xl font-black text-white mb-5 leading-tight">
-              Opera con tecnología<br />de nivel institucional.<br /><span className="text-[#00C853]">Para todos.</span>
-            </h2>
-            <p className="text-white/50 mb-8 leading-relaxed">
-              Gráficos profesionales, precios en tiempo real via WebSocket y métricas avanzadas de P&L. La plataforma que los traders profesionales usan, ahora disponible para ti.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <button
-                onClick={() => window.location.href = '/login'}
-                className="px-7 py-3.5 bg-[#00C853] hover:bg-[#00b34a] text-white font-bold rounded-full transition-all text-sm"
-              >
-                Abrir cuenta gratis
-              </button>
-              <Link
-                to={createPageUrl('Product')}
-                className="px-7 py-3.5 border border-white/20 text-white font-semibold rounded-full hover:border-white/40 transition-all text-sm text-center"
-              >
-                Ver la plataforma
-              </Link>
+      {/* ══════════════ AWARDS ══════════════ */}
+      {awards.length > 0 && (
+        <section className="py-20 px-4 sm:px-6 bg-white">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-14">
+              <span className="text-xs font-bold text-amber-500 uppercase tracking-[0.2em] mb-3 block">Reconocimientos</span>
+              <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Premios & Logros</h2>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {awards.slice(0, 6).map(a => (
+                <div key={a.id} className="flex items-start gap-4 bg-white border border-gray-100 rounded-2xl p-5 hover:border-amber-200 hover:shadow-md transition-all group">
+                  <div className="w-11 h-11 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                    <Award className="h-5 w-5 text-amber-500" />
+                  </div>
+                  <div>
+                    <div className="font-bold text-gray-900 text-sm mb-0.5">{a.title}</div>
+                    <div className="text-xs text-amber-500">{a.issuer} · {a.year}</div>
+                    {a.description && <p className="text-xs text-gray-400 mt-1.5 leading-relaxed line-clamp-2">{a.description}</p>}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* ══ FAQ ══ */}
-      <section className="py-20 px-4 sm:px-6 bg-white">
+      {/* ══════════════ FAQ ══════════════ */}
+      <section className="py-24 px-4 sm:px-6 bg-gray-50">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-black text-gray-900 text-center mb-10">Preguntas frecuentes</h2>
-          <div className="space-y-1">
-            {displayFaqs.map(f => (
-              <div key={f.id} className="border-b border-gray-100">
+          <div className="text-center mb-14">
+            <span className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-3 block">FAQ</span>
+            <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Preguntas<br />frecuentes</h2>
+          </div>
+          <div className="space-y-1 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            {displayFaqs.map((f, idx) => (
+              <div key={f.id} className={idx > 0 ? 'border-t border-gray-100' : ''}>
                 <button
                   onClick={() => setOpenFaq(openFaq === f.id ? null : f.id)}
-                  className="w-full flex items-center justify-between py-5 text-left"
+                  className="w-full flex items-center justify-between px-6 py-5 text-left hover:bg-gray-50 transition-colors"
                 >
                   <span className="font-semibold text-gray-900">{f.question}</span>
-                  <ChevronDown className={`h-5 w-5 text-gray-400 flex-shrink-0 transition-transform ${openFaq === f.id ? 'rotate-180 text-[#00C853]' : ''}`} />
+                  <ChevronDown className={`h-4 w-4 text-gray-400 flex-shrink-0 transition-transform duration-300 ${openFaq === f.id ? 'rotate-180 text-[#00C853]' : ''}`} />
                 </button>
                 {openFaq === f.id && (
-                  <div className="pb-5 text-sm text-gray-500 leading-relaxed">{f.answer}</div>
+                  <div className="px-6 pb-5 text-sm text-gray-500 leading-relaxed">{f.answer}</div>
                 )}
               </div>
             ))}
@@ -433,21 +507,33 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ══ FINAL CTA ══ */}
-      <section className="py-24 px-4 sm:px-6 bg-gray-50 text-center">
-        <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-4">¿Listo para empezar?</h2>
-        <p className="text-gray-500 text-lg mb-8">Cuenta demo con $10,000. Sin depósito. Activación inmediata.</p>
-        <button
-          onClick={() => window.location.href = '/login'}
-          className="inline-flex items-center gap-2 px-10 py-4 bg-[#00C853] hover:bg-[#00b34a] text-white font-black rounded-full text-lg transition-all shadow-xl hover:scale-[1.03]"
-        >
-          Únete gratis
-          <ArrowRight className="h-5 w-5" />
-        </button>
-        <div className="flex items-center justify-center gap-6 mt-6 text-xs text-gray-400">
-          <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#00C853]" />Sin comisiones en acciones</span>
-          <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#00C853]" />Datos en tiempo real</span>
-          <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#00C853]" />Activación inmediata</span>
+      {/* ══════════════ FINAL CTA (dark) ══════════════ */}
+      <section className="relative py-32 px-4 sm:px-6 overflow-hidden bg-[#0a0d14]">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_70%_at_50%_50%,rgba(0,200,83,0.08),transparent)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_40%_at_80%_20%,rgba(33,150,243,0.07),transparent)]" />
+        <div className="relative max-w-3xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#00C853]/10 border border-[#00C853]/20 text-xs text-[#00C853] font-semibold mb-8">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#00C853] animate-pulse" />
+            Plataforma activa · Únete hoy
+          </div>
+          <h2 className="text-5xl sm:text-6xl font-black mb-5 leading-tight text-white">
+            ¿Listo para operar<br />como un <span className="text-[#00C853]">pro?</span>
+          </h2>
+          <p className="text-lg text-white/40 mb-10">
+            Cuenta demo con $10,000 activada al instante. Sin esperas.
+          </p>
+          <button
+            onClick={() => window.location.href = '/login'}
+            className="group inline-flex items-center gap-3 px-10 py-5 bg-[#00C853] hover:bg-[#00b34a] text-white font-black rounded-full text-xl transition-all shadow-2xl shadow-[#00C853]/25 hover:scale-[1.04]"
+          >
+            Abrir cuenta ahora
+            <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
+          </button>
+          <div className="flex items-center justify-center gap-6 mt-8 text-xs text-white/30">
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#00C853]" />Cuenta demo $10K</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#00C853]" />Datos en tiempo real</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#00C853]" />Activación inmediata</span>
+          </div>
         </div>
       </section>
 
