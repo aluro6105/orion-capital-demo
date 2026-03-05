@@ -51,8 +51,16 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.full_name || !form.email) {
+    if (!form.full_name || !form.email || !form.password) {
       setError('Por favor completa los campos obligatorios.');
+      return;
+    }
+    if (form.password.length < 8) {
+      setError('La contraseña debe tener al menos 8 caracteres.');
+      return;
+    }
+    if (form.password !== form.confirm_password) {
+      setError('Las contraseñas no coinciden.');
       return;
     }
     setLoading(true);
