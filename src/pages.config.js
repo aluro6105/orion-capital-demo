@@ -56,6 +56,9 @@ import Admin from './pages/Admin';
 import Summary from './pages/Summary';
 import Dashboard from './pages/Dashboard';
 import portalCharts from './pages/Portal_Charts';
+import portalPortfolio from './pages/Portal_Portfolio';
+import portalTrades from './pages/Portal_Trades';
+import portalFunding from './pages/Portal_Funding';
 import __Layout from './Layout.jsx';
 
 
@@ -69,6 +72,9 @@ export const PAGES = {
     "Summary": Summary,
     "Dashboard": Dashboard,
     "Portal_Charts": portalCharts,
+    "Portal_Portfolio": portalPortfolio,
+    "Portal_Trades": portalTrades,
+    "Portal_Funding": portalFunding,
 }
 
 export const pagesConfig = {
