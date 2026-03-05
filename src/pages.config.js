@@ -64,6 +64,9 @@ import portalReports from './pages/Portal_Reports';
 import portalMessages from './pages/Portal_Messages';
 import portalSupport from './pages/Portal_Support';
 import portalSettings from './pages/Portal_Settings';
+import Home from './pages/Home';
+import About from './pages/About';
+import Product from './pages/Product';
 import __Layout from './Layout.jsx';
 
 
@@ -85,6 +88,9 @@ export const PAGES = {
     "Portal_Messages": portalMessages,
     "Portal_Support": portalSupport,
     "Portal_Settings": portalSettings,
+    "Home": Home,
+    "About": About,
+    "Product": Product,
 }
 
 export const pagesConfig = {
