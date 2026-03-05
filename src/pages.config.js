@@ -54,6 +54,8 @@ import Trades from './pages/Trades';
 import Settings from './pages/Settings';
 import Admin from './pages/Admin';
 import Summary from './pages/Summary';
+import Dashboard from './pages/Dashboard';
+import portalCharts from './pages/Portal_Charts';
 import __Layout from './Layout.jsx';
 
 
@@ -65,6 +67,8 @@ export const PAGES = {
     "Settings": Settings,
     "Admin": Admin,
     "Summary": Summary,
+    "Dashboard": Dashboard,
+    "Portal_Charts": portalCharts,
 }
 
 export const pagesConfig = {
