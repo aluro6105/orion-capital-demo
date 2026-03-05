@@ -48,10 +48,10 @@ const FEATURES = [
 ];
 
 const MARKETS = [
-  { emoji: '📈', label: 'Acciones', symbols: ['AAPL', 'MSFT', 'NVDA', 'TSLA', 'AMZN'], color: '#2196F3' },
-  { emoji: '🏦', label: 'ETFs', symbols: ['SPY', 'QQQ', 'IWM'], color: '#7C3AED' },
-  { emoji: '💱', label: 'Forex', symbols: ['EUR/USD', 'GBP/USD', 'USD/JPY'], color: '#00C853' },
-  { emoji: '₿', label: 'Crypto', symbols: ['BTC/USD', 'ETH/USD'], color: '#f59e0b' },
+  { icon: TrendingUp, label: 'Acciones', desc: 'Las principales empresas del mundo', symbols: ['AAPL', 'MSFT', 'NVDA', 'TSLA', 'AMZN'], color: '#2196F3', bg: '#2196F315' },
+  { icon: BarChart3, label: 'Fondos cotizados (ETF)', desc: 'Diversificación instantánea en un solo activo', symbols: ['SPY', 'QQQ', 'IWM'], color: '#7C3AED', bg: '#7C3AED15' },
+  { icon: Globe, label: 'Divisas (Forex)', desc: 'Los pares de divisas más negociados del mundo', symbols: ['EUR/USD', 'GBP/USD', 'USD/JPY'], color: '#00C853', bg: '#00C85315' },
+  { icon: Zap, label: 'Criptomonedas', desc: 'Los activos digitales líderes del mercado', symbols: ['BTC/USD', 'ETH/USD'], color: '#f59e0b', bg: '#f59e0b15' },
 ];
 
 const STEPS = [
@@ -323,24 +323,31 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <span className="text-xs font-bold text-[#2196F3] uppercase tracking-[0.2em] mb-3 block">Mercados disponibles</span>
-            <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Acceso a todos<br />los mercados globales</h2>
+            <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Todos los mercados<br />en una sola plataforma</h2>
+            <p className="text-gray-500 mt-4 max-w-xl mx-auto">Opera en los mercados más importantes del mundo con tecnología de nivel institucional.</p>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="space-y-3">
-              {MARKETS.map((m, i) => (
-                <div key={i} className="flex items-center gap-5 bg-white border border-gray-100 rounded-2xl px-6 py-4 hover:border-gray-300 hover:shadow-md transition-all group cursor-pointer">
-                  <div className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center text-2xl flex-shrink-0 group-hover:scale-110 transition-transform">{m.emoji}</div>
-                  <div className="flex-1 min-w-0">
-                    <div className="font-bold text-gray-900 mb-1">{m.label}</div>
-                    <div className="flex flex-wrap gap-1.5">
-                      {m.symbols.map(s => (
-                        <span key={s} className="text-[10px] px-1.5 py-0.5 bg-gray-100 rounded text-gray-500 font-mono">{s}</span>
-                      ))}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {MARKETS.map((m, i) => {
+                const MIcon = m.icon;
+                return (
+                <div key={i} className="bg-white border border-gray-100 rounded-2xl p-6 hover:border-gray-200 hover:shadow-lg transition-all group cursor-pointer">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform" style={{ background: m.bg }}>
+                      <MIcon className="h-5 w-5" style={{ color: m.color }} />
                     </div>
+                    <span className="text-xs font-bold px-2.5 py-1 rounded-full" style={{ color: m.color, background: m.bg }}>{m.symbols.length} activos</span>
                   </div>
-                  <div className="text-xs font-semibold flex-shrink-0" style={{ color: m.color }}>{m.symbols.length} activos</div>
+                  <div className="font-bold text-gray-900 text-base mb-1">{m.label}</div>
+                  <div className="text-xs text-gray-400 mb-3">{m.desc}</div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {m.symbols.map(s => (
+                      <span key={s} className="text-[10px] px-2 py-1 bg-gray-50 border border-gray-100 rounded-lg text-gray-500 font-mono font-semibold">{s}</span>
+                    ))}
+                  </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
             {/* Live price mockup */}
             <div className="bg-[#0c0f1c] border border-[#1e2538] rounded-2xl overflow-hidden shadow-xl">
