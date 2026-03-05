@@ -23,7 +23,7 @@ const NAV = [
 ];
 
 export default function PortalSidebar({ currentPage, onClose }) {
-  const { activeType } = useAccount();
+  const { activeType, user } = useAccount();
 
   return (
     <div className="flex flex-col h-full bg-[#0f1117] border-r border-[#1e2130] w-56">
@@ -33,7 +33,7 @@ export default function PortalSidebar({ currentPage, onClose }) {
           <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#2196F3] to-[#1565C0] flex items-center justify-center">
             <BarChart3 className="h-4 w-4 text-white" />
           </div>
-          <span className="text-sm font-bold text-white">TradePortal</span>
+          <span className="text-sm font-bold text-white">SimuTrade <span className="text-[#2196F3]">TV-Lite</span></span>
         </Link>
         {onClose && (
           <button onClick={onClose} className="text-[#787b86] hover:text-white lg:hidden">
@@ -46,6 +46,7 @@ export default function PortalSidebar({ currentPage, onClose }) {
       <nav className="flex-1 px-2 py-3 space-y-0.5 overflow-y-auto">
         {NAV.map(item => {
           if (item.realOnly && activeType !== 'REAL') return null;
+          if (item.adminOnly && user?.role !== 'admin') return null;
           const Icon = item.icon;
           const isActive = currentPage === item.page;
           return (
