@@ -49,7 +49,7 @@ export default function SummaryPage() {
   const winRate = sellTrades.length > 0 ? (winTrades.length / sellTrades.length * 100) : 0;
 
   // Build equity curve from trades
-  const equityCurve = React.useMemo(() => {
+  const equityCurve = useMemo(() => {
     const sortedTrades = [...trades].sort((a, b) => new Date(a.created_date) - new Date(b.created_date));
     let cash = startingCash;
     const points = [{ date: 'Start', equity: startingCash }];
