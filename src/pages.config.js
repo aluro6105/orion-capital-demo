@@ -50,6 +50,7 @@
 import About from './pages/About';
 import Admin from './pages/Admin';
 import Awards from './pages/Awards';
+import CRM from './pages/CRM';
 import Chart from './pages/Chart';
 import Dashboard from './pages/Dashboard';
 import Explore from './pages/Explore';
@@ -70,7 +71,7 @@ import Settings from './pages/Settings';
 import Summary from './pages/Summary';
 import Testimonials from './pages/Testimonials';
 import Trades from './pages/Trades';
-import CRM from './pages/CRM';
+import Register from './pages/Register';
 import __Layout from './Layout.jsx';
 
 
@@ -78,6 +79,7 @@ export const PAGES = {
     "About": About,
     "Admin": Admin,
     "Awards": Awards,
+    "CRM": CRM,
     "Chart": Chart,
     "Dashboard": Dashboard,
     "Explore": Explore,
@@ -98,7 +100,7 @@ export const PAGES = {
     "Summary": Summary,
     "Testimonials": Testimonials,
     "Trades": Trades,
-    "CRM": CRM,
+    "Register": Register,
 }
 
 export const pagesConfig = {
