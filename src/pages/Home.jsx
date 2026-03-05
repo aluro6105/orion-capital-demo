@@ -354,23 +354,60 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <span className="text-xs font-bold text-[#26a69a] uppercase tracking-[0.2em] mb-3 block">Mercados disponibles</span>
-            <h2 className="text-4xl sm:text-5xl font-black">Opera en todos<br />los mercados</h2>
+            <h2 className="text-4xl sm:text-5xl font-black">Acceso a todos<br />los mercados globales</h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {MARKETS.map((m, i) => (
-              <div key={i}
-                className="relative overflow-hidden rounded-2xl border border-white/5 bg-[#0c0f1c] p-6 hover:border-white/10 hover:-translate-y-1 transition-all group cursor-pointer"
-              >
-                <div className="absolute top-0 left-0 right-0 h-0.5 opacity-60" style={{ background: m.color }} />
-                <div className="text-3xl mb-4">{m.emoji}</div>
-                <div className="font-bold text-white text-lg mb-3">{m.label}</div>
-                <div className="flex flex-wrap gap-1.5">
-                  {m.symbols.map(s => (
-                    <span key={s} className="text-[11px] px-2 py-0.5 bg-white/5 rounded-full text-white/60 font-mono border border-white/5">{s}</span>
-                  ))}
+          {/* Main showcase: big grid with live-feel rows */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Left: market categories */}
+            <div className="space-y-3">
+              {MARKETS.map((m, i) => (
+                <div key={i} className="flex items-center gap-5 bg-[#0c0f1c] border border-white/5 rounded-2xl px-6 py-4 hover:border-white/10 hover:bg-[#0e1220] transition-all group cursor-pointer">
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 bg-white/5 group-hover:scale-110 transition-transform">{m.emoji}</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-bold text-white mb-1">{m.label}</div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {m.symbols.map(s => (
+                        <span key={s} className="text-[10px] px-1.5 py-0.5 bg-white/5 rounded text-white/50 font-mono">{s}</span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="text-right flex-shrink-0">
+                    <div className="text-xs font-semibold" style={{ color: m.color }}>{m.symbols.length} activos</div>
+                  </div>
                 </div>
+              ))}
+            </div>
+            {/* Right: live price table mockup */}
+            <div className="bg-[#0c0f1c] border border-white/5 rounded-2xl overflow-hidden">
+              <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/5">
+                <span className="text-xs font-semibold text-white/60 uppercase tracking-widest">Precios en vivo</span>
+                <span className="flex items-center gap-1.5 text-[10px] text-[#26a69a]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#26a69a] animate-pulse" />LIVE
+                </span>
               </div>
-            ))}
+              {[
+                { s: 'AAPL', n: 'Apple', p: '$178.52', c: '+1.23%', up: true },
+                { s: 'NVDA', n: 'Nvidia', p: '$875.30', c: '+3.21%', up: true },
+                { s: 'MSFT', n: 'Microsoft', p: '$415.20', c: '+0.87%', up: true },
+                { s: 'BTC/USD', n: 'Bitcoin', p: '$62,450', c: '-0.42%', up: false },
+                { s: 'EUR/USD', n: 'Euro / Dollar', p: '1.0850', c: '+0.12%', up: true },
+                { s: 'SPY', n: 'S&P 500 ETF', p: '$502.40', c: '+0.65%', up: true },
+                { s: 'ETH/USD', n: 'Ethereum', p: '$3,420', c: '+2.05%', up: true },
+                { s: 'TSLA', n: 'Tesla', p: '$245.60', c: '-1.18%', up: false },
+              ].map((r, i) => (
+                <div key={i} className="flex items-center px-5 py-3 border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
+                  <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-xs font-bold text-white/60 mr-3 flex-shrink-0">{r.s[0]}</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-bold text-white leading-none">{r.s}</div>
+                    <div className="text-[10px] text-white/30 mt-0.5">{r.n}</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm font-mono font-semibold text-white">{r.p}</div>
+                    <div className={`text-[11px] font-mono font-bold ${r.up ? 'text-[#26a69a]' : 'text-[#ef5350]'}`}>{r.c}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
