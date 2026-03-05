@@ -36,10 +36,14 @@ export default function RegisterPage() {
     phone: '',
     country_code: '+52',
     account_type: 'Demo',
+    password: '',
+    confirm_password: '',
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const handleChange = (field, value) => {
     setForm(prev => ({ ...prev, [field]: value }));
