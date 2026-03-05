@@ -7,28 +7,26 @@ import { HelpCircle, Search, ChevronDown } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
 const STATIC_FAQS = [
-  { id: 's1', category: 'cuenta', question: '¿Es gratis SimuTrade TV-Lite?', answer: 'Sí, completamente gratis. Sin tarjeta de crédito, sin compromisos, sin límites de tiempo.' },
-  { id: 's2', category: 'cuenta', question: '¿Cómo creo una cuenta?', answer: 'Haz clic en "Crear cuenta gratis", introduce tu email, elige una contraseña y listo. El proceso tarda menos de 30 segundos.' },
-  { id: 's3', category: 'cuenta', question: '¿Puedo tener múltiples cuentas?', answer: 'Puedes tener una cuenta Demo y una cuenta Real. La cuenta Demo tiene $100,000 virtuales, mientras que la Real requiere verificación KYC.' },
-  { id: 's4', category: 'mercado', question: '¿Los precios son datos reales?', answer: 'Usamos datos de mercado de alta fidelidad a través de WebSocket. Los datos pueden ser de proveedores como Finnhub o Twelve Data según la configuración del administrador.' },
-  { id: 's5', category: 'mercado', question: '¿Con qué frecuencia se actualizan los precios?', answer: 'Los precios se actualizan en tiempo real via WebSocket, con un máximo de 5-10 actualizaciones por segundo para garantizar la estabilidad de la interfaz.' },
-  { id: 's6', category: 'mercado', question: '¿Qué instrumentos están disponibles?', answer: 'Acciones (AAPL, MSFT, NVDA, TSLA, AMZN), ETFs (SPY, QQQ, IWM), Forex (EUR/USD, GBP/USD, USD/JPY) y Crypto (BTC/USD, ETH/USD). También oro (XAU/USD) si el proveedor lo soporta.' },
-  { id: 's7', category: 'trading', question: '¿Puedo perder dinero real?', answer: 'No. Todo el trading se realiza con dinero virtual. La cuenta Demo tiene $100,000 virtuales y puedes resetearla cuando quieras.' },
-  { id: 's8', category: 'trading', question: '¿Qué tipos de órdenes puedo usar?', answer: 'En el MVP puedes usar órdenes de mercado (Market). Las órdenes Limit están en desarrollo como Fase 2.' },
-  { id: 's9', category: 'trading', question: '¿Puedo hacer posiciones cortas?', answer: 'No en esta versión. Los cortos (short selling) están planificados para una fase futura de desarrollo.' },
-  { id: 's10', category: 'trading', question: '¿Cómo se calcula el P&L?', answer: 'El P&L no realizado se calcula en tiempo real: (precio actual - precio promedio) × cantidad. El P&L realizado se registra al cerrar posiciones.' },
-  { id: 's11', category: 'seguridad', question: '¿Es segura mi información?', answer: 'Sí. Toda la información se almacena de forma segura. Las API keys de proveedores de datos nunca se exponen al frontend.' },
-  { id: 's12', category: 'seguridad', question: '¿Qué datos guardáis de mí?', answer: 'Email, nombre, historial de operaciones virtuales y preferencias de cuenta. Nunca datos bancarios reales.' },
-  { id: 's13', category: 'seguridad', question: '¿Sois un broker regulado?', answer: 'No. SimuTrade TV-Lite es una plataforma educativa, no un broker. No está sujeta a regulación financiera ya que no gestiona dinero real.' },
-  { id: 's14', category: 'precios', question: '¿Cuánto cuesta?', answer: 'Actualmente SimuTrade TV-Lite es completamente gratuito. En el futuro podrían existir planes premium con funciones adicionales.' },
-  { id: 's15', category: 'precios', question: '¿Habrá versión de pago?', answer: 'Posiblemente en el futuro. El plan básico siempre será gratuito. Los planes premium añadirán más instrumentos, indicadores avanzados y funciones de análisis.' },
+  { id: 's1', category: 'cuenta', question: '¿Cómo abro una cuenta?', answer: 'Introduce tu email y elige una contraseña. El proceso tarda menos de 30 segundos y tu cuenta demo queda activada al instante.' },
+  { id: 's2', category: 'cuenta', question: '¿Cuánto capital tiene la cuenta demo?', answer: 'La cuenta demo se activa con $10,000 virtuales. Puedes resetearla desde el dashboard en cualquier momento.' },
+  { id: 's3', category: 'cuenta', question: '¿Puedo tener múltiples cuentas?', answer: 'Puedes tener una cuenta Demo y una cuenta Real. La cuenta Real requiere verificación KYC para operar.' },
+  { id: 's4', category: 'mercado', question: '¿Los precios son datos reales?', answer: 'Sí, usamos datos de mercado de alta fidelidad a través de WebSocket con actualizaciones tick a tick.' },
+  { id: 's5', category: 'mercado', question: '¿Con qué frecuencia se actualizan los precios?', answer: 'Los precios se actualizan en tiempo real via WebSocket, con múltiples actualizaciones por segundo.' },
+  { id: 's6', category: 'mercado', question: '¿Qué instrumentos están disponibles?', answer: 'Acciones (AAPL, MSFT, NVDA, TSLA, AMZN), ETFs (SPY, QQQ, IWM), Forex (EUR/USD, GBP/USD, USD/JPY) y Crypto (BTC/USD, ETH/USD).' },
+  { id: 's7', category: 'trading', question: '¿Qué tipos de órdenes puedo usar?', answer: 'Órdenes de mercado (Market Order) con validación de balance en tiempo real. Las órdenes Limit están en desarrollo.' },
+  { id: 's8', category: 'trading', question: '¿Puedo hacer posiciones cortas?', answer: 'No en esta versión. El short selling está planificado para una fase futura.' },
+  { id: 's9', category: 'trading', question: '¿Cómo se calcula el P&L?', answer: 'El P&L no realizado se calcula en tiempo real: (precio actual - precio promedio) × cantidad. El P&L realizado se registra al cerrar posiciones.' },
+  { id: 's10', category: 'seguridad', question: '¿Es segura mi información?', answer: 'Sí. Toda la información se almacena de forma segura. Las conexiones de datos se realizan a través de un proxy de backend protegido.' },
+  { id: 's11', category: 'seguridad', question: '¿Qué datos guardáis de mí?', answer: 'Email, nombre, historial de operaciones y preferencias de cuenta. Nunca datos bancarios sin proceso de verificación previo.' },
+  { id: 's12', category: 'precios', question: '¿Cuánto cuesta la plataforma?', answer: 'Consulta nuestros planes disponibles en la sección de precios. Contamos con opciones para todos los perfiles de inversión.' },
+  { id: 's13', category: 'precios', question: '¿Habrá planes premium?', answer: 'Sí. Los planes premium añadirán más instrumentos, indicadores avanzados, herramientas de análisis multicharts y soporte prioritario.' },
 ];
 
 const CATEGORIES = [
   { id: 'all', label: 'Todas' },
   { id: 'cuenta', label: 'Cuenta' },
   { id: 'mercado', label: 'Datos de mercado' },
-  { id: 'trading', label: 'Trading simulado' },
+  { id: 'trading', label: 'Trading' },
   { id: 'seguridad', label: 'Seguridad' },
   { id: 'precios', label: 'Precios' },
 ];
