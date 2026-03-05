@@ -70,6 +70,7 @@ import Settings from './pages/Settings';
 import Summary from './pages/Summary';
 import Testimonials from './pages/Testimonials';
 import Trades from './pages/Trades';
+import CRM from './pages/CRM';
 import __Layout from './Layout.jsx';
 
 
@@ -97,6 +98,7 @@ export const PAGES = {
     "Summary": Summary,
     "Testimonials": Testimonials,
     "Trades": Trades,
+    "CRM": CRM,
 }
 
 export const pagesConfig = {
