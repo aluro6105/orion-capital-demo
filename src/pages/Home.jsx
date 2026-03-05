@@ -396,7 +396,7 @@ export default function HomePage() {
                 Opera con la misma tecnología que usan los traders profesionales. Sin limitaciones artificiales.
               </p>
               <button
-                onClick={() => window.location.href = '/login'}
+                onClick={() => window.location.href = createPageUrl('Register')}
                 className="flex items-center gap-2 px-7 py-3.5 bg-[#00C853] hover:bg-[#00b34a] text-white font-bold rounded-full transition-all text-sm"
               >
                 Abrir cuenta gratis <ArrowRight className="h-4 w-4" />
