@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { createPageUrl } from '@/utils';
-import { ArrowRight, CheckCircle2, User, Mail, Phone, ChevronDown, TrendingUp } from 'lucide-react';
+import { ArrowRight, CheckCircle2, User, Mail, Phone, ChevronDown, TrendingUp, Lock, Eye, EyeOff } from 'lucide-react';
 
 const COUNTRY_CODES = [
   { code: '+1', abbr: 'US', name: 'Estados Unidos' },
