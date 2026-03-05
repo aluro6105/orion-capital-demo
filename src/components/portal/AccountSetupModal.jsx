@@ -33,7 +33,7 @@ export default function AccountSetupModal({ onDone }) {
               <ArrowRight className="h-5 w-5 text-white" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Welcome to TradePortal</h2>
+              <h2 className="text-lg font-bold text-white">Welcome to NEXUS</h2>
               <p className="text-xs text-[#8b8fa8]">Select how you'd like to start trading</p>
             </div>
           </div>

@@ -67,7 +67,7 @@ export default function AboutPage() {
               { year: '2022', title: 'El inicio', desc: 'Alejandro y María, ambos frustrados con la falta de herramientas educativas de trading de calidad, deciden construir lo que siempre quisieron tener.' },
               { year: '2023', title: 'Primer prototipo', desc: 'Lanzamos la beta privada con 200 usuarios. El feedback fue brutal pero revelador: la gente quería algo que se sintiera "real".' },
               { year: '2024', title: 'WebSocket & tiempo real', desc: 'Integramos streaming de datos via WebSocket. La plataforma empieza a sentirse como un broker de verdad. Llegamos a 10,000 usuarios.' },
-              { year: '2025', title: 'Nexus', desc: 'Rediseño completo de la plataforma. Motor de trading avanzado, métricas institucionales y la interfaz que tienes delante ahora.' },
+              { year: '2025', title: 'NEXUS', desc: 'Rediseño completo de la plataforma. Motor de trading avanzado, métricas institucionales y la interfaz que tienes delante ahora.' },
             ].map((h, i) => (
               <div key={i} className="flex gap-6">
                 <div className="flex flex-col items-center">
@@ -114,7 +114,7 @@ export default function AboutPage() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-black">El equipo</h2>
-            <p className="text-white/50 mt-2">Las personas detrás de Nexus</p>
+            <p className="text-white/50 mt-2">Las personas detrás de NEXUS</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {TEAM.map((m, i) => (
