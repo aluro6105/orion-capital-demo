@@ -32,7 +32,7 @@ export default function TestimonialsPage() {
         </div>
         <h1 className="text-4xl sm:text-5xl font-black mb-4">Lo que dicen nuestros usuarios</h1>
         <p className="text-white/50 max-w-xl mx-auto">
-          Miles de traders operan con Nexus. Estas son sus historias.
+          Miles de traders operan con NEXUS. Estas son sus historias.
         </p>
       </section>
 
