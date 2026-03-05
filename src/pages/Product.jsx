@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPageUrl } from '@/utils';
 import PublicNav from '../components/public/PublicNav';
 import PublicFooter from '../components/public/PublicFooter';
 import { BarChart3, Wifi, BookOpen, LineChart, ArrowRight, CheckCircle2 } from 'lucide-react';
