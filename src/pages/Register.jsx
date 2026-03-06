@@ -115,13 +115,20 @@ export default function RegisterPage() {
         {/* ── Left: form ── */}
         <div className="flex flex-col justify-center px-6 sm:px-12 lg:px-16 py-16">
 
-          {/* Logo */}
-          <div className="mb-12">
+          {/* Logo + back */}
+          <div className="mb-12 flex items-center justify-between">
             <a href={createPageUrl('Home')} className="inline-flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-md bg-[#00C853] flex items-center justify-center">
                 <span className="text-white font-black text-sm tracking-tight">N</span>
               </div>
               <span className="font-black text-xl text-gray-900 tracking-tight">NEXUS</span>
+            </a>
+            <a
+              href={createPageUrl('Home')}
+              className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-700 transition-colors"
+            >
+              <ArrowRight className="h-4 w-4 rotate-180" />
+              Inicio
             </a>
           </div>
 

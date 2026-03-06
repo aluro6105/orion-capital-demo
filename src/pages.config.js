@@ -67,11 +67,11 @@ import portalSupport from './pages/Portal_Support';
 import portalTrades from './pages/Portal_Trades';
 import Portfolio from './pages/Portfolio';
 import Product from './pages/Product';
+import Register from './pages/Register';
 import Settings from './pages/Settings';
 import Summary from './pages/Summary';
 import Testimonials from './pages/Testimonials';
 import Trades from './pages/Trades';
-import Register from './pages/Register';
 import __Layout from './Layout.jsx';
 
 
@@ -96,11 +96,11 @@ export const PAGES = {
     "Portal_Trades": portalTrades,
     "Portfolio": Portfolio,
     "Product": Product,
+    "Register": Register,
     "Settings": Settings,
     "Summary": Summary,
     "Testimonials": Testimonials,
     "Trades": Trades,
-    "Register": Register,
 }
 
 export const pagesConfig = {
