@@ -85,14 +85,17 @@ export default function HomePage() {
   const { data: testimonials = [] } = useQuery({
     queryKey: ['testimonials-home'],
     queryFn: () => base44.entities.Testimonial.filter({ approved: true }),
+    staleTime: 5 * 60 * 1000,
   });
   const { data: awards = [] } = useQuery({
     queryKey: ['awards-home'],
     queryFn: () => base44.entities.Award.filter({ is_active: true }),
+    staleTime: 5 * 60 * 1000,
   });
   const { data: faqs = [] } = useQuery({
     queryKey: ['faqs-home'],
     queryFn: () => base44.entities.Faq.filter({ is_active: true }),
+    staleTime: 5 * 60 * 1000,
   });
 
   const [openFaq, setOpenFaq] = useState(null);
