@@ -47,7 +47,7 @@ export default function PublicNav({ currentPage }) {
           {/* CTA buttons */}
           <div className="hidden md:flex items-center gap-2">
             <button
-              onClick={() => base44.auth.redirectToLogin(createPageUrl('Dashboard'))}
+              onClick={() => base44.auth.redirectToLogin()}
               className="px-4 py-2 text-sm font-semibold text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-all"
             >
               Iniciar sesión
@@ -89,7 +89,7 @@ export default function PublicNav({ currentPage }) {
           ))}
           <div className="pt-3 border-t border-gray-100 space-y-2">
             <button
-              onClick={() => { setMenuOpen(false); base44.auth.redirectToLogin(createPageUrl('Dashboard')); }}
+              onClick={() => { setMenuOpen(false); base44.auth.redirectToLogin(); }}
               className="w-full px-4 py-2.5 border border-gray-200 text-gray-700 font-semibold rounded-lg text-sm hover:bg-gray-50 transition-all"
             >
               Iniciar sesión
