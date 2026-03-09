@@ -54,10 +54,10 @@ export default function ProductPage() {
             Plataforma
           </div>
           <h1 className="text-4xl sm:text-6xl font-black mb-6 leading-tight text-gray-900">
-            Un simulador que se siente <span className="bg-gradient-to-r from-[#00C853] to-[#2196F3] bg-clip-text text-transparent">real</span>
+            Regulada, segura y con <span className="bg-gradient-to-r from-[#00C853] to-[#2196F3] bg-clip-text text-transparent">tecnología de vanguardia</span>
           </h1>
           <p className="text-lg text-gray-500 leading-relaxed mb-8 max-w-2xl mx-auto">
-            Construido con la misma tecnología que usan los brokers institucionales. Sin simplificaciones. Sin atajos.
+            Una plataforma supervisada por organismos reguladores internacionales, respaldada por infraestructura de última generación para garantizar seguridad, transparencia y máximo rendimiento.
           </p>
           <div className="inline-flex items-center gap-3 px-5 py-3.5 bg-[#00C853]/8 border border-[#00C853]/20 rounded-2xl">
             <p className="text-sm text-[#00a844] text-left font-medium">
