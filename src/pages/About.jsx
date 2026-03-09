@@ -55,7 +55,7 @@ export default function AboutPage() {
             { v: '2022', l: 'Año de fundación' },
             { v: '10K+', l: 'Traders activos' },
             { v: '100+', l: 'Países' },
-            { v: '4', l: 'Personas en el equipo' },
+            { v: '24/7', l: 'Soporte disponible' },
           ].map(s => (
             <div key={s.l} className="text-center">
               <div className="text-3xl sm:text-4xl font-black text-white mb-1">{s.v}</div>
@@ -178,8 +178,8 @@ export default function AboutPage() {
           <p className="text-gray-500 mb-10 max-w-2xl mx-auto">
             Precios en tiempo real con proveedores de datos institucionales, arquitectura segura y una interfaz construida con las mismas tecnologías que usan los mejores brokers del mundo.
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {['Tiempo real', 'React + Vite', 'Gráficos Canvas', 'Proxy seguro'].map(t => (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
+            {['Bloomberg', 'Yahoo Finance', 'Refinitiv', 'Alpha Vantage', 'Polygon.io', 'Morningstar', 'FactSet', 'ICE Data Services'].map(t => (
               <div key={t} className="bg-white border border-gray-100 rounded-xl p-4 text-center hover:border-[#2196F3]/30 transition-all">
                 <div className="text-sm font-bold text-gray-900">{t}</div>
               </div>
