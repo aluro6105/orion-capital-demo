@@ -4,7 +4,6 @@ import { base44 } from '@/api/base44Client';
 import PortalLayout from '../components/portal/PortalLayout';
 import { useAccount } from '../components/portal/AccountContext';
 import { Bell, CheckCircle2, TrendingUp, Shield, Wallet, Wrench, AlertTriangle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
 const TYPE_CONFIG = {
@@ -33,7 +32,7 @@ function MessagesContent() {
     for (const n of unread) await base44.entities.Notification.update(n.id, { read: true });
     queryClient.invalidateQueries({ queryKey: ['all-notifications'] });
     queryClient.invalidateQueries({ queryKey: ['notifications'] });
-    toast.success('All marked as read');
+    toast.success('Todos marcados como leídos');
   };
 
   const markRead = async (id) => {
@@ -46,20 +45,21 @@ function MessagesContent() {
     <div className="p-6 max-w-3xl mx-auto space-y-5">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-white">Notifications</h1>
-          {unread.length > 0 && <p className="text-xs text-[#8b8fa8]">{unread.length} unread</p>}
+          <h1 className="text-2xl font-bold text-white">Notificaciones</h1>
+          {unread.length > 0 && <p className="text-xs text-[#8b8fa8]">{unread.length} sin leer</p>}
         </div>
         {unread.length > 0 && (
-          <Button onClick={markAllRead} variant="outline" size="sm" className="border-[#1e2130] text-[#d1d4dc] hover:bg-[#1e2130] text-xs">
-            <CheckCircle2 className="h-3.5 w-3.5 mr-1.5" /> Mark All Read
-          </Button>
+          <button onClick={markAllRead}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#1e2130] text-[#d1d4dc] hover:bg-[#1e2130] text-xs font-medium transition-all">
+            <CheckCircle2 className="h-3.5 w-3.5" /> Marcar todas como leídas
+          </button>
         )}
       </div>
 
       {sorted.length === 0 ? (
         <div className="bg-[#0f1117] border border-[#1e2130] rounded-xl p-12 text-center">
           <Bell className="h-10 w-10 text-[#1e2130] mx-auto mb-3" />
-          <p className="text-sm text-[#8b8fa8]">No notifications yet</p>
+          <p className="text-sm text-[#8b8fa8]">Sin notificaciones aún</p>
         </div>
       ) : (
         <div className="space-y-2">
@@ -80,7 +80,7 @@ function MessagesContent() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-2">
                     <span className={`text-sm font-semibold ${n.read ? 'text-[#8b8fa8]' : 'text-white'}`}>{n.title}</span>
-                    <span className="text-[10px] text-[#8b8fa8] flex-shrink-0">{new Date(n.created_date).toLocaleDateString()}</span>
+                    <span className="text-[10px] text-[#8b8fa8] flex-shrink-0">{new Date(n.created_date).toLocaleDateString('es-ES')}</span>
                   </div>
                   <p className="text-xs text-[#8b8fa8] mt-0.5">{n.message}</p>
                 </div>

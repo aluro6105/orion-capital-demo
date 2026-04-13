@@ -9,17 +9,17 @@ import {
 import { useAccount } from './AccountContext';
 
 const NAV = [
-  { label: 'Dashboard', page: 'Dashboard', icon: LayoutDashboard },
-  { label: 'Charts', page: 'Portal_Charts', icon: BarChart3 },
-  { label: 'Portfolio', page: 'Portal_Portfolio', icon: Briefcase },
-  { label: 'Orders & Trades', page: 'Portal_Trades', icon: History },
-  { label: 'Funding', page: 'Portal_Funding', icon: Wallet, realOnly: true },
-  { label: 'Verification', page: 'Portal_KYC', icon: Shield, realOnly: true },
-  { label: 'Reports', page: 'Portal_Reports', icon: FileText },
-  { label: 'Messages', page: 'Portal_Messages', icon: MessageSquare },
-  { label: 'Support', page: 'Portal_Support', icon: HelpCircle },
-  { label: 'Settings', page: 'Portal_Settings', icon: Settings },
-  { label: 'Admin', page: 'Admin', icon: Settings, adminOnly: true },
+  { label: 'Panel', page: 'Dashboard', icon: LayoutDashboard },
+  { label: 'Gráficos', page: 'Portal_Charts', icon: BarChart3 },
+  { label: 'Cartera', page: 'Portal_Portfolio', icon: Briefcase },
+  { label: 'Órdenes y Operaciones', page: 'Portal_Trades', icon: History },
+  { label: 'Fondos', page: 'Portal_Funding', icon: Wallet, realOnly: true },
+  { label: 'Verificación', page: 'Portal_KYC', icon: Shield, realOnly: true },
+  { label: 'Informes', page: 'Portal_Reports', icon: FileText },
+  { label: 'Mensajes', page: 'Portal_Messages', icon: MessageSquare },
+  { label: 'Soporte', page: 'Portal_Support', icon: HelpCircle },
+  { label: 'Ajustes', page: 'Portal_Settings', icon: Settings },
+  { label: 'Administración', page: 'Admin', icon: Settings, adminOnly: true },
 ];
 
 export default function PortalSidebar({ currentPage, onClose }) {

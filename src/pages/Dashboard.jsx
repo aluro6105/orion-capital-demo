@@ -68,14 +68,14 @@ function DashboardContent() {
 
   const handleResetDemo = async () => {
     if (!activeAccount || activeType !== 'DEMO') return;
-    if (!confirm('Reset demo account to $10,000? All positions and trades will be cleared.')) return;
+    if (!confirm('¿Resetear la cuenta Demo a $10,000? Se borrarán todas las posiciones y operaciones.')) return;
     setResetting(true);
     // Delete positions and trades
     for (const p of positions) await base44.entities.BrokerPosition.delete(p.id);
     for (const t of recentTrades) await base44.entities.BrokerTrade.delete(t.id);
     await base44.entities.BrokerAccount.update(activeAccount.id, { cash_balance: 10000, starting_cash: 10000 });
     queryClient.invalidateQueries();
-    toast.success('Demo account reset to $10,000');
+    toast.success('Cuenta Demo reseteada a $10,000');
     setResetting(false);
   };
 
@@ -100,7 +100,7 @@ function DashboardContent() {
           <div>
             <div className="text-sm font-semibold text-white">{activeAccount?.display_name}</div>
             <div className="text-xs text-[#8b8fa8]">
-              {activeType === 'DEMO' ? 'Demo account — $10,000 virtual funds' : 'Live account — real funds'}
+              {activeType === 'DEMO' ? 'Cuenta Demo — $10,000 virtuales' : 'Cuenta Real — fondos reales'}
             </div>
           </div>
         </div>
@@ -108,12 +108,12 @@ function DashboardContent() {
           {activeType === 'DEMO' && (
             <>
               <Button size="sm" variant="outline" onClick={handleResetDemo} disabled={resetting}
-                className="border-amber-500/30 text-amber-400 hover:bg-amber-500/10 text-xs h-8">
-                <RefreshCw className="h-3 w-3 mr-1" /> Reset
+                className="bg-transparent border-amber-500/30 text-amber-400 hover:bg-amber-500/10 text-xs h-8">
+                <RefreshCw className="h-3 w-3 mr-1" /> Resetear
               </Button>
               <Link to={createPageUrl('Portal_Trades')}>
-                <Button size="sm" variant="outline" className="border-amber-500/30 text-amber-400 hover:bg-amber-500/10 text-xs h-8">
-                  <Download className="h-3 w-3 mr-1" /> Export Trades
+                <Button size="sm" variant="outline" className="bg-transparent border-amber-500/30 text-amber-400 hover:bg-amber-500/10 text-xs h-8">
+                  <Download className="h-3 w-3 mr-1" /> Exportar
                 </Button>
               </Link>
             </>
@@ -122,11 +122,11 @@ function DashboardContent() {
             <>
               <Link to={createPageUrl('Portal_Funding')}>
                 <Button size="sm" className="bg-[#2196F3] hover:bg-[#1976D2] text-xs h-8">
-                  <Plus className="h-3 w-3 mr-1" /> Deposit
+                  <Plus className="h-3 w-3 mr-1" /> Depositar
                 </Button>
               </Link>
               <Link to={createPageUrl('Portal_KYC')}>
-                <Button size="sm" variant="outline" className={`border-[#2196F3]/30 text-xs h-8 ${kycColors[kycStatus]}`}>
+                <Button size="sm" variant="outline" className={`bg-transparent border-[#2196F3]/30 text-xs h-8 ${kycColors[kycStatus]}`}>
                   KYC: {kycStatus.replace('_', ' ').toUpperCase()}
                 </Button>
               </Link>
@@ -139,7 +139,7 @@ function DashboardContent() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-[#0f1117] border border-[#1e2130] rounded-xl p-5">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs text-[#8b8fa8] uppercase tracking-wide">Equity</span>
+            <span className="text-xs text-[#8b8fa8] uppercase tracking-wide">Patrimonio</span>
             <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
               <DollarSign className="h-4 w-4 text-blue-400" />
             </div>
@@ -148,13 +148,13 @@ function DashboardContent() {
             ${equity.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
           <div className={`text-xs font-mono mt-1 ${returnPct >= 0 ? 'text-[#26a69a]' : 'text-[#ef5350]'}`}>
-            {returnPct >= 0 ? '▲' : '▼'} {Math.abs(returnPct).toFixed(2)}% total return
+            {returnPct >= 0 ? '▲' : '▼'} {Math.abs(returnPct).toFixed(2)}% retorno total
           </div>
         </div>
 
         <div className="bg-[#0f1117] border border-[#1e2130] rounded-xl p-5">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs text-[#8b8fa8] uppercase tracking-wide">Cash</span>
+            <span className="text-xs text-[#8b8fa8] uppercase tracking-wide">Efectivo</span>
             <div className="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center">
               <Wallet className="h-4 w-4 text-green-400" />
             </div>
@@ -163,13 +163,13 @@ function DashboardContent() {
             ${cash.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
           <div className="text-xs text-[#8b8fa8] mt-1">
-            {equity > 0 ? (cash / equity * 100).toFixed(1) : 0}% of equity
+            {equity > 0 ? (cash / equity * 100).toFixed(1) : 0}% del patrimonio
           </div>
         </div>
 
         <div className="bg-[#0f1117] border border-[#1e2130] rounded-xl p-5">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs text-[#8b8fa8] uppercase tracking-wide">Unrealized P&L</span>
+            <span className="text-xs text-[#8b8fa8] uppercase tracking-wide">G/P No realizada</span>
             <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${unrealizedPnl >= 0 ? 'bg-[#26a69a]/10' : 'bg-[#ef5350]/10'}`}>
               {unrealizedPnl >= 0 ? <TrendingUp className="h-4 w-4 text-[#26a69a]" /> : <TrendingDown className="h-4 w-4 text-[#ef5350]" />}
             </div>
@@ -177,12 +177,12 @@ function DashboardContent() {
           <div className={`text-2xl font-bold font-mono ${unrealizedPnl >= 0 ? 'text-[#26a69a]' : 'text-[#ef5350]'}`}>
             {unrealizedPnl >= 0 ? '+' : ''}${unrealizedPnl.toFixed(2)}
           </div>
-          <div className="text-xs text-[#8b8fa8] mt-1">{activePos.length} open position{activePos.length !== 1 ? 's' : ''}</div>
+          <div className="text-xs text-[#8b8fa8] mt-1">{activePos.length} posición{activePos.length !== 1 ? 'es' : ''} abiertas</div>
         </div>
 
         <div className="bg-[#0f1117] border border-[#1e2130] rounded-xl p-5">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs text-[#8b8fa8] uppercase tracking-wide">Realized P&L</span>
+            <span className="text-xs text-[#8b8fa8] uppercase tracking-wide">G/P Realizada</span>
             <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${realizedTotal >= 0 ? 'bg-[#26a69a]/10' : 'bg-[#ef5350]/10'}`}>
               <BarChart3 className={`h-4 w-4 ${realizedTotal >= 0 ? 'text-[#26a69a]' : 'text-[#ef5350]'}`} />
             </div>
@@ -190,7 +190,7 @@ function DashboardContent() {
           <div className={`text-2xl font-bold font-mono ${realizedTotal >= 0 ? 'text-[#26a69a]' : 'text-[#ef5350]'}`}>
             {realizedTotal >= 0 ? '+' : ''}${realizedTotal.toFixed(2)}
           </div>
-          <div className="text-xs text-[#8b8fa8] mt-1">{recentTrades.length} total trades</div>
+          <div className="text-xs text-[#8b8fa8] mt-1">{recentTrades.length} operaciones totales</div>
         </div>
       </div>
 
@@ -198,33 +198,33 @@ function DashboardContent() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Quick actions */}
         <div className="bg-[#0f1117] border border-[#1e2130] rounded-xl p-5">
-          <h3 className="text-sm font-semibold text-white mb-4">Quick Actions</h3>
+          <h3 className="text-sm font-semibold text-white mb-4">Acciones rápidas</h3>
           <div className="space-y-2">
             <Link to={createPageUrl('Portal_Charts')}>
               <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-[#1e2130] hover:bg-[#252836] transition-all text-left text-sm text-[#d1d4dc]">
-                <BarChart3 className="h-4 w-4 text-[#2196F3]" /> Open Charts
+                <BarChart3 className="h-4 w-4 text-[#2196F3]" /> Abrir gráficos
               </button>
             </Link>
             <Link to={createPageUrl('Portal_Portfolio')}>
               <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-[#1e2130] hover:bg-[#252836] transition-all text-left text-sm text-[#d1d4dc]">
-                <TrendingUp className="h-4 w-4 text-green-400" /> View Portfolio
+                <TrendingUp className="h-4 w-4 text-green-400" /> Ver cartera
               </button>
             </Link>
             {activeType === 'REAL' && (
               <>
                 <Link to={createPageUrl('Portal_Funding')}>
                   <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-[#1e2130] hover:bg-[#252836] transition-all text-left text-sm text-[#d1d4dc]">
-                    <ArrowUpRight className="h-4 w-4 text-[#26a69a]" /> Deposit Funds
+                    <ArrowUpRight className="h-4 w-4 text-[#26a69a]" /> Depositar fondos
                   </button>
                 </Link>
                 <Link to={createPageUrl('Portal_Funding') + '?tab=withdraw'}>
                   <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-[#1e2130] hover:bg-[#252836] transition-all text-left text-sm text-[#d1d4dc]">
-                    <ArrowDownRight className="h-4 w-4 text-[#ef5350]" /> Withdraw Funds
+                    <ArrowDownRight className="h-4 w-4 text-[#ef5350]" /> Retirar fondos
                   </button>
                 </Link>
                 <Link to={createPageUrl('Portal_KYC')}>
                   <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-[#1e2130] hover:bg-[#252836] transition-all text-left text-sm text-[#d1d4dc]">
-                    <LinkIcon className="h-4 w-4 text-purple-400" /> KYC Verification
+                    <LinkIcon className="h-4 w-4 text-purple-400" /> Verificación KYC
                   </button>
                 </Link>
               </>
@@ -232,12 +232,12 @@ function DashboardContent() {
             {activeType === 'DEMO' && (
               <button onClick={handleResetDemo} disabled={resetting}
                 className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-[#1e2130] hover:bg-[#252836] transition-all text-left text-sm text-[#d1d4dc]">
-                <RefreshCw className="h-4 w-4 text-amber-400" /> Reset Demo Account
+                <RefreshCw className="h-4 w-4 text-amber-400" /> Resetear cuenta Demo
               </button>
             )}
             <Link to={createPageUrl('Portal_Reports')}>
               <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-[#1e2130] hover:bg-[#252836] transition-all text-left text-sm text-[#d1d4dc]">
-                <Download className="h-4 w-4 text-[#8b8fa8]" /> Statements & Reports
+                <Download className="h-4 w-4 text-[#8b8fa8]" /> Extractos e informes
               </button>
             </Link>
           </div>
@@ -246,14 +246,14 @@ function DashboardContent() {
         {/* Recent activity */}
         <div className="lg:col-span-2 bg-[#0f1117] border border-[#1e2130] rounded-xl p-5">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-semibold text-white">Recent Activity</h3>
-            <Link to={createPageUrl('Portal_Trades')} className="text-xs text-[#2196F3] hover:underline">View all</Link>
+            <h3 className="text-sm font-semibold text-white">Actividad reciente</h3>
+            <Link to={createPageUrl('Portal_Trades')} className="text-xs text-[#2196F3] hover:underline">Ver todo</Link>
           </div>
           <div className="space-y-1">
             {sortedTrades.length === 0 ? (
               <div className="flex flex-col items-center py-8 text-center">
                 <Clock className="h-8 w-8 text-[#1e2130] mb-2" />
-                <p className="text-xs text-[#8b8fa8]">No activity yet. Start trading!</p>
+                <p className="text-xs text-[#8b8fa8]">Sin actividad aún. ¡Empieza a operar!</p>
               </div>
             ) : (
               sortedTrades.map(t => (

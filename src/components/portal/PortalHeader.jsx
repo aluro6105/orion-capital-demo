@@ -70,7 +70,7 @@ export default function PortalHeader({ onMenuToggle }) {
           {activeType === 'DEMO' && (
             <span className="text-[10px] bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded font-bold">DEMO</span>
           )}
-          <span className="text-xs text-[#8b8fa8]">Balance:</span>
+          <span className="text-xs text-[#8b8fa8]">Saldo:</span>
           <span className="text-sm font-bold text-white font-mono">
             ${(activeAccount.cash_balance || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </span>
@@ -105,19 +105,19 @@ export default function PortalHeader({ onMenuToggle }) {
           <DropdownMenuContent align="end" className="bg-[#1e2130] border-[#2a2e3f] w-48">
             <DropdownMenuItem asChild>
               <Link to={createPageUrl('Portal_Settings')} className="flex items-center gap-2 text-[#d1d4dc] text-sm">
-                <Settings className="h-4 w-4" /> Settings
+                <Settings className="h-4 w-4" /> Ajustes
               </Link>
             </DropdownMenuItem>
             {user?.role === 'admin' && (
               <DropdownMenuItem asChild>
                 <Link to={createPageUrl('Admin')} className="flex items-center gap-2 text-[#d1d4dc] text-sm">
-                  <User className="h-4 w-4" /> Admin Panel
+                  <User className="h-4 w-4" /> Administración
                 </Link>
               </DropdownMenuItem>
             )}
             <DropdownMenuSeparator className="bg-[#2a2e3f]" />
             <DropdownMenuItem onClick={handleLogout} className="flex items-center gap-2 text-red-400 text-sm cursor-pointer">
-              <LogOut className="h-4 w-4" /> Logout
+              <LogOut className="h-4 w-4" /> Cerrar sesión
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
