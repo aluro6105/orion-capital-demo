@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { createPageUrl } from '@/utils';
 
 const AccountContext = createContext(null);
 
@@ -13,7 +14,13 @@ export function AccountProvider({ children }) {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    base44.auth.me().then(u => { setUser(u); setUserLoading(false); }).catch(() => setUserLoading(false));
+    const stored = localStorage.getItem('nexus_user');
+    if (stored) {
+      try {
+        setUser(JSON.parse(stored));
+      } catch {}
+    }
+    setUserLoading(false);
   }, []);
 
   const { data: accounts = [], isLoading: accountsLoading } = useQuery({

@@ -14,7 +14,7 @@ function PortalShell({ children, currentPageName }) {
   useEffect(() => {
     if (!userLoading) {
       if (!user) {
-        base44.auth.redirectToLogin(window.location.pathname + window.location.search);
+        window.location.href = '/Acceso';
       } else {
         setAuthChecked(true);
       }

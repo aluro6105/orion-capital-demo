@@ -37,7 +37,7 @@ export default function Watchlist({ items, instruments, activeSymbol, onSelectSy
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between px-3 py-2 border-b border-[#2a2e39]">
-        <span className="text-xs font-semibold text-[#d1d4dc] uppercase tracking-wider">Watchlist</span>
+        <span className="text-xs font-semibold text-[#d1d4dc] uppercase tracking-wider">Lista de seguimiento</span>
         <Button variant="ghost" size="icon" className="h-6 w-6 text-[#787b86] hover:text-white hover:bg-[#2a2e39]" onClick={() => setShowSearch(!showSearch)}>
           <Plus className="h-3.5 w-3.5" />
         </Button>
@@ -50,7 +50,7 @@ export default function Watchlist({ items, instruments, activeSymbol, onSelectSy
             <Input
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
-              placeholder="Add symbol..."
+              placeholder="Agregar símbolo..."
               className="h-7 pl-7 text-xs bg-[#1e222d] border-[#2a2e39] text-white placeholder:text-[#787b86]"
               autoFocus
             />
@@ -132,7 +132,7 @@ export default function Watchlist({ items, instruments, activeSymbol, onSelectSy
 
       {items.length === 0 && (
         <div className="flex-1 flex items-center justify-center text-xs text-[#787b86]">
-          Click + to add symbols
+          Haz clic en + para agregar símbolos
         </div>
       )}
     </div>

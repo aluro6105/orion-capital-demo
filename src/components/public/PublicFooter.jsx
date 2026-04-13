@@ -4,65 +4,61 @@ import { createPageUrl } from '@/utils';
 
 export default function PublicFooter() {
   return (
-    <footer className="bg-gray-900 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+    <footer className="bg-[#0a0d14] border-t border-white/5 py-12 px-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="flex flex-col md:flex-row items-start justify-between gap-8 mb-10">
           {/* Brand */}
-          <div className="md:col-span-2">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00C853] to-[#2196F3] flex items-center justify-center">
+          <div>
+            <div className="flex items-center gap-2.5 mb-3">
+              <div className="w-8 h-8 rounded-md bg-[#00C853] flex items-center justify-center">
                 <span className="text-white font-black text-sm">N</span>
               </div>
-              <span className="font-black text-white text-lg">NEXUS</span>
+              <span className="font-black text-xl text-white tracking-tight">NEXUS</span>
             </div>
-            <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
-              Plataforma de trading simulado con tecnología institucional. Aprende sin riesgo, opera como un profesional.
+            <p className="text-white/30 text-sm max-w-xs leading-relaxed">
+              Plataforma de trading simulado con fines educativos. Los resultados en cuentas demo no garantizan rendimientos reales.
             </p>
-            <div className="flex items-center gap-2 mt-4">
-              <span className="w-2 h-2 rounded-full bg-[#00C853] animate-pulse" />
-              <span className="text-xs text-[#00C853] font-semibold">Plataforma activa</span>
+          </div>
+
+          {/* Links */}
+          <div className="flex flex-wrap gap-12">
+            <div>
+              <div className="text-xs font-bold text-white/50 uppercase tracking-widest mb-4">Plataforma</div>
+              <div className="space-y-2">
+                {[
+                  { label: 'Inicio', page: 'Home' },
+                  { label: 'Producto', page: 'Product' },
+                  { label: 'Sobre nosotros', page: 'About' },
+                ].map(l => (
+                  <Link key={l.page} to={createPageUrl(l.page)} className="block text-sm text-white/40 hover:text-white transition-colors">{l.label}</Link>
+                ))}
+              </div>
             </div>
-          </div>
-
-          {/* Navigation */}
-          <div>
-            <div className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Plataforma</div>
-            <ul className="space-y-2.5">
-              {[
-                { label: 'Inicio', page: 'Home' },
-                { label: 'Plataforma', page: 'Product' },
-                { label: 'Premios', page: 'Awards' },
-              ].map(l => (
-                <li key={l.page}>
-                  <Link to={createPageUrl(l.page)} className="text-sm text-gray-400 hover:text-white transition-colors">
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <div className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Empresa</div>
-            <ul className="space-y-2.5">
-              {[
-                { label: 'Nosotros', page: 'About' },
-                { label: 'Testimonios', page: 'Testimonials' },
-                { label: 'FAQ', page: 'FAQ' },
-              ].map(l => (
-                <li key={l.page}>
-                  <Link to={createPageUrl(l.page)} className="text-sm text-gray-400 hover:text-white transition-colors">
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <div>
+              <div className="text-xs font-bold text-white/50 uppercase tracking-widest mb-4">Soporte</div>
+              <div className="space-y-2">
+                {[
+                  { label: 'FAQ', page: 'FAQ' },
+                  { label: 'Testimonios', page: 'Testimonials' },
+                  { label: 'Premios', page: 'Awards' },
+                ].map(l => (
+                  <Link key={l.page} to={createPageUrl(l.page)} className="block text-sm text-white/40 hover:text-white transition-colors">{l.label}</Link>
+                ))}
+              </div>
+            </div>
+            <div>
+              <div className="text-xs font-bold text-white/50 uppercase tracking-widest mb-4">Cuenta</div>
+              <div className="space-y-2">
+                <a href={createPageUrl('Acceso')} className="block text-sm text-white/40 hover:text-white transition-colors">Iniciar sesión</a>
+                <a href={createPageUrl('Acceso')} className="block text-sm text-white/40 hover:text-white transition-colors">Crear cuenta</a>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-gray-600">© {new Date().getFullYear()} NEXUS. Todos los derechos reservados.</p>
-          <p className="text-xs text-gray-600">Plataforma educativa de trading simulado. No es asesoramiento financiero.</p>
+        <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <span className="text-xs text-white/20">© {new Date().getFullYear()} NEXUS Trading. Todos los derechos reservados.</span>
+          <span className="text-xs text-white/20">Plataforma educativa · No constituye asesoramiento financiero</span>
         </div>
       </div>
     </footer>

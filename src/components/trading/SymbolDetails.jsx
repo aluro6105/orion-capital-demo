@@ -21,13 +21,13 @@ export default function SymbolDetails({ symbol, name, type, priceData, candles }
 
       <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-[10px]">
         <div className="flex justify-between">
-          <span className="text-[#787b86]">Last</span>
+          <span className="text-[#787b86]">Último</span>
           <span className={`font-mono font-semibold ${isUp ? 'text-[#26a69a]' : 'text-[#ef5350]'}`}>
             {priceData.price?.toFixed(2)}
           </span>
         </div>
         <div className="flex justify-between">
-          <span className="text-[#787b86]">Change</span>
+          <span className="text-[#787b86]">Cambio</span>
           <span className={`font-mono ${isUp ? 'text-[#26a69a]' : 'text-[#ef5350]'}`}>
             {isUp ? '+' : ''}{priceData.changePercent?.toFixed(2)}%
           </span>
@@ -35,15 +35,15 @@ export default function SymbolDetails({ symbol, name, type, priceData, candles }
         {lastCandle && (
           <>
             <div className="flex justify-between">
-              <span className="text-[#787b86]">High</span>
+              <span className="text-[#787b86]">Máx</span>
               <span className="text-[#d1d4dc] font-mono">{lastCandle.high?.toFixed(2)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-[#787b86]">Low</span>
+              <span className="text-[#787b86]">Mín</span>
               <span className="text-[#d1d4dc] font-mono">{lastCandle.low?.toFixed(2)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-[#787b86]">Open</span>
+              <span className="text-[#787b86]">Apertura</span>
               <span className="text-[#d1d4dc] font-mono">{lastCandle.open?.toFixed(2)}</span>
             </div>
             <div className="flex justify-between">

@@ -66,7 +66,7 @@ export default function TopToolbar({
                     ref={searchRef}
                     value={searchTerm}
                     onChange={e => setSearchTerm(e.target.value)}
-                    placeholder="Search symbol..."
+                    placeholder="Buscar símbolo..."
                     className="h-8 pl-8 text-xs bg-[#131722] border-[#2a2e39] text-white"
                   />
                 </div>
@@ -154,7 +154,7 @@ export default function TopToolbar({
         <DropdownMenuTrigger asChild>
           <button className="flex items-center gap-1 px-2 py-1 text-xs text-[#787b86] hover:text-white hover:bg-[#2a2e39] rounded transition-colors">
             <Activity className="h-3.5 w-3.5" />
-            <span>Indicators</span>
+            <span>Indicadores</span>
             {indicators.length > 0 && (
               <span className="bg-[#2196F3] text-white text-[10px] rounded-full px-1.5">{indicators.length}</span>
             )}

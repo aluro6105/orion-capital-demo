@@ -24,11 +24,11 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
 
   const handleSubmit = async () => {
     if (side === 'buy' && !canBuy) {
-      toast.error(total > cash ? 'Insufficient funds' : 'Invalid order');
+      toast.error(total > cash ? 'Fondos insuficientes' : 'Orden inválida');
       return;
     }
     if (side === 'sell' && !canSell) {
-      toast.error(!position ? 'No position to sell' : position.qty < qtyNum ? 'Insufficient shares' : 'Invalid order');
+      toast.error(!position ? 'Sin posición para vender' : position.qty < qtyNum ? 'Acciones insuficientes' : 'Orden inválida');
       return;
     }
     setSubmitting(true);
@@ -43,7 +43,7 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
   return (
     <div className="bg-[#131722] border-t border-[#2a2e39] p-3">
       <div className="flex items-center gap-2 mb-3">
-        <span className="text-xs font-semibold text-[#d1d4dc] uppercase tracking-wider">Trade</span>
+        <span className="text-xs font-semibold text-[#d1d4dc] uppercase tracking-wider">Operar</span>
         <span className="text-xs font-bold text-white">{symbol}</span>
         {currentPrice && (
           <span className="text-xs font-mono text-[#787b86] ml-auto">${currentPrice.toFixed(2)}</span>
@@ -58,7 +58,7 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
             side === 'buy' ? 'bg-[#26a69a] text-white' : 'bg-[#1e222d] text-[#787b86] hover:text-white'
           }`}
         >
-          <ArrowUpRight className="h-3 w-3 inline mr-1" />BUY
+          <ArrowUpRight className="h-3 w-3 inline mr-1" />COMPRAR
         </button>
         <button
           onClick={() => setSide('sell')}
@@ -66,7 +66,7 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
             side === 'sell' ? 'bg-[#ef5350] text-white' : 'bg-[#1e222d] text-[#787b86] hover:text-white'
           }`}
         >
-          <ArrowDownRight className="h-3 w-3 inline mr-1" />SELL
+          <ArrowDownRight className="h-3 w-3 inline mr-1" />VENDER
         </button>
       </div>
 
@@ -77,20 +77,20 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
           className={`flex-1 py-1 rounded text-[10px] font-semibold uppercase ${
             orderType === 'market' ? 'bg-[#2a2e39] text-white' : 'text-[#787b86]'
           }`}
-        >Market</button>
+        >Mercado</button>
         <button
           onClick={() => setOrderType('limit')}
           className={`flex-1 py-1 rounded text-[10px] font-semibold uppercase ${
             orderType === 'limit' ? 'bg-[#2a2e39] text-white' : 'text-[#787b86]'
           }`}
-        >Limit</button>
+        >Límite</button>
       </div>
 
       {/* Qty */}
       <div className="space-y-2 mb-3">
         <div>
           <div className="flex items-center justify-between mb-1">
-            <Label className="text-[10px] text-[#787b86] uppercase">Quantity</Label>
+            <Label className="text-[10px] text-[#787b86] uppercase">Cantidad</Label>
             {side === 'buy' && (
               <button onClick={() => setQty(String(maxBuyQty))} className="text-[10px] text-[#2196F3] hover:underline">
                 Max: {maxBuyQty}
@@ -111,7 +111,7 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
         </div>
         {orderType === 'limit' && (
           <div>
-            <Label className="text-[10px] text-[#787b86] uppercase">Limit Price</Label>
+            <Label className="text-[10px] text-[#787b86] uppercase">Precio Límite</Label>
             <Input
               type="number" min="0" step="0.01" value={limitPrice}
               onChange={e => setLimitPrice(e.target.value)}
@@ -125,7 +125,7 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
       {/* Summary */}
       <div className="bg-[#1e222d] rounded p-2 mb-3 space-y-1">
         <div className="flex justify-between text-[10px]">
-          <span className="text-[#787b86]">Price</span>
+          <span className="text-[#787b86]">Precio</span>
           <span className="text-[#d1d4dc] font-mono">${price.toFixed(2)}</span>
         </div>
         <div className="flex justify-between text-[10px]">
@@ -133,12 +133,12 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
           <span className="text-white font-semibold font-mono">${total.toFixed(2)}</span>
         </div>
         <div className="flex justify-between text-[10px]">
-          <span className="text-[#787b86]">Available Cash</span>
+          <span className="text-[#787b86]">Efectivo disponible</span>
           <span className="text-[#d1d4dc] font-mono">${cash.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
         </div>
         {position && (
           <div className="flex justify-between text-[10px]">
-            <span className="text-[#787b86]">Current Position</span>
+            <span className="text-[#787b86]">Posición actual</span>
             <span className="text-[#d1d4dc] font-mono">{position.qty} @ ${position.avg_price?.toFixed(2)}</span>
           </div>
         )}
@@ -153,7 +153,7 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
             : 'bg-[#ef5350] hover:bg-[#ef5350]/90 text-white'
         }`}
       >
-        {submitting ? 'Processing...' : `${side.toUpperCase()} ${symbol}`}
+        {submitting ? 'Procesando...' : `${side === 'buy' ? 'COMPRAR' : 'VENDER'} ${symbol}`}
       </Button>
     </div>
   );

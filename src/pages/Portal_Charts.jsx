@@ -87,12 +87,12 @@ function ChartsContent() {
   }, []);
 
   const handleTrade = async ({ side, orderType, qty, price, symbol }) => {
-    if (!activeAccount) { toast.error('No active account'); return; }
+    if (!activeAccount) { toast.error('Sin cuenta activa'); return; }
     const total = qty * price;
     const fee = 0;
 
     if (side === 'buy') {
-      if (activeAccount.cash_balance < total) { toast.error('Insufficient funds'); return; }
+      if (activeAccount.cash_balance < total) { toast.error('Fondos insuficientes'); return; }
       const newCash = activeAccount.cash_balance - total - fee;
       await base44.entities.BrokerAccount.update(activeAccount.id, { cash_balance: newCash });
       const existingPos = positions.find(p => p.symbol === symbol);
@@ -104,10 +104,10 @@ function ChartsContent() {
         await base44.entities.BrokerPosition.create({ account_id: activeAccount.id, account_type: activeType, user_id: activeAccount.user_id, symbol, qty, avg_price: price, instrument_name: DEFAULT_INSTRUMENTS.find(i => i.symbol === symbol)?.name || symbol });
       }
       await base44.entities.BrokerTrade.create({ account_id: activeAccount.id, account_type: activeType, user_id: activeAccount.user_id, symbol, side: 'buy', order_type: orderType, qty, price, fee, total, instrument_name: DEFAULT_INSTRUMENTS.find(i => i.symbol === symbol)?.name || symbol });
-      toast.success(`Bought ${qty} ${symbol} @ $${price.toFixed(2)}`);
+      toast.success(`Comprado ${qty} ${symbol} @ $${price.toFixed(2)}`);
     } else {
       const existingPos = positions.find(p => p.symbol === symbol);
-      if (!existingPos || existingPos.qty < qty) { toast.error('Insufficient position'); return; }
+      if (!existingPos || existingPos.qty < qty) { toast.error('Posición insuficiente'); return; }
       const realizedPnl = (price - existingPos.avg_price) * qty;
       const newCash = activeAccount.cash_balance + total - fee;
       await base44.entities.BrokerAccount.update(activeAccount.id, { cash_balance: newCash });
@@ -115,7 +115,7 @@ function ChartsContent() {
       if (newQty <= 0) await base44.entities.BrokerPosition.delete(existingPos.id);
       else await base44.entities.BrokerPosition.update(existingPos.id, { qty: newQty });
       await base44.entities.BrokerTrade.create({ account_id: activeAccount.id, account_type: activeType, user_id: activeAccount.user_id, symbol, side: 'sell', order_type: orderType, qty, price, fee, total, realized_pnl: realizedPnl, instrument_name: DEFAULT_INSTRUMENTS.find(i => i.symbol === symbol)?.name || symbol });
-      toast.success(`Sold ${qty} ${symbol} | P&L: ${realizedPnl >= 0 ? '+' : ''}$${realizedPnl.toFixed(2)}`);
+      toast.success(`Vendido ${qty} ${symbol} | G/P: ${realizedPnl >= 0 ? '+' : ''}$${realizedPnl.toFixed(2)}`);
     }
     queryClient.invalidateQueries({ queryKey: ['broker-positions', activeAccount.id] });
     queryClient.invalidateQueries({ queryKey: ['broker-trades-recent', activeAccount.id] });
@@ -133,7 +133,7 @@ function ChartsContent() {
       {/* Account type badge */}
       <div className={`px-3 py-1 flex items-center gap-2 text-[10px] ${activeType === 'DEMO' ? 'bg-amber-500/20 text-amber-400' : 'bg-[#1e2130] text-[#787b86]'}`}>
         <FlaskConical className="h-3 w-3 flex-shrink-0" />
-        <span>{activeType === 'DEMO' ? 'DEMO MODE — Paper trading with virtual funds. Prices are simulated.' : 'REAL ACCOUNT — Paper Trading Simulator. No real orders are executed.'}</span>
+        <span>{activeType === 'DEMO' ? 'MODO DEMO — Operaciones simuladas con fondos virtuales. Los precios son simulados.' : 'CUENTA REAL — Simulador de trading. No se ejecutan órdenes reales.'}</span>
       </div>
 
       <TopToolbar

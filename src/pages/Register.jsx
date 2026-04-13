@@ -91,7 +91,7 @@ export default function RegisterPage() {
             Nuestro equipo activará tu cuenta en breve. Recibirás un correo de confirmación con los detalles de acceso.
           </p>
           <button
-            onClick={() => base44.auth.redirectToLogin(createPageUrl('Dashboard'))}
+            onClick={() => window.location.href = createPageUrl('Acceso')}
             className="w-full py-3.5 bg-[#00C853] hover:bg-[#00b34a] text-white font-semibold rounded-lg transition-all text-sm flex items-center justify-center gap-2"
           >
             Acceder a mi cuenta
@@ -313,7 +313,7 @@ export default function RegisterPage() {
             <div className="mt-6 pt-6 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400">
               <span>¿Ya tienes cuenta?</span>
               <button
-                onClick={() => base44.auth.redirectToLogin(createPageUrl('Dashboard'))}
+                onClick={() => window.location.href = createPageUrl('Acceso')}
                 className="text-[#00C853] font-semibold hover:underline"
               >
                 Iniciar sesión

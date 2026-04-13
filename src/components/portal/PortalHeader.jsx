@@ -23,7 +23,10 @@ export default function PortalHeader({ onMenuToggle }) {
 
   const unread = notifs.length;
 
-  const handleLogout = () => base44.auth.logout('/');
+  const handleLogout = () => {
+    localStorage.removeItem('nexus_user');
+    window.location.href = '/';
+  };
 
   return (
     <header className="h-14 bg-[#0f1117] border-b border-[#1e2130] flex items-center justify-between px-4 gap-4 flex-shrink-0">

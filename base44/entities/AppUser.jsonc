@@ -1,0 +1,33 @@
+{
+  "name": "AppUser",
+  "type": "object",
+  "properties": {
+    "full_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "password_hash": {
+      "type": "string",
+      "description": "SHA-256 hashed password"
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "user",
+        "admin"
+      ],
+      "default": "user"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "full_name",
+    "email",
+    "password_hash"
+  ]
+}
