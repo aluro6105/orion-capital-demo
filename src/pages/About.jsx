@@ -16,17 +16,17 @@ const CORE_PILLARS = [
   {
     title: 'Fundado por Expertos',
     sub: 'Con licencia. De confianza. Global.',
-    desc: 'Creado en 2020, NexusTrade ha crecido hasta convertirse en una referencia global con infraestructura regulada y tecnología de primer nivel. Fundado por veteranos de la industria financiera, priorizamos el cumplimiento estricto, la liquidez profunda y la precisión en los precios para que operes con confianza real.',
+    desc: 'Creado en 2020, M4MarketsLatam ha crecido hasta convertirse en una referencia global con infraestructura regulada y tecnología de primer nivel. Fundado por veteranos de la industria financiera, priorizamos el cumplimiento estricto, la liquidez profunda y la precisión en los precios para que operes con confianza real.',
   },
   {
     title: 'Nuestra Historia',
     sub: 'Construido para traders que piensan.',
-    desc: 'Muchos brokers se enfocan en spreads y ganancias rápidas. Nosotros lo hacemos diferente. NexusTrade está diseñado para traders serios que valoran el conocimiento, la visión y un camino claro hacia el crecimiento sostenido. Con tecnología avanzada y soporte dedicado, te ayudamos a dominar el arte del trading inteligente.',
+    desc: 'Muchos brokers se enfocan en spreads y ganancias rápidas. Nosotros lo hacemos diferente. M4MarketsLatam está diseñado para traders serios que valoran el conocimiento, la visión y un camino claro hacia el crecimiento sostenido. Con tecnología avanzada y soporte dedicado, te ayudamos a dominar el arte del trading inteligente.',
   },
   {
     title: 'Nuestros Valores',
     sub: 'Transparencia e integridad ante todo.',
-    desc: 'En NexusTrade, todo se construye sobre transparencia, integridad y una mentalidad centrada en el trader, garantizando comunicación abierta y decisiones siempre en tu mejor interés. Impulsados por la pasión por los mercados, abrazamos la innovación para darte una ventaja competitiva real.',
+    desc: 'En M4MarketsLatam, todo se construye sobre transparencia, integridad y una mentalidad centrada en el trader, garantizando comunicación abierta y decisiones siempre en tu mejor interés. Impulsados por la pasión por los mercados, abrazamos la innovación para darte una ventaja competitiva real.',
   },
   {
     title: 'Nuestra Promesa',
@@ -90,7 +90,7 @@ const STEPS = [
   {
     n: '03',
     title: 'Descarga la Plataforma y Empieza',
-    desc: 'Accede a NexusTrade desde el navegador o la app móvil. Configura tu watchlist, analiza los mercados con herramientas profesionales y ejecuta tu primera operación con confianza.',
+    desc: 'Accede a M4MarketsLatam desde el navegador o la app móvil. Configura tu watchlist, analiza los mercados con herramientas profesionales y ejecuta tu primera operación con confianza.',
   },
 ];
 
@@ -133,15 +133,15 @@ export default function AboutPage() {
         <div className="absolute inset-0 opacity-[0.04] bg-[linear-gradient(rgba(255,255,255,0.4)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.4)_1px,transparent_1px)] bg-[size:70px_70px]" />
 
         <div className="relative max-w-4xl mx-auto">
-          <p className="text-xs font-bold text-[#80cc00] uppercase tracking-[0.25em] mb-4">Acerca de NexusTrade</p>
+          <p className="text-xs font-bold text-[#80cc00] uppercase tracking-[0.25em] mb-4">Acerca de M4MarketsLatam</p>
           <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black leading-none tracking-tight mb-6 text-white uppercase">
-            ACERCA DE<br /><span className="text-[#80cc00]">NEXUSTRADE</span>
+            ACERCA DE<br /><span className="text-[#80cc00]">M4MARKETSLATAM</span>
           </h1>
           <p className="text-lg sm:text-xl text-white/55 max-w-2xl mx-auto mb-10 leading-relaxed">
             Los Traders Empoderados Rinden Mejor
           </p>
           <p className="text-white/40 text-base max-w-2xl mx-auto mb-10 leading-relaxed">
-            NexusTrade te ayuda a navegar los mercados financieros con el conocimiento, la tecnología, las ideas estratégicas y el soporte que necesitas para operar con mayor confianza y consistencia.
+            M4MarketsLatam te ayuda a navegar los mercados financieros con el conocimiento, la tecnología, las ideas estratégicas y el soporte que necesitas para operar con mayor confianza y consistencia.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <button
@@ -204,7 +204,7 @@ export default function AboutPage() {
           <div>
             <span className="text-xs font-bold text-[#1a1aff] uppercase tracking-[0.2em] mb-4 block">Alianza de precisión</span>
             <h2 className="text-4xl sm:text-5xl font-black text-gray-900 leading-tight mb-6">
-              NexusTrade y la<br /><span className="text-[#1a1aff]">Excelencia Técnica</span>
+              M4MarketsLatam y la<br /><span className="text-[#1a1aff]">Excelencia Técnica</span>
             </h2>
             <p className="text-gray-500 leading-relaxed mb-5">
               Nuestra filosofía refleja los mismos valores que importan en las disciplinas de alto rendimiento: decisiones instantáneas, excelencia técnica y rendimiento consistente bajo presión.
@@ -246,12 +246,12 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ══════════ ¿POR QUÉ NEXUSTRADE? ══════════ */}
+      {/* ══════════ ¿POR QUÉ M4MARKETSLATAM? ══════════ */}
       <section className="py-24 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <span className="text-xs font-bold text-[#1a1aff] uppercase tracking-[0.2em] mb-3 block">Ventajas únicas</span>
-            <h2 className="text-4xl sm:text-5xl font-black text-gray-900">¿Por qué NexusTrade?</h2>
+            <h2 className="text-4xl sm:text-5xl font-black text-gray-900">¿Por qué M4MarketsLatam?</h2>
             <p className="text-gray-500 mt-4 max-w-xl mx-auto">Herramientas, condiciones y soporte diseñados para que operes mejor cada día.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -287,7 +287,7 @@ export default function AboutPage() {
           <span className="text-xs font-bold text-[#80cc00] uppercase tracking-[0.2em] mb-4 block">Alcance mundial</span>
           <h2 className="text-4xl sm:text-5xl font-black text-white mb-6">Nuestra Presencia Global</h2>
           <p className="text-white/40 max-w-2xl mx-auto mb-12 text-lg">
-            Descubre por qué miles de traders de más de 50 países han elegido NexusTrade como su plataforma de referencia.
+            Descubre por qué miles de traders de más de 50 países han elegido M4MarketsLatam como su plataforma de referencia.
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {[
