@@ -8,7 +8,7 @@ import { base44 } from '@/api/base44Client';
 import {
   ArrowRight, Users, Shield, Globe, FileText,
   Star, ChevronDown, CheckCircle2, TrendingUp,
-  BarChart3, Zap, Award, Trophy, Medal, Star as StarIcon, BadgeCheck, Gem
+  BarChart3, Zap, Award, Trophy, Medal, BadgeCheck, Gem, Lock, CreditCard, Banknote
 } from 'lucide-react';
 
 // ─── STATIC DATA ─────────────────────────────────────────────────────────────
@@ -27,37 +27,45 @@ const TICKER_DATA = [
 ];
 
 const TRUST_CARDS = [
-  { icon: Users, title: 'Social', desc: 'Más de 5,000 traders activos operando en la plataforma' },
-  { icon: FileText, title: 'Fiable', desc: 'Líder en tecnología de trading simulado desde 2020' },
-  { icon: Shield, title: 'Seguro', desc: 'Protegemos tu cuenta y tus activos con la máxima seguridad' },
-  { icon: Globe, title: 'Global', desc: 'Ofrecemos nuestros servicios en todo el mundo' },
+  { icon: Users, title: 'Somos Sociales', desc: 'Más de 5,000 traders activos operando en nuestra plataforma cada día' },
+  { icon: FileText, title: 'Somos Fiables', desc: 'Referentes en tecnología de trading educacional desde 2020' },
+  { icon: Shield, title: 'Somos Seguros', desc: 'Triple verificación y protección de cuentas con estándares institucionales' },
+  { icon: Globe, title: 'Somos Globales', desc: 'Operamos en más de 50 países con soporte multilingüe 24/7' },
 ];
 
 const STATS = [
-  { value: '$10K', label: 'Capital de cuenta demo' },
-  { value: '15+', label: 'Instrumentos disponibles' },
-  { value: '5+', label: 'Años en el mercado' },
-  { value: '<1ms', label: 'Latencia WebSocket' },
+  { value: '0.0', label: 'Spreads desde pips' },
+  { value: '<5ms', label: 'Velocidad de ejecución' },
+  { value: '$5', label: 'Depósito mínimo demo' },
+  { value: '1:500', label: 'Apalancamiento máx.' },
 ];
 
 const FEATURES = [
-  { icon: BarChart3, title: 'Gráficos profesionales', desc: 'Velas japonesas, indicadores técnicos, múltiples marcos temporales. Una interfaz idéntica a la de los brokers reales.', accent: '#00C853', tag: 'Análisis técnico' },
-  { icon: Zap, title: 'Datos en tiempo real', desc: 'Precios actualizados al instante mediante conexión directa. Opera con información de mercado real y precisa.', accent: '#2196F3', tag: 'Tiempo real' },
-  { icon: TrendingUp, title: 'Métricas avanzadas', desc: 'Curva de capital, tasa de acierto, caída máxima y ganancias realizadas. Análisis completo de tu rendimiento.', accent: '#7C3AED', tag: 'Analítica pro' },
-  { icon: Shield, title: 'Cuenta demo incluida', desc: '$10,000 en cuenta demo para practicar estrategias. Empieza a operar al instante, sin depósito previo.', accent: '#f59e0b', tag: 'Cuenta demo' },
+  { icon: BarChart3, title: 'Gráficos profesionales', desc: 'Velas japonesas, indicadores técnicos y múltiples marcos temporales. Una interfaz idéntica a la de los brokers reales del mercado.', accent: '#1a1aff', tag: 'Análisis técnico' },
+  { icon: Zap, title: 'Ejecución ultrarrápida', desc: 'Órdenes procesadas en milisegundos mediante conexión directa a los mercados. Opera sin slippage y con precios reales al instante.', accent: '#80cc00', tag: 'Ultra-rápido' },
+  { icon: TrendingUp, title: 'Métricas avanzadas', desc: 'Curva de capital, tasa de acierto, drawdown máximo y P&L detallado. Análisis institucional completo de tu rendimiento como trader.', accent: '#7C3AED', tag: 'Analítica pro' },
+  { icon: Shield, title: 'Cuenta demo gratuita', desc: '$10,000 en cuenta demo para practicar estrategias reales sin arriesgar capital. Actívate al instante, sin depósito previo requerido.', accent: '#f59e0b', tag: 'Sin riesgo' },
 ];
 
 const MARKETS = [
-  { icon: TrendingUp, label: 'Acciones', desc: 'Las principales empresas del mundo', symbols: ['AAPL', 'MSFT', 'NVDA', 'TSLA', 'AMZN'], color: '#2196F3', bg: '#2196F315' },
-  { icon: BarChart3, label: 'Fondos cotizados (ETF)', desc: 'Diversificación instantánea en un solo activo', symbols: ['SPY', 'QQQ', 'IWM'], color: '#7C3AED', bg: '#7C3AED15' },
-  { icon: Globe, label: 'Divisas (Forex)', desc: 'Los pares de divisas más negociados del mundo', symbols: ['EUR/USD', 'GBP/USD', 'USD/JPY'], color: '#00C853', bg: '#00C85315' },
-  { icon: Zap, label: 'Criptomonedas', desc: 'Los activos digitales líderes del mercado', symbols: ['BTC/USD', 'ETH/USD'], color: '#f59e0b', bg: '#f59e0b15' },
+  { icon: TrendingUp, label: 'Criptomonedas', desc: 'Opera el valor de las criptomonedas más populares del mercado', symbols: ['BTC/USD', 'ETH/USD', 'SOL/USD'], color: '#1a1aff', bg: '#1a1aff15' },
+  { icon: BarChart3, label: 'Forex', desc: 'Opera el valor de una divisa frente a otra en tiempo real', symbols: ['EUR/USD', 'GBP/USD', 'USD/JPY'], color: '#80cc00', bg: '#80cc0015' },
+  { icon: Globe, label: 'Materias Primas', desc: 'Opera el valor de las commodities más importantes del mundo', symbols: ['XAUUSD', 'XAGUSD', 'WTI'], color: '#f59e0b', bg: '#f59e0b15' },
+  { icon: Zap, label: 'Índices', desc: 'Opera cestas de acciones de los principales mercados globales', symbols: ['SPX500', 'NAS100', 'GER40'], color: '#7C3AED', bg: '#7C3AED15' },
 ];
 
 const STEPS = [
-  { n: '01', title: 'Abre tu cuenta', desc: 'Registro en 30 segundos. Cuenta demo con $10,000 activada al instante, sin depósito.' },
-  { n: '02', title: 'Analiza mercados', desc: 'Accede a acciones, ETFs, forex y crypto con precios WebSocket en vivo.' },
-  { n: '03', title: 'Opera y crece', desc: 'Compra, vende, analiza tu P&L y perfecciona tu estrategia con datos reales.' },
+  { n: '01', title: 'Abre tu cuenta', desc: 'Registro en 30 segundos. Cuenta demo con $10,000 activada al instante, sin depósito ni documentación previa.' },
+  { n: '02', title: 'Elige tu mercado', desc: 'Accede a criptos, forex, commodities e índices con precios en tiempo real y herramientas institucionales.' },
+  { n: '03', title: 'Opera y mejora', desc: 'Ejecuta operaciones, analiza tu P&L y perfecciona tu estrategia con métricas de nivel profesional.' },
+];
+
+const SECURITY_ITEMS = [
+  { icon: Lock, label: 'Tus fondos están seguros y protegidos' },
+  { icon: Shield, label: 'Sin cargos ocultos ni letra pequeña' },
+  { icon: CreditCard, label: 'Fondos en cuentas segregadas' },
+  { icon: Zap, label: 'Depósitos instantáneos y retiros rápidos' },
+  { icon: Banknote, label: 'Alianzas con bancos de primer nivel' },
 ];
 
 const CANDLES = [
@@ -73,7 +81,7 @@ function StarRating({ rating }) {
   return (
     <div className="flex gap-0.5">
       {[1,2,3,4,5].map(i => (
-        <Star key={i} className={`h-3.5 w-3.5 ${i <= rating ? 'text-[#00C853] fill-[#00C853]' : 'text-gray-200 fill-gray-200'}`} />
+        <Star key={i} className={`h-3.5 w-3.5 ${i <= rating ? 'text-[#80cc00] fill-[#80cc00]' : 'text-gray-200 fill-gray-200'}`} />
       ))}
     </div>
   );
@@ -101,101 +109,91 @@ export default function HomePage() {
   const [openFaq, setOpenFaq] = useState(null);
 
   const displayFaqs = faqs.length > 0 ? faqs.slice(0, 5) : [
-    { id: 1, question: '¿Cómo abro una cuenta en NEXUS?', answer: 'Registro en menos de 30 segundos. Tu cuenta demo con $10,000 queda activada inmediatamente, sin ningún depósito previo.' },
-    { id: 2, question: '¿Los precios son datos reales de mercado?', answer: 'Sí, NEXUS utiliza datos de mercado de alta fidelidad con actualizaciones en tiempo real para ofrecerte una experiencia lo más cercana posible al mercado real.' },
-    { id: 3, question: '¿Qué instrumentos están disponibles en NEXUS?', answer: 'Acciones (AAPL, MSFT, NVDA...), Fondos cotizados (SPY, QQQ), Divisas (EUR/USD) y Criptomonedas (BTC, ETH). Más de 15 instrumentos disponibles.' },
-    { id: 4, question: '¿Cuánto capital tiene la cuenta demo?', answer: 'La cuenta demo de NEXUS se activa con $10,000 virtuales. Puedes resetearla desde el panel de control en cualquier momento.' },
-    { id: 5, question: '¿Existen comisiones en NEXUS?', answer: 'Sin comisiones ocultas ni letra pequeña. NEXUS es completamente transparente con sus usuarios en todo momento.' },
+    { id: 1, question: '¿Cómo abro una cuenta en NexusTrade?', answer: 'El registro tarda menos de 30 segundos. Tu cuenta demo con $10,000 queda activada inmediatamente, sin ningún depósito previo ni verificación de documentos.' },
+    { id: 2, question: '¿Los precios son datos reales de mercado?', answer: 'Sí, NexusTrade utiliza datos de mercado de alta fidelidad actualizados en tiempo real para ofrecerte una experiencia lo más cercana posible al mercado real con spreads competitivos.' },
+    { id: 3, question: '¿Qué instrumentos están disponibles?', answer: 'Criptomonedas (BTC, ETH, SOL...), Forex (EUR/USD, GBP/USD...), Materias Primas (Oro, Plata, Petróleo) e Índices (SP500, Nasdaq, DAX). Más de 50 instrumentos disponibles.' },
+    { id: 4, question: '¿Cuánto capital tiene la cuenta demo?', answer: 'La cuenta demo se activa con $10,000 virtuales. Puedes resetearla desde el panel de control en cualquier momento para empezar con capital fresco.' },
+    { id: 5, question: '¿Existen cargos ocultos en NexusTrade?', answer: 'Cero cargos ocultos ni letra pequeña. NexusTrade es completamente transparente con todos sus usuarios. Los spreads y condiciones de trading se publican abiertamente.' },
   ];
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
+    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden font-inter">
       <PublicNav currentPage="Home" />
 
       {/* ══════════════ HERO ══════════════ */}
-      <section className="relative min-h-screen flex items-center bg-white overflow-hidden pt-16">
-        {/* Subtle bg grid */}
-        <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(#000_1px,transparent_1px),linear-gradient(90deg,#000_1px,transparent_1px)] bg-[size:60px_60px]" />
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#f0fdf4] to-transparent pointer-events-none" />
+      <section className="relative min-h-[90vh] flex items-center bg-[#04052e] overflow-hidden">
+        {/* Background effects */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_60%_40%,rgba(26,26,255,0.25),transparent)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_50%_at_20%_80%,rgba(128,204,0,0.12),transparent)]" />
+        <div className="absolute inset-0 opacity-[0.04] bg-[linear-gradient(rgba(255,255,255,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.5)_1px,transparent_1px)] bg-[size:80px_80px]" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full grid lg:grid-cols-2 gap-16 items-center py-20">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full grid lg:grid-cols-2 gap-12 items-center py-24">
           {/* Left: copy */}
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#00C853]/10 border border-[#00C853]/20 text-xs text-[#00a844] font-semibold mb-8 tracking-wide">
-              <span className="w-2 h-2 rounded-full bg-[#00C853] animate-pulse" />
-              LIVE · Datos de mercado en tiempo real
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#80cc00]/15 border border-[#80cc00]/25 text-xs text-[#80cc00] font-bold mb-8 tracking-wide uppercase">
+              <span className="w-2 h-2 rounded-full bg-[#80cc00] animate-pulse" />
+              En Vivo · Mercados en tiempo real
             </div>
 
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.0] tracking-tight mb-6 text-gray-900">
-              Sé el trader<br />
-              <span className="bg-gradient-to-r from-[#00C853] to-[#2196F3] bg-clip-text text-transparent">
-                que deseas ser.
-              </span>
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.0] tracking-tight mb-6 text-white">
+              Opera más<br />inteligente,<br />
+              <span className="text-[#80cc00]">no más duro.</span>
             </h1>
 
-            <p className="text-lg sm:text-xl text-gray-500 leading-relaxed mb-10 max-w-lg">
-              Opera en miles de acciones, criptos y ETFs con tecnología de nivel institucional. Practica sin riesgo, aprende de verdad.
+            <p className="text-lg sm:text-xl text-white/55 leading-relaxed mb-10 max-w-lg">
+              Tecnología de trading de nivel institucional al alcance de cualquier trader. Spreads desde 0.0 pips, ejecución ultrarrápida y herramientas profesionales.
             </p>
 
-            <div className="flex flex-wrap gap-3 mb-12">
+            <div className="flex flex-wrap gap-3 mb-10">
               <button
                 onClick={() => window.location.href = createPageUrl('Register')}
-                className="group flex items-center gap-2 px-8 py-4 bg-[#00C853] hover:bg-[#00b34a] text-white font-bold rounded-full transition-all text-base shadow-lg shadow-[#00C853]/25 hover:scale-[1.03]"
+                className="group flex items-center gap-2 px-8 py-4 bg-[#80cc00] hover:bg-[#72b800] text-[#0d0d0d] font-black rounded-full transition-all text-base shadow-xl shadow-[#80cc00]/20 hover:scale-[1.03]"
               >
-                Únete gratis
+                Abrir Cuenta
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </button>
               <Link
-                to={createPageUrl('Product')}
-                className="flex items-center gap-2 px-6 py-4 bg-white text-gray-700 font-semibold rounded-full border border-gray-200 hover:border-gray-400 transition-all text-base"
+                to={createPageUrl('Register')}
+                className="flex items-center gap-2 px-6 py-4 bg-transparent text-white/70 font-semibold rounded-full border border-white/15 hover:border-white/35 hover:text-white transition-all text-base"
               >
-                Ver la plataforma
+                Cuenta demo gratuita
               </Link>
             </div>
 
-            <div className="flex flex-wrap gap-5">
-              {[
-                { icon: CheckCircle2, label: '$10K en cuenta demo' },
-                { icon: CheckCircle2, label: 'Sin comisiones ocultas' },
-                { icon: CheckCircle2, label: 'Activación inmediata' },
-              ].map(({ icon: Icon, label }) => (
-                <div key={label} className="flex items-center gap-1.5 text-sm text-gray-500">
-                  <Icon className="h-4 w-4 text-[#00C853] flex-shrink-0" />
-                  {label}
-                </div>
-              ))}
+            <div className="text-xs text-white/30 font-medium">
+              El trading de CFDs conlleva un riesgo significativo de pérdida de capital.
             </div>
           </div>
 
-          {/* Right: platform mockup (dark card) */}
+          {/* Right: platform mockup */}
           <div className="relative hidden lg:block">
-            <div className="absolute -inset-4 bg-[#00C853]/5 rounded-3xl blur-2xl" />
-            <div className="relative bg-[#0c0f1c] border border-[#1e2538] rounded-2xl shadow-2xl overflow-hidden">
+            <div className="absolute -inset-6 bg-[#1a1aff]/10 rounded-3xl blur-3xl" />
+            <div className="relative bg-[#0a0c1e] border border-[#1a1aff]/25 rounded-2xl shadow-2xl overflow-hidden">
               {/* Window chrome */}
-              <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5 bg-[#080b17]">
+              <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5 bg-[#060820]">
                 <div className="w-2.5 h-2.5 rounded-full bg-[#ef5350]/70" />
                 <div className="w-2.5 h-2.5 rounded-full bg-[#f59e0b]/70" />
-                <div className="w-2.5 h-2.5 rounded-full bg-[#00C853]/70" />
+                <div className="w-2.5 h-2.5 rounded-full bg-[#80cc00]/70" />
                 <div className="ml-3 flex-1 h-5 bg-white/5 rounded-md px-2 flex items-center">
-                  <span className="text-[10px] text-white/25">nexus.io/portal/charts</span>
+                  <span className="text-[10px] text-white/25">nexustrade.io/portal/charts</span>
                 </div>
               </div>
               {/* Header bar */}
-              <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/5 bg-[#090c19]">
+              <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/5 bg-[#070920]">
                 <div className="flex items-center gap-3">
-                  <span className="text-sm font-bold text-white">AAPL</span>
-                  <span className="text-[10px] text-white/30">Apple Inc.</span>
-                  <span className="text-lg font-mono font-black text-white">$178.52</span>
-                  <span className="text-xs font-mono font-bold text-[#00C853] bg-[#00C853]/10 px-2 py-0.5 rounded">▲ +1.23%</span>
+                  <span className="text-sm font-bold text-white">EUR/USD</span>
+                  <span className="text-[10px] text-white/30">Euro / Dólar</span>
+                  <span className="text-lg font-mono font-black text-white">1.0850</span>
+                  <span className="text-xs font-mono font-bold text-[#80cc00] bg-[#80cc00]/10 px-2 py-0.5 rounded">▲ +0.12%</span>
                 </div>
                 <div className="flex gap-1 text-[10px] text-white/30">
                   {['1m','5m','1h','1D','1W'].map(t => (
-                    <button key={t} className={`px-2 py-0.5 rounded ${t === '1D' ? 'bg-[#00C853]/20 text-[#00C853]' : 'hover:bg-white/5'}`}>{t}</button>
+                    <button key={t} className={`px-2 py-0.5 rounded ${t === '1D' ? 'bg-[#1a1aff]/30 text-[#7a8aff]' : 'hover:bg-white/5'}`}>{t}</button>
                   ))}
                 </div>
               </div>
               {/* Chart */}
-              <div className="relative h-44 bg-[#080b17] px-4 pt-4 pb-1">
+              <div className="relative h-44 bg-[#060820] px-4 pt-4 pb-1">
                 {[0,25,50,75,100].map(p => (
                   <div key={p} className="absolute left-4 right-0 border-t border-white/[0.04]" style={{ top: `${100 - p}%` }} />
                 ))}
@@ -203,7 +201,7 @@ export default function HomePage() {
                   {CANDLES.map((c, i) => {
                     const bodyH = Math.abs(c.c - c.o);
                     const bodyTop = 100 - Math.max(c.o, c.c);
-                    const color = c.up ? '#00C853' : '#ef5350';
+                    const color = c.up ? '#80cc00' : '#ef5350';
                     return (
                       <div key={i} className="flex-1 relative flex flex-col items-center" style={{ height: '100%' }}>
                         <div className="absolute left-1/2 -translate-x-1/2 w-px" style={{ top: `${100 - c.h}%`, height: `${c.h - c.l}%`, background: color, opacity: 0.5 }} />
@@ -214,106 +212,141 @@ export default function HomePage() {
                 </div>
               </div>
               {/* Trade panel */}
-              <div className="grid grid-cols-2 gap-2 p-3 bg-[#080b17] border-t border-white/5">
-                <div className="bg-[#00C853]/10 border border-[#00C853]/20 rounded-xl p-3">
-                  <div className="text-[10px] text-[#00C853] font-semibold uppercase mb-1">Comprar</div>
-                  <div className="text-xs text-white/40 mb-1">10 acciones</div>
-                  <div className="text-sm font-bold text-[#00C853]">$1,785.20</div>
+              <div className="grid grid-cols-2 gap-2 p-3 bg-[#060820] border-t border-white/5">
+                <div className="bg-[#80cc00]/10 border border-[#80cc00]/20 rounded-xl p-3">
+                  <div className="text-[10px] text-[#80cc00] font-semibold uppercase mb-1">Comprar</div>
+                  <div className="text-xs text-white/40 mb-1">1.00 lote</div>
+                  <div className="text-sm font-bold text-[#80cc00]">1.0850</div>
                 </div>
                 <div className="bg-[#ef5350]/10 border border-[#ef5350]/20 rounded-xl p-3">
                   <div className="text-[10px] text-[#ef5350] font-semibold uppercase mb-1">Vender</div>
-                  <div className="text-xs text-white/40 mb-1">50 acciones</div>
-                  <div className="text-sm font-bold text-[#ef5350]">$8,926.00</div>
+                  <div className="text-xs text-white/40 mb-1">0.50 lote</div>
+                  <div className="text-sm font-bold text-[#ef5350]">1.0848</div>
                 </div>
               </div>
               {/* Equity */}
               <div className="px-3 pb-3 flex items-center justify-between border-t border-white/5 pt-2">
-                <div className="text-[10px] text-white/30">Equity total</div>
-                <div className="text-xs font-bold text-white">$10,432.85</div>
-                <div className="text-[10px] font-bold text-[#00C853] bg-[#00C853]/10 px-2 py-0.5 rounded-full">+4.33%</div>
+                <div className="text-[10px] text-white/30">Balance total</div>
+                <div className="text-xs font-bold text-white">$12,840.50</div>
+                <div className="text-[10px] font-bold text-[#80cc00] bg-[#80cc00]/10 px-2 py-0.5 rounded-full">+28.4%</div>
               </div>
             </div>
 
             {/* Floating cards */}
-            <div className="absolute -bottom-4 -left-8 bg-white border border-gray-100 rounded-2xl px-4 py-3 shadow-xl flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-[#00C853]/15 flex items-center justify-center">
-                <TrendingUp className="h-4 w-4 text-[#00C853]" />
+            <div className="absolute -bottom-4 -left-10 bg-[#0a0c1e] border border-[#1a1aff]/30 rounded-2xl px-4 py-3 shadow-2xl flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-[#80cc00]/15 flex items-center justify-center">
+                <TrendingUp className="h-4 w-4 text-[#80cc00]" />
               </div>
               <div>
-                <div className="text-xs font-bold text-gray-900">Orden ejecutada</div>
-                <div className="text-[10px] text-gray-400">NVDA · Compra · $875.30</div>
+                <div className="text-xs font-bold text-white">Orden ejecutada</div>
+                <div className="text-[10px] text-white/40">EUR/USD · Buy · 1.0850</div>
               </div>
             </div>
-            <div className="absolute -top-4 -right-6 bg-white border border-[#00C853]/20 rounded-2xl px-4 py-3 shadow-xl">
-              <div className="text-[10px] text-gray-400 mb-0.5">P&L Hoy</div>
-              <div className="text-lg font-black text-[#00C853]">+$4,328</div>
+            <div className="absolute -top-4 -right-6 bg-[#0a0c1e] border border-[#80cc00]/25 rounded-2xl px-4 py-3 shadow-2xl">
+              <div className="text-[10px] text-white/40 mb-0.5">P&L Hoy</div>
+              <div className="text-lg font-black text-[#80cc00]">+$2,840</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* ══════════════ TICKER ══════════════ */}
-      <div className="bg-gray-900 py-3 overflow-hidden border-y border-gray-800">
-        <div className="flex gap-10 animate-[ticker_40s_linear_infinite] whitespace-nowrap px-6">
-          {[...TICKER_DATA, ...TICKER_DATA].map((t, i) => (
+      <div className="bg-[#1a1aff] py-2.5 overflow-hidden">
+        <div className="flex gap-10 animate-ticker whitespace-nowrap px-6">
+          {[...TICKER_DATA, ...TICKER_DATA, ...TICKER_DATA].map((t, i) => (
             <span key={i} className="inline-flex items-center gap-2 text-xs">
-              <span className="font-bold text-white/80 tracking-wide">{t.symbol}</span>
-              <span className="font-mono text-white/40">{t.price}</span>
-              <span className={`font-mono font-bold ${t.up ? 'text-[#00C853]' : 'text-[#ef5350]'}`}>{t.change}</span>
+              <span className="font-bold text-white tracking-wide">{t.symbol}</span>
+              <span className="font-mono text-white/60">{t.price}</span>
+              <span className={`font-mono font-bold ${t.up ? 'text-[#80cc00]' : 'text-red-300'}`}>{t.change}</span>
             </span>
           ))}
         </div>
       </div>
 
       {/* ══════════════ STATS BAND ══════════════ */}
-      <div className="bg-[#00C853] py-10 px-4">
-        <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-8">
+      <div className="bg-white border-b border-gray-100 py-12 px-4">
+        <div className="max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-8">
           {STATS.map(s => (
             <div key={s.label} className="text-center">
-              <div className="text-3xl sm:text-4xl font-black text-white mb-1">{s.value}</div>
-              <div className="text-xs text-white/75 font-medium">{s.label}</div>
+              <div className="text-3xl sm:text-4xl font-black text-[#1a1aff] mb-1">{s.value}</div>
+              <div className="text-xs text-gray-500 font-medium">{s.label}</div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* ══════════════ TRUST / WHY NEXUS ══════════════ */}
-      <section className="py-24 px-4 sm:px-6 bg-white">
-        <div className="max-w-5xl mx-auto text-center mb-14">
-          <span className="text-xs font-bold text-[#00C853] uppercase tracking-[0.2em] mb-3 block">Confiable a nivel mundial</span>
-          <h2 className="text-4xl sm:text-5xl font-black text-gray-900">¿Por qué elegir NEXUS?</h2>
-          <p className="text-gray-500 mt-4 max-w-xl mx-auto">Miles de traders de más de 100 países confían en nuestra plataforma.</p>
-        </div>
-        <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {TRUST_CARDS.map((c, i) => {
-            const Icon = c.icon;
-            return (
-              <div key={i} className="border border-gray-200 rounded-2xl p-8 text-center hover:shadow-lg hover:border-[#00C853]/30 transition-all group cursor-default">
-                <div className="w-14 h-14 rounded-full bg-[#00C853]/10 flex items-center justify-center mx-auto mb-4 group-hover:bg-[#00C853]/20 transition-colors">
-                  <Icon className="h-6 w-6 text-[#00C853]" />
+      {/* ══════════════ MARKETS ══════════════ */}
+      <section className="py-24 px-4 sm:px-6 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-14">
+            <span className="text-xs font-bold text-[#1a1aff] uppercase tracking-[0.2em] mb-3 block">Nuestros Mercados</span>
+            <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Del forex al cripto,<br />commodities a acciones.</h2>
+            <p className="text-gray-500 mt-4 max-w-xl mx-auto">Elige tu mercado, personaliza tu enfoque y opera a tu manera con las herramientas de precisión que necesitas.</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {MARKETS.map((m, i) => {
+              const MIcon = m.icon;
+              return (
+                <div key={i} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-xl hover:border-[#1a1aff]/20 transition-all group cursor-pointer">
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform" style={{ background: m.bg }}>
+                    <MIcon className="h-6 w-6" style={{ color: m.color }} />
+                  </div>
+                  <h3 className="font-black text-gray-900 text-base mb-2">{m.label}</h3>
+                  <p className="text-xs text-gray-500 leading-relaxed mb-4">{m.desc}</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {m.symbols.map(s => (
+                      <span key={s} className="text-[10px] px-2 py-1 bg-gray-50 border border-gray-100 rounded-lg text-gray-500 font-mono font-semibold">{s}</span>
+                    ))}
+                  </div>
+                  <div className="mt-4 flex items-center gap-1 text-xs font-bold" style={{ color: m.color }}>
+                    Ver más <ArrowRight className="h-3 w-3" />
+                  </div>
                 </div>
-                <h3 className="font-bold text-gray-900 text-base mb-2">{c.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{c.desc}</p>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════ TRADE WITH US ══════════════ */}
+      <section className="py-24 px-4 sm:px-6 bg-[#04052e] relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_70%_at_80%_50%,rgba(26,26,255,0.2),transparent)]" />
+        <div className="relative max-w-6xl mx-auto">
+          <div className="text-center mb-14">
+            <span className="text-xs font-bold text-[#80cc00] uppercase tracking-[0.2em] mb-3 block">Opera con NexusTrade</span>
+            <h2 className="text-4xl sm:text-5xl font-black text-white">Elección de traders<br />en todo el mundo</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            {TRUST_CARDS.map((c, i) => {
+              const Icon = c.icon;
+              return (
+                <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/8 hover:border-[#80cc00]/30 transition-all group cursor-default">
+                  <div className="w-12 h-12 rounded-xl bg-[#80cc00]/15 flex items-center justify-center mb-4 group-hover:bg-[#80cc00]/25 transition-colors">
+                    <Icon className="h-6 w-6 text-[#80cc00]" />
+                  </div>
+                  <h3 className="font-black text-white text-base mb-2">{c.title}</h3>
+                  <p className="text-sm text-white/50 leading-relaxed">{c.desc}</p>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
 
       {/* ══════════════ HOW IT WORKS ══════════════ */}
-      <section className="py-24 px-4 sm:px-6 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-24 px-4 sm:px-6 bg-white">
+        <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <span className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-3 block">Cómo funciona</span>
-            <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Empieza en <span className="text-[#00C853]">3 pasos</span></h2>
+            <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Empieza en <span className="text-[#1a1aff]">3 pasos</span></h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {STEPS.map((s, i) => (
               <div key={i} className="relative text-center group">
-                <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white border-2 border-gray-100 text-[#00C853] text-3xl font-black mb-5 mx-auto group-hover:border-[#00C853] group-hover:bg-[#00C853]/5 transition-all shadow-sm">
+                <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-[#1a1aff]/8 border-2 border-[#1a1aff]/15 text-[#1a1aff] text-3xl font-black mb-5 mx-auto group-hover:border-[#1a1aff]/50 group-hover:bg-[#1a1aff]/12 transition-all">
                   {s.n}
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{s.title}</h3>
+                <h3 className="text-xl font-black text-gray-900 mb-3">{s.title}</h3>
                 <p className="text-sm text-gray-500 leading-relaxed max-w-xs mx-auto">{s.desc}</p>
               </div>
             ))}
@@ -321,86 +354,21 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ══════════════ MARKETS ══════════════ */}
-      <section className="py-24 px-4 sm:px-6 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <span className="text-xs font-bold text-[#2196F3] uppercase tracking-[0.2em] mb-3 block">Mercados disponibles</span>
-            <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Todos los mercados<br />en una sola plataforma</h2>
-            <p className="text-gray-500 mt-4 max-w-xl mx-auto">Opera en los mercados más importantes del mundo con tecnología de nivel institucional.</p>
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {MARKETS.map((m, i) => {
-                const MIcon = m.icon;
-                return (
-                <div key={i} className="bg-white border border-gray-100 rounded-2xl p-6 hover:border-gray-200 hover:shadow-lg transition-all group cursor-pointer">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform" style={{ background: m.bg }}>
-                      <MIcon className="h-5 w-5" style={{ color: m.color }} />
-                    </div>
-                    <span className="text-xs font-bold px-2.5 py-1 rounded-full" style={{ color: m.color, background: m.bg }}>{m.symbols.length} activos</span>
-                  </div>
-                  <div className="font-bold text-gray-900 text-base mb-1">{m.label}</div>
-                  <div className="text-xs text-gray-400 mb-3">{m.desc}</div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {m.symbols.map(s => (
-                      <span key={s} className="text-[10px] px-2 py-1 bg-gray-50 border border-gray-100 rounded-lg text-gray-500 font-mono font-semibold">{s}</span>
-                    ))}
-                  </div>
-                </div>
-                );
-              })}
-            </div>
-            {/* Live price mockup */}
-            <div className="bg-[#0c0f1c] border border-[#1e2538] rounded-2xl overflow-hidden shadow-xl">
-              <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/5">
-                <span className="text-xs font-semibold text-white/50 uppercase tracking-widest">Precios en vivo</span>
-                <span className="flex items-center gap-1.5 text-[10px] text-[#00C853]">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#00C853] animate-pulse" />LIVE
-                </span>
-              </div>
-              {[
-                { s: 'AAPL', n: 'Apple', p: '$178.52', c: '+1.23%', up: true },
-                { s: 'NVDA', n: 'Nvidia', p: '$875.30', c: '+3.21%', up: true },
-                { s: 'MSFT', n: 'Microsoft', p: '$415.20', c: '+0.87%', up: true },
-                { s: 'BTC/USD', n: 'Bitcoin', p: '$62,450', c: '-0.42%', up: false },
-                { s: 'EUR/USD', n: 'Euro / Dollar', p: '1.0850', c: '+0.12%', up: true },
-                { s: 'SPY', n: 'S&P 500 ETF', p: '$502.40', c: '+0.65%', up: true },
-                { s: 'ETH/USD', n: 'Ethereum', p: '$3,420', c: '+2.05%', up: true },
-              ].map((r, i) => (
-                <div key={i} className="flex items-center px-5 py-3 border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
-                  <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-xs font-bold text-white/50 mr-3 flex-shrink-0">{r.s[0]}</div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-bold text-white">{r.s}</div>
-                    <div className="text-[10px] text-white/30 mt-0.5">{r.n}</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-sm font-mono font-semibold text-white">{r.p}</div>
-                    <div className={`text-[11px] font-mono font-bold ${r.up ? 'text-[#00C853]' : 'text-[#ef5350]'}`}>{r.c}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════ FEATURES (dark section) ══════════════ */}
-      <section className="py-24 px-4 sm:px-6 bg-[#0a0d14]">
+      {/* ══════════════ FEATURES (dark) ══════════════ */}
+      <section className="py-24 px-4 sm:px-6 bg-[#04052e]">
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <span className="text-xs font-bold text-[#00C853] uppercase tracking-[0.2em] mb-4 block">Por qué NEXUS</span>
+              <span className="text-xs font-bold text-[#80cc00] uppercase tracking-[0.2em] mb-4 block">Herramientas y recursos</span>
               <h2 className="text-4xl sm:text-5xl font-black leading-tight mb-6 text-white">
-                Herramientas de<br /><span className="text-[#00C853]">nivel institucional.</span><br />Para todos.
+                Empieza tu viaje<br /><span className="text-[#80cc00]">con NexusTrade.</span>
               </h2>
               <p className="text-white/50 text-lg leading-relaxed mb-8">
-                Opera con la misma tecnología que usan los traders profesionales. Sin limitaciones artificiales.
+                Todo lo que necesitas para operar como un profesional. Desde gráficos avanzados hasta calendarios económicos y cursos de formación.
               </p>
               <button
                 onClick={() => window.location.href = createPageUrl('Register')}
-                className="flex items-center gap-2 px-7 py-3.5 bg-[#00C853] hover:bg-[#00b34a] text-white font-bold rounded-full transition-all text-sm"
+                className="flex items-center gap-2 px-7 py-3.5 bg-[#80cc00] hover:bg-[#72b800] text-[#0d0d0d] font-black rounded-full transition-all text-sm shadow-lg shadow-[#80cc00]/20"
               >
                 Abrir cuenta gratis <ArrowRight className="h-4 w-4" />
               </button>
@@ -409,14 +377,14 @@ export default function HomePage() {
               {FEATURES.map((f, i) => {
                 const Icon = f.icon;
                 return (
-                  <div key={i} className="bg-[#0f1117] border border-[#1e2130] rounded-2xl p-5 hover:border-white/10 transition-all group">
+                  <div key={i} className="bg-white/[0.04] border border-white/[0.08] rounded-2xl p-5 hover:border-white/15 hover:bg-white/[0.06] transition-all group">
                     <div className="flex items-center gap-2 mb-3">
                       <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: `${f.accent}18` }}>
                         <Icon className="h-4 w-4" style={{ color: f.accent }} />
                       </div>
-                      <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold" style={{ background: `${f.accent}15`, color: f.accent }}>{f.tag}</span>
+                      <span className="text-[10px] px-2 py-0.5 rounded-full font-bold" style={{ background: `${f.accent}18`, color: f.accent }}>{f.tag}</span>
                     </div>
-                    <h3 className="font-bold text-white text-sm mb-2">{f.title}</h3>
+                    <h3 className="font-black text-white text-sm mb-2">{f.title}</h3>
                     <p className="text-xs text-white/45 leading-relaxed">{f.desc}</p>
                   </div>
                 );
@@ -426,25 +394,59 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ══════════════ SECURITY ══════════════ */}
+      <section className="py-24 px-4 sm:px-6 bg-white">
+        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <span className="text-xs font-bold text-[#1a1aff] uppercase tracking-[0.2em] mb-4 block">Seguridad de fortaleza</span>
+            <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-6 leading-tight">
+              Trading seguro,<br />tranquilidad total.
+            </h2>
+            <p className="text-gray-500 text-lg leading-relaxed mb-10">
+              Tu capital merece protección de nivel militar y gestión transparente. Nuestra tecnología de vanguardia garantiza ejecución al instante y te ayuda a identificar las mejores oportunidades con precisión.
+            </p>
+            <Link
+              to={createPageUrl('About')}
+              className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#1a1aff] hover:bg-[#1515ee] text-white font-black rounded-full transition-all text-sm shadow-lg shadow-[#1a1aff]/25"
+            >
+              Conoce nuestras cuentas <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 gap-3">
+            {SECURITY_ITEMS.map((item, i) => {
+              const Icon = item.icon;
+              return (
+                <div key={i} className="flex items-center gap-4 bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 hover:border-[#1a1aff]/20 hover:bg-[#1a1aff]/3 transition-all group">
+                  <div className="w-10 h-10 rounded-xl bg-[#1a1aff]/10 flex items-center justify-center flex-shrink-0 group-hover:bg-[#1a1aff]/18 transition-colors">
+                    <Icon className="h-5 w-5 text-[#1a1aff]" />
+                  </div>
+                  <span className="font-semibold text-gray-800 text-sm">{item.label}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* ══════════════ TESTIMONIALS ══════════════ */}
       {testimonials.length > 0 && (
         <section className="py-24 px-4 sm:px-6 bg-gray-50">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-14">
-              <span className="text-xs font-bold text-[#00C853] uppercase tracking-[0.2em] mb-3 block">Testimonios reales</span>
+              <span className="text-xs font-bold text-[#1a1aff] uppercase tracking-[0.2em] mb-3 block">Confiado globalmente</span>
               <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Lo que dicen<br />nuestros traders</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {testimonials.slice(0, 6).map((t) => (
-                <div key={t.id} className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
+                <div key={t.id} className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all hover:border-[#1a1aff]/15">
                   <StarRating rating={t.rating || 5} />
                   <p className="text-gray-600 text-sm leading-relaxed my-4">"{t.text}"</p>
                   <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#00C853] to-[#2196F3] flex items-center justify-center text-sm font-bold text-white flex-shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1a1aff] to-[#80cc00] flex items-center justify-center text-sm font-black text-white flex-shrink-0">
                       {t.name[0]}
                     </div>
                     <div>
-                      <div className="text-sm font-semibold text-gray-900">{t.name}</div>
+                      <div className="text-sm font-bold text-gray-900">{t.name}</div>
                       <div className="text-xs text-gray-400">{t.role}{t.company ? ` · ${t.company}` : ''}</div>
                     </div>
                   </div>
@@ -452,7 +454,7 @@ export default function HomePage() {
               ))}
             </div>
             <div className="text-center mt-8">
-              <Link to={createPageUrl('Testimonials')} className="text-sm text-[#00C853] hover:text-[#00b34a] font-semibold transition-colors">
+              <Link to={createPageUrl('Testimonials')} className="text-sm text-[#1a1aff] hover:text-[#1515ee] font-bold transition-colors">
                 Ver todos los testimonios →
               </Link>
             </div>
@@ -465,25 +467,25 @@ export default function HomePage() {
         <section className="py-20 px-4 sm:px-6 bg-white">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-14">
-              <span className="text-xs font-bold text-amber-500 uppercase tracking-[0.2em] mb-3 block">Reconocimientos</span>
-              <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Premios & Logros</h2>
+              <span className="text-xs font-bold text-amber-500 uppercase tracking-[0.2em] mb-3 block">Reconocimientos del grupo</span>
+              <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Premios & Excelencia</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {awards.slice(0, 6).map((a, idx) => {
-                const awardIcons = [Trophy, Medal, BadgeCheck, Gem, Award, StarIcon];
-                const awardColors = ['#f59e0b', '#2196F3', '#00C853', '#7C3AED', '#ef5350', '#06b6d4'];
-                const awardBgs = ['#f59e0b15', '#2196F315', '#00C85315', '#7C3AED15', '#ef535015', '#06b6d415'];
+                const awardIcons = [Trophy, Medal, BadgeCheck, Gem, Award, Star];
+                const awardColors = ['#f59e0b', '#1a1aff', '#80cc00', '#7C3AED', '#ef5350', '#06b6d4'];
+                const awardBgs = ['#f59e0b15', '#1a1aff15', '#80cc0015', '#7C3AED15', '#ef535015', '#06b6d415'];
                 const AIcon = awardIcons[idx % awardIcons.length];
                 const aColor = awardColors[idx % awardColors.length];
                 const aBg = awardBgs[idx % awardBgs.length];
                 return (
-                  <div key={a.id} className="flex items-start gap-4 bg-white border border-gray-100 rounded-2xl p-5 hover:shadow-md transition-all group" style={{ borderColor: 'transparent' }} onMouseEnter={e => e.currentTarget.style.borderColor = aColor + '40'} onMouseLeave={e => e.currentTarget.style.borderColor = 'transparent'}>
+                  <div key={a.id} className="flex items-start gap-4 bg-white border border-gray-100 rounded-2xl p-5 hover:shadow-lg transition-all group cursor-default">
                     <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform border" style={{ background: aBg, borderColor: aColor + '30' }}>
                       <AIcon className="h-5 w-5" style={{ color: aColor }} />
                     </div>
                     <div>
                       <div className="font-bold text-gray-900 text-sm mb-0.5">{a.title}</div>
-                      <div className="text-xs font-semibold" style={{ color: aColor }}>{a.issuer} · {a.year}</div>
+                      <div className="text-xs font-bold" style={{ color: aColor }}>{a.issuer} · {a.year}</div>
                       {a.description && <p className="text-xs text-gray-400 mt-1.5 leading-relaxed line-clamp-2">{a.description}</p>}
                     </div>
                   </div>
@@ -508,8 +510,8 @@ export default function HomePage() {
                   onClick={() => setOpenFaq(openFaq === f.id ? null : f.id)}
                   className="w-full flex items-center justify-between px-6 py-5 text-left hover:bg-gray-50 transition-colors"
                 >
-                  <span className="font-semibold text-gray-900">{f.question}</span>
-                  <ChevronDown className={`h-4 w-4 text-gray-400 flex-shrink-0 transition-transform duration-300 ${openFaq === f.id ? 'rotate-180 text-[#00C853]' : ''}`} />
+                  <span className="font-bold text-gray-900 pr-4">{f.question}</span>
+                  <ChevronDown className={`h-4 w-4 text-gray-400 flex-shrink-0 transition-transform duration-300 ${openFaq === f.id ? 'rotate-180 text-[#1a1aff]' : ''}`} />
                 </button>
                 {openFaq === f.id && (
                   <div className="px-6 pb-5 text-sm text-gray-500 leading-relaxed">{f.answer}</div>
@@ -518,39 +520,39 @@ export default function HomePage() {
             ))}
           </div>
           <div className="text-center mt-8">
-            <Link to={createPageUrl('FAQ')} className="text-sm text-[#00C853] hover:text-[#00b34a] font-semibold transition-colors">
+            <Link to={createPageUrl('FAQ')} className="text-sm text-[#1a1aff] hover:text-[#1515ee] font-bold transition-colors">
               Ver todas las preguntas →
             </Link>
           </div>
         </div>
       </section>
 
-      {/* ══════════════ FINAL CTA (dark) ══════════════ */}
-      <section className="relative py-32 px-4 sm:px-6 overflow-hidden bg-[#0a0d14]">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_70%_at_50%_50%,rgba(0,200,83,0.08),transparent)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_40%_at_80%_20%,rgba(33,150,243,0.07),transparent)]" />
+      {/* ══════════════ FINAL CTA ══════════════ */}
+      <section className="relative py-32 px-4 sm:px-6 overflow-hidden bg-[#04052e]">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_70%_at_50%_50%,rgba(26,26,255,0.18),transparent)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_40%_at_85%_15%,rgba(128,204,0,0.1),transparent)]" />
         <div className="relative max-w-3xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#00C853]/10 border border-[#00C853]/20 text-xs text-[#00C853] font-semibold mb-8">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#00C853] animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#80cc00]/15 border border-[#80cc00]/25 text-xs text-[#80cc00] font-bold mb-8 uppercase tracking-wide">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#80cc00] animate-pulse" />
             Plataforma activa · Únete hoy
           </div>
           <h2 className="text-5xl sm:text-6xl font-black mb-5 leading-tight text-white">
-            ¿Listo para operar<br />como un <span className="text-[#00C853]">pro?</span>
+            ¿Listo para operar<br />como un <span className="text-[#80cc00]">profesional?</span>
           </h2>
           <p className="text-lg text-white/40 mb-10">
-            Cuenta demo con $10,000 activada al instante. Sin esperas.
+            Cuenta demo gratuita activada al instante. Sin esperas, sin depósito previo.
           </p>
           <button
             onClick={() => window.location.href = createPageUrl('Register')}
-            className="group inline-flex items-center gap-3 px-10 py-5 bg-[#00C853] hover:bg-[#00b34a] text-white font-black rounded-full text-xl transition-all shadow-2xl shadow-[#00C853]/25 hover:scale-[1.04]"
+            className="group inline-flex items-center gap-3 px-10 py-5 bg-[#80cc00] hover:bg-[#72b800] text-[#0d0d0d] font-black rounded-full text-xl transition-all shadow-2xl shadow-[#80cc00]/20 hover:scale-[1.04]"
           >
             Abrir cuenta ahora
             <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
           </button>
-          <div className="flex items-center justify-center gap-6 mt-8 text-xs text-white/30">
-            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#00C853]" />Cuenta demo $10K</span>
-            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#00C853]" />Datos en tiempo real</span>
-            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#00C853]" />Activación inmediata</span>
+          <div className="flex items-center justify-center gap-6 mt-8 text-xs text-white/30 flex-wrap">
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#80cc00]" />Cuenta demo $10K</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#80cc00]" />Spreads desde 0.0 pips</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#80cc00]" />Activación inmediata</span>
           </div>
         </div>
       </section>

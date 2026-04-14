@@ -1,64 +1,80 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import { Shield, Globe } from 'lucide-react';
+
+const LINKS = {
+  'Trading': [
+    { label: 'Plataforma', href: createPageUrl('Product') },
+    { label: 'Mercados', href: createPageUrl('Explore') },
+    { label: 'Gráficos', href: createPageUrl('Portal_Charts') },
+  ],
+  'Empresa': [
+    { label: 'Sobre Nosotros', href: createPageUrl('About') },
+    { label: 'Premios', href: createPageUrl('Awards') },
+    { label: 'Testimonios', href: createPageUrl('Testimonials') },
+  ],
+  'Soporte': [
+    { label: 'Preguntas Frecuentes', href: createPageUrl('FAQ') },
+    { label: 'Portal del Trader', href: createPageUrl('Dashboard') },
+    { label: 'Registrarse', href: createPageUrl('Register') },
+  ],
+};
 
 export default function PublicFooter() {
   return (
-    <footer className="bg-[#0a0d14] border-t border-white/5 py-12 px-4">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col md:flex-row items-start justify-between gap-8 mb-10">
-          {/* Brand */}
-          <div>
-            <div className="flex items-center gap-2.5 mb-3">
-              <div className="w-8 h-8 rounded-md bg-[#00C853] flex items-center justify-center">
-                <span className="text-white font-black text-sm">N</span>
-              </div>
-              <span className="font-black text-xl text-white tracking-tight">NEXUS</span>
-            </div>
-            <p className="text-white/30 text-sm max-w-xs leading-relaxed">
-              Plataforma de trading simulado con fines educativos. Los resultados en cuentas demo no garantizan rendimientos reales.
-            </p>
+    <footer className="bg-[#060820] text-white">
+      {/* Main footer */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
+        {/* Brand */}
+        <div className="lg:col-span-2">
+          <div className="flex items-center gap-1 mb-4">
+            <span className="text-2xl font-black text-[#1a1aff]">NEXUS</span>
+            <span className="text-2xl font-black text-[#80cc00]">Trade</span>
           </div>
-
-          {/* Links */}
-          <div className="flex flex-wrap gap-12">
-            <div>
-              <div className="text-xs font-bold text-white/50 uppercase tracking-widest mb-4">Plataforma</div>
-              <div className="space-y-2">
-                {[
-                  { label: 'Inicio', page: 'Home' },
-                  { label: 'Producto', page: 'Product' },
-                  { label: 'Sobre nosotros', page: 'About' },
-                ].map(l => (
-                  <Link key={l.page} to={createPageUrl(l.page)} className="block text-sm text-white/40 hover:text-white transition-colors">{l.label}</Link>
-                ))}
-              </div>
-            </div>
-            <div>
-              <div className="text-xs font-bold text-white/50 uppercase tracking-widest mb-4">Soporte</div>
-              <div className="space-y-2">
-                {[
-                  { label: 'FAQ', page: 'FAQ' },
-                  { label: 'Testimonios', page: 'Testimonials' },
-                  { label: 'Premios', page: 'Awards' },
-                ].map(l => (
-                  <Link key={l.page} to={createPageUrl(l.page)} className="block text-sm text-white/40 hover:text-white transition-colors">{l.label}</Link>
-                ))}
-              </div>
-            </div>
-            <div>
-              <div className="text-xs font-bold text-white/50 uppercase tracking-widest mb-4">Cuenta</div>
-              <div className="space-y-2">
-                <a href={createPageUrl('Acceso')} className="block text-sm text-white/40 hover:text-white transition-colors">Iniciar sesión</a>
-                <a href={createPageUrl('Acceso')} className="block text-sm text-white/40 hover:text-white transition-colors">Crear cuenta</a>
-              </div>
-            </div>
+          <p className="text-sm text-white/50 leading-relaxed max-w-xs mb-6">
+            Plataforma de trading educacional con datos en tiempo real. Opera, aprende y perfecciona tu estrategia sin riesgo financiero real.
+          </p>
+          <div className="flex items-center gap-2 text-xs text-white/40">
+            <Shield className="h-3.5 w-3.5 text-[#80cc00]" />
+            Plataforma educacional · Sin inversión real
+          </div>
+          <div className="flex items-center gap-2 text-xs text-white/40 mt-2">
+            <Globe className="h-3.5 w-3.5 text-[#1a1aff]" />
+            Disponible globalmente
           </div>
         </div>
 
-        <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <span className="text-xs text-white/20">© {new Date().getFullYear()} NEXUS Trading. Todos los derechos reservados.</span>
-          <span className="text-xs text-white/20">Plataforma educativa · No constituye asesoramiento financiero</span>
+        {/* Links */}
+        {Object.entries(LINKS).map(([section, items]) => (
+          <div key={section}>
+            <div className="text-xs font-bold uppercase tracking-widest text-white/30 mb-4">{section}</div>
+            <ul className="space-y-2.5">
+              {items.map((item) => (
+                <li key={item.label}>
+                  <Link
+                    to={item.href}
+                    className="text-sm text-white/55 hover:text-[#80cc00] transition-colors"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      {/* Bottom bar */}
+      <div className="border-t border-white/[0.06] px-4 sm:px-6 py-5 max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/30">
+        <span>© 2025 NexusTrade. Todos los derechos reservados.</span>
+        <span className="text-center">
+          El trading conlleva un riesgo significativo de pérdida. Esta es una plataforma educacional simulada.
+        </span>
+        <div className="flex gap-4">
+          <span className="hover:text-white/60 cursor-pointer transition-colors">Privacidad</span>
+          <span className="hover:text-white/60 cursor-pointer transition-colors">Términos</span>
+          <span className="hover:text-white/60 cursor-pointer transition-colors">Cookies</span>
         </div>
       </div>
     </footer>
