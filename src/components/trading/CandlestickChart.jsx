@@ -88,7 +88,7 @@ function calculateFibonacci(candles, lookback = 50) {
   };
 }
 
-export default function CandlestickChart({ candles, chartType = 'candles', indicators = [], currentPrice, symbol }) {
+export default function CandlestickChart({ candles, chartType = 'candles', indicators = [], currentPrice, symbol, takeProfit, stopLoss }) {
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 500 });
@@ -336,6 +336,43 @@ export default function CandlestickChart({ candles, chartType = 'candles', indic
       ctx.fillText(formatPrice(currentPrice, symbol), width - padding.right + 8, y + 4);
     }
 
+    // ── TP / SL lines ──────────────────────────────────────────────────────────
+    const drawTPSLLine = (price, color, labelText) => {
+      const y = priceToY(price);
+      if (y < padding.top || y > padding.top + chartH) return;
+      // Dashed line
+      ctx.save();
+      ctx.setLineDash([6, 4]);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(padding.left, y);
+      ctx.lineTo(width - padding.right, y);
+      ctx.stroke();
+      ctx.restore();
+      // Label pill on right axis
+      const pillW = padding.right - 2;
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.roundRect(width - padding.right, y - 10, pillW, 20, 3);
+      ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 10px Inter, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(`${labelText} ${formatPrice(price, symbol)}`, width - padding.right + 4, y + 4);
+      // Distance label on chart
+      if (currentPrice) {
+        const dist = ((price - currentPrice) / currentPrice * 100);
+        ctx.fillStyle = color;
+        ctx.font = '10px Inter, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(`${dist >= 0 ? '+' : ''}${dist.toFixed(2)}%`, padding.left + 6, y - 3);
+      }
+    };
+
+    if (takeProfit) drawTPSLLine(takeProfit, '#26a69a', 'TP');
+    if (stopLoss)   drawTPSLLine(stopLoss,   '#ef5350', 'SL');
+
     // Crosshair
     if (crosshair) {
       const { x: mx, y: my } = crosshair;
@@ -398,7 +435,7 @@ export default function CandlestickChart({ candles, chartType = 'candles', indic
       legendX += ctx.measureText(item.label).width + 14;
     });
   }, [candles, dimensions, offset, visibleCount, crosshair, chartType, indicators, currentPrice,
-      sma20, sma50, ema9, ema21, ema50, rsi, fibData, showRSI, symbol]);
+      sma20, sma50, ema9, ema21, ema50, rsi, fibData, showRSI, symbol, takeProfit, stopLoss]);
 
   useEffect(() => { draw(); }, [draw]);
 

@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { ArrowUpRight, ArrowDownRight, Target, ShieldAlert } from 'lucide-react';
 import { toast } from 'sonner';
 
-export default function TradePanel({ symbol, currentPrice, account, positions, onTrade }) {
+export default function TradePanel({ symbol, currentPrice, account, positions, onTrade, onTPChange, onSLChange }) {
   const [side, setSide] = useState('buy');
   const [orderType, setOrderType] = useState('market');
   const [qty, setQty] = useState('');
@@ -152,7 +152,7 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
           </div>
           <Input
             type="number" min="0" step="0.01" value={takeProfit}
-            onChange={e => setTakeProfit(e.target.value)}
+            onChange={e => { setTakeProfit(e.target.value); onTPChange && onTPChange(parseFloat(e.target.value) || null); }}
             className="h-8 text-xs bg-[#1e222d] border-[#26a69a]/40 text-white font-mono focus:border-[#26a69a]"
             placeholder={price > 0 ? `>${(price * (side === 'buy' ? 1.02 : 0.98)).toFixed(2)}` : 'Precio TP'}
           />
@@ -170,7 +170,7 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
           </div>
           <Input
             type="number" min="0" step="0.01" value={stopLoss}
-            onChange={e => setStopLoss(e.target.value)}
+            onChange={e => { setStopLoss(e.target.value); onSLChange && onSLChange(parseFloat(e.target.value) || null); }}
             className="h-8 text-xs bg-[#1e222d] border-[#ef5350]/40 text-white font-mono focus:border-[#ef5350]"
             placeholder={price > 0 ? `<${(price * (side === 'buy' ? 0.98 : 1.02)).toFixed(2)}` : 'Precio SL'}
           />

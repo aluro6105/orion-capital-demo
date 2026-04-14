@@ -187,6 +187,8 @@ function ChartsContent() {
   ]);
   const [mobileWatchlist, setMobileWatchlist] = useState(false);
   const [rightPanel, setRightPanel] = useState('watchlist'); // 'watchlist' | 'signals'
+  const [chartTP, setChartTP] = useState(null);
+  const [chartSL, setChartSL] = useState(null);
   const queryClient = useQueryClient();
 
   const { data: positions = [] } = useQuery({
@@ -287,7 +289,7 @@ function ChartsContent() {
       <div className="flex flex-1 overflow-hidden">
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="flex-1 min-h-0">
-            <CandlestickChart candles={candles} chartType={chartType} indicators={indicators} currentPrice={priceData?.price} symbol={activeSymbol} />
+            <CandlestickChart candles={candles} chartType={chartType} indicators={indicators} currentPrice={priceData?.price} symbol={activeSymbol} takeProfit={chartTP} stopLoss={chartSL} />
           </div>
           <BottomPanel positions={positionsForPanel} trades={trades} account={accountForPanel} equitySnapshots={[]} />
         </div>
@@ -320,13 +322,22 @@ function ChartsContent() {
                   onAdd={inst => setWatchlistItems(p => p.find(i => i.symbol === inst.symbol) ? p : [...p, { symbol: inst.symbol, order_index: p.length }])}
                 />
               </div>
-              <TradePanel symbol={activeSymbol} currentPrice={priceData?.price} account={accountForPanel} positions={positionsForPanel} onTrade={handleTrade} />
             </>
           ) : (
             <div className="flex-1 overflow-hidden">
               <MarketSignals isRealAccount={activeType === 'REAL'} onSelectSymbol={handleSymbolChange} />
             </div>
           )}
+          {/* TradePanel always visible at bottom */}
+          <TradePanel
+            symbol={activeSymbol}
+            currentPrice={priceData?.price}
+            account={accountForPanel}
+            positions={positionsForPanel}
+            onTrade={handleTrade}
+            onTPChange={setChartTP}
+            onSLChange={setChartSL}
+          />
         </div>
 
         <div className="lg:hidden fixed bottom-20 right-4 z-40">
@@ -346,7 +357,7 @@ function ChartsContent() {
                   onAdd={inst => setWatchlistItems(p => p.find(i => i.symbol === inst.symbol) ? p : [...p, { symbol: inst.symbol, order_index: p.length }])}
                 />
               </div>
-              <TradePanel symbol={activeSymbol} currentPrice={priceData?.price} account={accountForPanel} positions={positionsForPanel} onTrade={handleTrade} />
+              <TradePanel symbol={activeSymbol} currentPrice={priceData?.price} account={accountForPanel} positions={positionsForPanel} onTrade={handleTrade} onTPChange={setChartTP} onSLChange={setChartSL} />
             </SheetContent>
           </Sheet>
         </div>
