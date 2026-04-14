@@ -121,7 +121,7 @@ export default function RegisterPage() {
               <div className="w-8 h-8 rounded-md bg-[#00C853] flex items-center justify-center">
                 <span className="text-white font-black text-sm tracking-tight">N</span>
               </div>
-              <span className="font-black text-xl text-gray-900 tracking-tight">NEXUS</span>
+              <span className="font-black text-xl text-gray-900 tracking-tight">M4 Markets Latam</span>
             </a>
             <a
               href={createPageUrl('Home')}
@@ -369,7 +369,7 @@ export default function RegisterPage() {
 
           {/* Bottom disclaimer */}
           <div className="relative text-xs text-white/20 leading-relaxed max-w-xs">
-            NEXUS es una plataforma de trading simulado con fines educativos. Los resultados obtenidos en cuentas demo no garantizan rendimientos reales.
+            M4 Markets Latam es una plataforma de trading simulado con fines educativos. Los resultados obtenidos en cuentas demo no garantizan rendimientos reales.
           </div>
         </div>
 

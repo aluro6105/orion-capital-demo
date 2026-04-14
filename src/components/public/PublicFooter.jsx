@@ -1,80 +1,83 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { Shield, Globe } from 'lucide-react';
 
-const LINKS = {
+const FOOTER_LINKS = {
   'Trading': [
-    { label: 'Plataforma', href: createPageUrl('Product') },
-    { label: 'Mercados', href: createPageUrl('Explore') },
-    { label: 'Gráficos', href: createPageUrl('Portal_Charts') },
+    { label: 'Criptomonedas', href: createPageUrl('Product') },
+    { label: 'Forex CFD', href: createPageUrl('Product') },
+    { label: 'Materias Primas', href: createPageUrl('Product') },
+    { label: 'Índices', href: createPageUrl('Product') },
+    { label: 'Acciones', href: createPageUrl('Product') },
+  ],
+  'Plataforma': [
+    { label: 'Gráficos Pro', href: createPageUrl('Product') },
+    { label: 'Spreads y Comisiones', href: createPageUrl('Product') },
+    { label: 'Cuenta Demo', href: createPageUrl('Register') },
+    { label: 'Cuenta Real', href: createPageUrl('Register') },
   ],
   'Empresa': [
     { label: 'Sobre Nosotros', href: createPageUrl('About') },
     { label: 'Premios', href: createPageUrl('Awards') },
     { label: 'Testimonios', href: createPageUrl('Testimonials') },
+    { label: 'FAQ', href: createPageUrl('FAQ') },
   ],
-  'Soporte': [
-    { label: 'Preguntas Frecuentes', href: createPageUrl('FAQ') },
-    { label: 'Portal del Trader', href: createPageUrl('Dashboard') },
-    { label: 'Registrarse', href: createPageUrl('Register') },
+  'Cuenta': [
+    { label: 'Iniciar Sesión', href: createPageUrl('Acceso') },
+    { label: 'Crear Cuenta', href: createPageUrl('Register') },
+    { label: 'Portal', href: createPageUrl('Dashboard') },
   ],
 };
 
 export default function PublicFooter() {
   return (
-    <footer className="bg-[#060820] text-white">
-      {/* Main footer */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
-        {/* Brand */}
-        <div className="lg:col-span-2">
-          <div className="flex items-center gap-1 mb-4">
-            <span className="text-2xl font-black text-[#1a1aff]">NEXUS</span>
-            <span className="text-2xl font-black text-[#80cc00]">Trade</span>
+    <footer className="bg-[#04052e] border-t border-white/[0.06]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-12">
+          {/* Brand */}
+          <div className="md:col-span-1">
+            <a href={createPageUrl('Home')} className="inline-flex items-center mb-5">
+              <span className="text-xl font-black tracking-tight">
+                <span className="text-white">M4</span>
+                <span className="text-[#80cc00]"> Markets Latam</span>
+              </span>
+            </a>
+            <p className="text-xs text-white/35 leading-relaxed mb-4">
+              Plataforma de trading educacional con datos de mercado en tiempo real. Opera con confianza.
+            </p>
+            <div className="flex gap-2 flex-wrap">
+              {['FSA', 'CySEC', 'DFSA'].map(lic => (
+                <span key={lic} className="text-[10px] font-bold px-2 py-1 bg-[#1a1aff]/20 border border-[#1a1aff]/30 text-[#7a8aff] rounded-lg">
+                  {lic}
+                </span>
+              ))}
+            </div>
           </div>
-          <p className="text-sm text-white/50 leading-relaxed max-w-xs mb-6">
-            Plataforma de trading educacional con datos en tiempo real. Opera, aprende y perfecciona tu estrategia sin riesgo financiero real.
-          </p>
-          <div className="flex items-center gap-2 text-xs text-white/40">
-            <Shield className="h-3.5 w-3.5 text-[#80cc00]" />
-            Plataforma educacional · Sin inversión real
-          </div>
-          <div className="flex items-center gap-2 text-xs text-white/40 mt-2">
-            <Globe className="h-3.5 w-3.5 text-[#1a1aff]" />
-            Disponible globalmente
-          </div>
+
+          {/* Links */}
+          {Object.entries(FOOTER_LINKS).map(([section, links]) => (
+            <div key={section}>
+              <h4 className="text-xs font-black text-white uppercase tracking-[0.15em] mb-5">{section}</h4>
+              <ul className="space-y-3">
+                {links.map(l => (
+                  <li key={l.label}>
+                    <a href={l.href} className="text-sm text-white/40 hover:text-white transition-colors">
+                      {l.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
-        {/* Links */}
-        {Object.entries(LINKS).map(([section, items]) => (
-          <div key={section}>
-            <div className="text-xs font-bold uppercase tracking-widest text-white/30 mb-4">{section}</div>
-            <ul className="space-y-2.5">
-              {items.map((item) => (
-                <li key={item.label}>
-                  <Link
-                    to={item.href}
-                    className="text-sm text-white/55 hover:text-[#80cc00] transition-colors"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-
-      {/* Bottom bar */}
-      <div className="border-t border-white/[0.06] px-4 sm:px-6 py-5 max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/30">
-        <span>© 2025 NexusTrade. Todos los derechos reservados.</span>
-        <span className="text-center">
-          El trading conlleva un riesgo significativo de pérdida. Esta es una plataforma educacional simulada.
-        </span>
-        <div className="flex gap-4">
-          <span className="hover:text-white/60 cursor-pointer transition-colors">Privacidad</span>
-          <span className="hover:text-white/60 cursor-pointer transition-colors">Términos</span>
-          <span className="hover:text-white/60 cursor-pointer transition-colors">Cookies</span>
+        {/* Bottom bar */}
+        <div className="mt-14 pt-8 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-white/25">
+            © {new Date().getFullYear()} M4 Markets Latam. Todos los derechos reservados.
+          </p>
+          <p className="text-xs text-white/20 text-center max-w-lg">
+            Operar con CFDs implica un riesgo significativo de pérdida de capital. Esta plataforma es de uso educativo. Los resultados en cuentas demo no garantizan rendimientos reales.
+          </p>
         </div>
       </div>
     </footer>

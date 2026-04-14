@@ -63,7 +63,7 @@ export default function AccesoPage() {
           <div className="w-16 h-16 rounded-2xl bg-[#00C853]/15 border border-[#00C853]/30 flex items-center justify-center mx-auto mb-4">
             <TrendingUp className="h-8 w-8 text-[#00C853]" />
           </div>
-          <h1 className="text-2xl font-black text-white mb-1">Bienvenido a NEXUS</h1>
+          <h1 className="text-2xl font-black text-white mb-1">Bienvenido a M4 Markets Latam</h1>
           <p className="text-white/40 text-sm">{tab === 'login' ? 'Inicia sesión para continuar' : 'Crea tu cuenta gratuita'}</p>
         </div>
 

@@ -109,11 +109,11 @@ export default function HomePage() {
   const [openFaq, setOpenFaq] = useState(null);
 
   const displayFaqs = faqs.length > 0 ? faqs.slice(0, 5) : [
-    { id: 1, question: '¿Cómo abro una cuenta en NexusTrade?', answer: 'El registro tarda menos de 30 segundos. Tu cuenta demo con $10,000 queda activada inmediatamente, sin ningún depósito previo ni verificación de documentos.' },
-    { id: 2, question: '¿Los precios son datos reales de mercado?', answer: 'Sí, NexusTrade utiliza datos de mercado de alta fidelidad actualizados en tiempo real para ofrecerte una experiencia lo más cercana posible al mercado real con spreads competitivos.' },
+    { id: 1, question: '¿Cómo abro una cuenta en M4 Markets Latam?', answer: 'El registro tarda menos de 30 segundos. Tu cuenta demo con $10,000 queda activada inmediatamente, sin ningún depósito previo ni verificación de documentos.' },
+    { id: 2, question: '¿Los precios son datos reales de mercado?', answer: 'Sí, M4 Markets Latam utiliza datos de mercado de alta fidelidad actualizados en tiempo real para ofrecerte una experiencia lo más cercana posible al mercado real con spreads competitivos.' },
     { id: 3, question: '¿Qué instrumentos están disponibles?', answer: 'Criptomonedas (BTC, ETH, SOL...), Forex (EUR/USD, GBP/USD...), Materias Primas (Oro, Plata, Petróleo) e Índices (SP500, Nasdaq, DAX). Más de 50 instrumentos disponibles.' },
     { id: 4, question: '¿Cuánto capital tiene la cuenta demo?', answer: 'La cuenta demo se activa con $10,000 virtuales. Puedes resetearla desde el panel de control en cualquier momento para empezar con capital fresco.' },
-    { id: 5, question: '¿Existen cargos ocultos en NexusTrade?', answer: 'Cero cargos ocultos ni letra pequeña. NexusTrade es completamente transparente con todos sus usuarios. Los spreads y condiciones de trading se publican abiertamente.' },
+    { id: 5, question: '¿Existen cargos ocultos en M4 Markets Latam?', answer: 'Cero cargos ocultos ni letra pequeña. M4 Markets Latam es completamente transparente con todos sus usuarios. Los spreads y condiciones de trading se publican abiertamente.' },
   ];
 
   return (
@@ -175,7 +175,7 @@ export default function HomePage() {
                 <div className="w-2.5 h-2.5 rounded-full bg-[#f59e0b]/70" />
                 <div className="w-2.5 h-2.5 rounded-full bg-[#80cc00]/70" />
                 <div className="ml-3 flex-1 h-5 bg-white/5 rounded-md px-2 flex items-center">
-                  <span className="text-[10px] text-white/25">nexustrade.io/portal/charts</span>
+                  <span className="text-[10px] text-white/25">m4marketslatam.io/portal/charts</span>
                 </div>
               </div>
               {/* Header bar */}
@@ -313,7 +313,7 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_70%_at_80%_50%,rgba(26,26,255,0.2),transparent)]" />
         <div className="relative max-w-6xl mx-auto">
           <div className="text-center mb-14">
-            <span className="text-xs font-bold text-[#80cc00] uppercase tracking-[0.2em] mb-3 block">Opera con NexusTrade</span>
+            <span className="text-xs font-bold text-[#80cc00] uppercase tracking-[0.2em] mb-3 block">Opera con M4 Markets Latam</span>
             <h2 className="text-4xl sm:text-5xl font-black text-white">Elección de traders<br />en todo el mundo</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -361,7 +361,7 @@ export default function HomePage() {
             <div>
               <span className="text-xs font-bold text-[#80cc00] uppercase tracking-[0.2em] mb-4 block">Herramientas y recursos</span>
               <h2 className="text-4xl sm:text-5xl font-black leading-tight mb-6 text-white">
-                Empieza tu viaje<br /><span className="text-[#80cc00]">con NexusTrade.</span>
+                Empieza tu viaje<br /><span className="text-[#80cc00]">con M4 Markets Latam.</span>
               </h2>
               <p className="text-white/50 text-lg leading-relaxed mb-8">
                 Todo lo que necesitas para operar como un profesional. Desde gráficos avanzados hasta calendarios económicos y cursos de formación.

@@ -38,7 +38,7 @@ export default function TestimonialsPage() {
           </div>
           <h1 className="text-4xl sm:text-6xl font-black mb-4 text-gray-900">Lo que dicen<br />nuestros traders</h1>
           <p className="text-gray-500 max-w-xl mx-auto text-lg">
-            Miles de traders operan con NEXUS. Estas son sus historias.
+            Miles de traders operan con M4 Markets Latam. Estas son sus historias.
           </p>
         </div>
       </section>
@@ -49,7 +49,7 @@ export default function TestimonialsPage() {
           {[
             { v: '10,000+', l: 'Usuarios activos' },
             { v: '4.9/5', l: 'Valoración media' },
-            { v: '98%', l: 'Recomendarían NEXUS' },
+            { v: '98%', l: 'Recomendarían M4 Markets Latam' },
           ].map(s => (
             <div key={s.l} className="text-center">
               <div className="text-3xl sm:text-4xl font-black text-white mb-1">{s.v}</div>
