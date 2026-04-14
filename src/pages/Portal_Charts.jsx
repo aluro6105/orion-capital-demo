@@ -10,10 +10,11 @@ import TradePanel from '../components/trading/TradePanel';
 import BottomPanel from '../components/trading/BottomPanel';
 import priceEngine from '../components/trading/PriceEngine';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { List, AlertTriangle, FlaskConical } from 'lucide-react';
+import { List, AlertTriangle, FlaskConical, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import PortalLayout from '../components/portal/PortalLayout';
 import { useAccount } from '../components/portal/AccountContext';
+import MarketSignals from '../components/trading/MarketSignals';
 
 const DEFAULT_INSTRUMENTS = [
   // ── Acciones ──────────────────────────────────────────────────────
@@ -185,6 +186,7 @@ function ChartsContent() {
     { symbol: 'BTCUSD', order_index: 4 },
   ]);
   const [mobileWatchlist, setMobileWatchlist] = useState(false);
+  const [rightPanel, setRightPanel] = useState('watchlist'); // 'watchlist' | 'signals'
   const queryClient = useQueryClient();
 
   const { data: positions = [] } = useQuery({
@@ -291,15 +293,40 @@ function ChartsContent() {
         </div>
 
         <div className="hidden lg:flex flex-col w-64 border-l border-[#2a2e39] bg-[#131722]">
-          <SymbolDetails symbol={activeSymbol} name={activeInstrument.name} type={activeInstrument.type} priceData={priceData} candles={candles} />
-          <div className="flex-1 overflow-hidden">
-            <Watchlist items={watchlistItems} instruments={DEFAULT_INSTRUMENTS} activeSymbol={activeSymbol}
-              onSelectSymbol={handleSymbolChange} onReorder={handleReorder}
-              onRemove={s => setWatchlistItems(p => p.filter(i => i.symbol !== s))}
-              onAdd={inst => setWatchlistItems(p => p.find(i => i.symbol === inst.symbol) ? p : [...p, { symbol: inst.symbol, order_index: p.length }])}
-            />
+          {/* Panel tab toggle */}
+          <div className="flex border-b border-[#2a2e39] flex-shrink-0">
+            <button
+              onClick={() => setRightPanel('watchlist')}
+              className={`flex-1 py-1.5 text-[10px] font-semibold uppercase tracking-wide transition-colors ${rightPanel === 'watchlist' ? 'text-white bg-[#1e222d]' : 'text-[#787b86] hover:text-white'}`}
+            >
+              <List className="h-3 w-3 inline mr-1" />Lista
+            </button>
+            <button
+              onClick={() => setRightPanel('signals')}
+              className={`flex-1 py-1.5 text-[10px] font-semibold uppercase tracking-wide transition-colors ${rightPanel === 'signals' ? 'text-[#2196F3] bg-[#2196F3]/10' : 'text-[#787b86] hover:text-white'}`}
+            >
+              <Zap className="h-3 w-3 inline mr-1" />Señales
+              {activeType === 'DEMO' && <span className="ml-1 text-[8px] bg-[#2196F3]/20 text-[#2196F3] px-1 rounded">REAL</span>}
+            </button>
           </div>
-          <TradePanel symbol={activeSymbol} currentPrice={priceData?.price} account={accountForPanel} positions={positionsForPanel} onTrade={handleTrade} />
+
+          {rightPanel === 'watchlist' ? (
+            <>
+              <SymbolDetails symbol={activeSymbol} name={activeInstrument.name} type={activeInstrument.type} priceData={priceData} candles={candles} />
+              <div className="flex-1 overflow-hidden">
+                <Watchlist items={watchlistItems} instruments={DEFAULT_INSTRUMENTS} activeSymbol={activeSymbol}
+                  onSelectSymbol={handleSymbolChange} onReorder={handleReorder}
+                  onRemove={s => setWatchlistItems(p => p.filter(i => i.symbol !== s))}
+                  onAdd={inst => setWatchlistItems(p => p.find(i => i.symbol === inst.symbol) ? p : [...p, { symbol: inst.symbol, order_index: p.length }])}
+                />
+              </div>
+              <TradePanel symbol={activeSymbol} currentPrice={priceData?.price} account={accountForPanel} positions={positionsForPanel} onTrade={handleTrade} />
+            </>
+          ) : (
+            <div className="flex-1 overflow-hidden">
+              <MarketSignals isRealAccount={activeType === 'REAL'} onSelectSymbol={handleSymbolChange} />
+            </div>
+          )}
         </div>
 
         <div className="lg:hidden fixed bottom-20 right-4 z-40">

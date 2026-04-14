@@ -160,20 +160,43 @@ export default function TopToolbar({
             )}
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="bg-[#1e222d] border-[#2a2e39]">
+        <DropdownMenuContent className="bg-[#1e222d] border-[#2a2e39] min-w-[160px]">
+          <div className="px-2 py-1 text-[10px] text-[#787b86] uppercase tracking-wider">Medias Móviles</div>
+          {[
+            { key: 'SMA20', label: 'SMA 20', color: '#2196F3' },
+            { key: 'SMA50', label: 'SMA 50', color: '#FF9800' },
+            { key: 'EMA9',  label: 'EMA 9',  color: '#E91E63' },
+            { key: 'EMA21', label: 'EMA 21', color: '#9C27B0' },
+            { key: 'EMA50', label: 'EMA 50', color: '#FF5722' },
+          ].map(({ key, label, color }) => (
+            <DropdownMenuCheckboxItem key={key}
+              checked={indicators.includes(key)}
+              onCheckedChange={() => toggleIndicator(key)}
+              className="text-[#d1d4dc] text-xs"
+            >
+              <span className="w-2 h-2 rounded-full inline-block mr-2 flex-shrink-0" style={{ background: color }} />
+              {label}
+            </DropdownMenuCheckboxItem>
+          ))}
+          <DropdownMenuSeparator className="bg-[#2a2e39]" />
+          <div className="px-2 py-1 text-[10px] text-[#787b86] uppercase tracking-wider">Osciladores</div>
           <DropdownMenuCheckboxItem
-            checked={indicators.includes('SMA20')}
-            onCheckedChange={() => toggleIndicator('SMA20')}
+            checked={indicators.includes('RSI')}
+            onCheckedChange={() => toggleIndicator('RSI')}
             className="text-[#d1d4dc] text-xs"
           >
-            SMA 20
+            <span className="w-2 h-2 rounded-full inline-block mr-2 flex-shrink-0 bg-[#00BCD4]" />
+            RSI (14)
           </DropdownMenuCheckboxItem>
+          <DropdownMenuSeparator className="bg-[#2a2e39]" />
+          <div className="px-2 py-1 text-[10px] text-[#787b86] uppercase tracking-wider">Otros</div>
           <DropdownMenuCheckboxItem
-            checked={indicators.includes('SMA50')}
-            onCheckedChange={() => toggleIndicator('SMA50')}
+            checked={indicators.includes('FIB')}
+            onCheckedChange={() => toggleIndicator('FIB')}
             className="text-[#d1d4dc] text-xs"
           >
-            SMA 50
+            <span className="w-2 h-2 rounded-full inline-block mr-2 flex-shrink-0 bg-yellow-400" />
+            Fibonacci
           </DropdownMenuCheckboxItem>
         </DropdownMenuContent>
       </DropdownMenu>

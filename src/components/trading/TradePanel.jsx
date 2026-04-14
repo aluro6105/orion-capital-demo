@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { AlertTriangle, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight, Target, ShieldAlert } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function TradePanel({ symbol, currentPrice, account, positions, onTrade }) {
@@ -11,6 +10,8 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
   const [orderType, setOrderType] = useState('market');
   const [qty, setQty] = useState('');
   const [limitPrice, setLimitPrice] = useState('');
+  const [takeProfit, setTakeProfit] = useState('');
+  const [stopLoss, setStopLoss] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   const position = positions?.find(p => p.symbol === symbol);
@@ -18,6 +19,18 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
   const price = orderType === 'limit' ? (parseFloat(limitPrice) || 0) : (currentPrice || 0);
   const total = (parseFloat(qty) || 0) * price;
   const qtyNum = parseFloat(qty) || 0;
+  const tpPrice = parseFloat(takeProfit) || 0;
+  const slPrice = parseFloat(stopLoss) || 0;
+
+  // TP/SL P&L calculations
+  const tpPnl = tpPrice > 0 && price > 0 && qtyNum > 0
+    ? (side === 'buy' ? (tpPrice - price) : (price - tpPrice)) * qtyNum : null;
+  const slPnl = slPrice > 0 && price > 0 && qtyNum > 0
+    ? (side === 'buy' ? (slPrice - price) : (price - slPrice)) * qtyNum : null;
+  const tpPct = tpPrice > 0 && price > 0
+    ? ((side === 'buy' ? tpPrice - price : price - tpPrice) / price * 100) : null;
+  const slPct = slPrice > 0 && price > 0
+    ? ((side === 'buy' ? slPrice - price : price - slPrice) / price * 100) : null;
 
   const canBuy = qtyNum > 0 && price > 0 && total <= cash;
   const canSell = qtyNum > 0 && price > 0 && position && position.qty >= qtyNum;
@@ -32,9 +45,11 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
       return;
     }
     setSubmitting(true);
-    await onTrade({ side, orderType, qty: qtyNum, price, symbol });
+    await onTrade({ side, orderType, qty: qtyNum, price, symbol, takeProfit: tpPrice || undefined, stopLoss: slPrice || undefined });
     setQty('');
     setLimitPrice('');
+    setTakeProfit('');
+    setStopLoss('');
     setSubmitting(false);
   };
 
@@ -120,6 +135,46 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
             />
           </div>
         )}
+      </div>
+
+      {/* TP / SL */}
+      <div className="space-y-2 mb-3">
+        <div>
+          <div className="flex items-center justify-between mb-1">
+            <Label className="text-[10px] text-[#26a69a] uppercase flex items-center gap-1">
+              <Target className="h-3 w-3" /> Take Profit
+            </Label>
+            {tpPnl !== null && (
+              <span className={`text-[10px] font-mono ${tpPnl >= 0 ? 'text-[#26a69a]' : 'text-[#ef5350]'}`}>
+                {tpPnl >= 0 ? '+' : ''}${tpPnl.toFixed(2)} ({tpPct >= 0 ? '+' : ''}{tpPct?.toFixed(2)}%)
+              </span>
+            )}
+          </div>
+          <Input
+            type="number" min="0" step="0.01" value={takeProfit}
+            onChange={e => setTakeProfit(e.target.value)}
+            className="h-8 text-xs bg-[#1e222d] border-[#26a69a]/40 text-white font-mono focus:border-[#26a69a]"
+            placeholder={price > 0 ? `>${(price * (side === 'buy' ? 1.02 : 0.98)).toFixed(2)}` : 'Precio TP'}
+          />
+        </div>
+        <div>
+          <div className="flex items-center justify-between mb-1">
+            <Label className="text-[10px] text-[#ef5350] uppercase flex items-center gap-1">
+              <ShieldAlert className="h-3 w-3" /> Stop Loss
+            </Label>
+            {slPnl !== null && (
+              <span className={`text-[10px] font-mono ${slPnl >= 0 ? 'text-[#26a69a]' : 'text-[#ef5350]'}`}>
+                {slPnl >= 0 ? '+' : ''}${slPnl.toFixed(2)} ({slPct >= 0 ? '+' : ''}{slPct?.toFixed(2)}%)
+              </span>
+            )}
+          </div>
+          <Input
+            type="number" min="0" step="0.01" value={stopLoss}
+            onChange={e => setStopLoss(e.target.value)}
+            className="h-8 text-xs bg-[#1e222d] border-[#ef5350]/40 text-white font-mono focus:border-[#ef5350]"
+            placeholder={price > 0 ? `<${(price * (side === 'buy' ? 0.98 : 1.02)).toFixed(2)}` : 'Precio SL'}
+          />
+        </div>
       </div>
 
       {/* Summary */}
