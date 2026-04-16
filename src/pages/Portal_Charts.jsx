@@ -332,7 +332,7 @@ function ChartsContent() {
       {/* Account type badge */}
       <div className={`px-3 py-1 flex items-center gap-2 text-[10px] ${activeType === 'DEMO' ? 'bg-amber-500/20 text-amber-400' : 'bg-[#1e2130] text-[#787b86]'}`}>
         <FlaskConical className="h-3 w-3 flex-shrink-0" />
-        <span>{activeType === 'DEMO' ? 'MODO DEMO — Operaciones simuladas con fondos virtuales. Los precios son simulados.' : 'CUENTA REAL — Simulador de trading. No se ejecutan órdenes reales.'}</span>
+        <span>{activeType === 'DEMO' ? 'MODO DEMO — Operaciones simuladas con fondos virtuales. Los precios son simulados.' : 'CUENTA REAL'}</span>
       </div>
 
       <TopToolbar
