@@ -49,6 +49,13 @@ export default function RegisterPage() {
     setForm(prev => ({ ...prev, [field]: value }));
   };
 
+  const hashPassword = async (password) => {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hash = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.full_name || !form.email || !form.password) {
@@ -66,6 +73,26 @@ export default function RegisterPage() {
     setLoading(true);
     setError('');
 
+    // Verificar si ya existe un AppUser con ese email
+    const existing = await base44.entities.AppUser.filter({ email: form.email.toLowerCase().trim() });
+    if (existing.length > 0) {
+      setError('Ya existe una cuenta con ese correo. Inicia sesión.');
+      setLoading(false);
+      return;
+    }
+
+    const hashed = await hashPassword(form.password);
+
+    // Crear AppUser para el login
+    await base44.entities.AppUser.create({
+      full_name: form.full_name.trim(),
+      email: form.email.toLowerCase().trim(),
+      password_hash: hashed,
+      role: 'user',
+      is_active: true,
+    });
+
+    // Crear CrmLead para el seguimiento
     await base44.entities.CrmLead.create({
       full_name: form.full_name,
       email: form.email,

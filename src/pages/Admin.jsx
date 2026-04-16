@@ -8,12 +8,14 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
-  Settings, Award, MessageSquare, HelpCircle, Users, Plus, Trash2, CheckCircle2, XCircle, Edit3, Save
+  Settings, Award, MessageSquare, HelpCircle, Users, Plus, Trash2, CheckCircle2, XCircle, Edit3, Save,
+  DollarSign, ArrowUpRight, ArrowDownRight
 } from 'lucide-react';
 import { toast } from 'sonner';
 
 const TABS = [
   { id: 'settings', label: 'Configuración', icon: Settings },
+  { id: 'deposits', label: 'Depósitos', icon: DollarSign },
   { id: 'awards', label: 'Premios', icon: Award },
   { id: 'testimonials', label: 'Testimonios', icon: MessageSquare },
   { id: 'faqs', label: 'FAQs', icon: HelpCircle },
@@ -72,6 +74,135 @@ function SettingsTab() {
         <p className="text-xs text-amber-400">⚠️ Las API keys del proveedor WebSocket se configuran en el backend para máxima seguridad. Nunca se exponen al frontend.</p>
       </div>
       <Button onClick={save} className="bg-[#2196F3] hover:bg-[#1976D2]"><Save className="h-4 w-4 mr-1.5" /> Guardar</Button>
+    </div>
+  );
+}
+
+function DepositsTab() {
+  const { data: ledger = [], isLoading } = useQuery({
+    queryKey: ['admin-ledger'],
+    queryFn: () => base44.entities.LedgerEntry.list('-created_date', 100),
+  });
+  const { data: accounts = [] } = useQuery({
+    queryKey: ['admin-broker-accounts'],
+    queryFn: () => base44.entities.BrokerAccount.list(),
+  });
+  const qc = useQueryClient();
+
+  const pending = ledger.filter(l => l.status === 'pending');
+  const others = ledger.filter(l => l.status !== 'pending');
+
+  const approve = async (entry) => {
+    // Marcar como completed
+    await base44.entities.LedgerEntry.update(entry.id, { status: 'completed' });
+    // Si es depósito, sumar al balance de la cuenta
+    if (entry.type === 'deposit') {
+      const account = accounts.find(a => a.id === entry.account_id);
+      if (account) {
+        await base44.entities.BrokerAccount.update(account.id, {
+          cash_balance: (account.cash_balance || 0) + entry.amount,
+        });
+      }
+    }
+    // Si es retiro, descontar del balance
+    if (entry.type === 'withdrawal') {
+      const account = accounts.find(a => a.id === entry.account_id);
+      if (account) {
+        await base44.entities.BrokerAccount.update(account.id, {
+          cash_balance: Math.max(0, (account.cash_balance || 0) - entry.amount),
+        });
+      }
+    }
+    qc.invalidateQueries({ queryKey: ['admin-ledger'] });
+    qc.invalidateQueries({ queryKey: ['admin-broker-accounts'] });
+    toast.success('Transacción aprobada y balance actualizado');
+  };
+
+  const reject = async (entry) => {
+    await base44.entities.LedgerEntry.update(entry.id, { status: 'rejected' });
+    qc.invalidateQueries({ queryKey: ['admin-ledger'] });
+    toast.success('Transacción rechazada');
+  };
+
+  const typeLabel = { deposit: 'Depósito', withdrawal: 'Retiro', fee: 'Comisión', adjustment: 'Ajuste', trade_buy: 'Compra', trade_sell: 'Venta', virtual_add: 'Adición virtual' };
+  const statusColor = { pending: 'text-yellow-400 bg-yellow-500/15', completed: 'text-[#26a69a] bg-[#26a69a]/15', rejected: 'text-[#ef5350] bg-[#ef5350]/15', cancelled: 'text-[#8b8fa8] bg-[#8b8fa8]/15' };
+
+  if (isLoading) return <div className="text-center text-[#8b8fa8] py-12">Cargando...</div>;
+
+  return (
+    <div className="space-y-6">
+      {/* Pendientes */}
+      <div>
+        <h3 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />
+          Pendientes de aprobación ({pending.length})
+        </h3>
+        {pending.length === 0 ? (
+          <div className="bg-[#0f1117] border border-[#1e2130] rounded-xl p-6 text-center text-[#8b8fa8] text-sm">No hay transacciones pendientes.</div>
+        ) : (
+          <div className="space-y-2">
+            {pending.map(entry => {
+              const account = accounts.find(a => a.id === entry.account_id);
+              return (
+                <div key={entry.id} className="flex items-center gap-4 p-4 bg-[#0f1117] border border-yellow-500/20 rounded-xl">
+                  <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${entry.type === 'deposit' ? 'bg-[#26a69a]/15' : 'bg-[#ef5350]/15'}`}>
+                    {entry.type === 'deposit' ? <ArrowUpRight className="h-4 w-4 text-[#26a69a]" /> : <ArrowDownRight className="h-4 w-4 text-[#ef5350]" />}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-semibold text-white">{typeLabel[entry.type] || entry.type}</div>
+                    <div className="text-xs text-[#8b8fa8] truncate">
+                      {account ? `${account.display_name || account.user_email} · ${account.type}` : entry.account_id}
+                    </div>
+                    {entry.method && <div className="text-xs text-white/40 mt-0.5">Método: {entry.method}</div>}
+                    {entry.notes && <div className="text-xs text-white/40 italic mt-0.5">{entry.notes}</div>}
+                    <div className="text-[10px] text-[#8b8fa8] mt-1">{new Date(entry.created_date).toLocaleString()}</div>
+                  </div>
+                  <div className="text-right flex-shrink-0">
+                    <div className={`text-base font-black ${entry.type === 'deposit' ? 'text-[#26a69a]' : 'text-[#ef5350]'}`}>
+                      {entry.type === 'deposit' ? '+' : '-'}${entry.amount?.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                    </div>
+                    <div className="text-[10px] text-[#8b8fa8]">{entry.currency || 'USD'}</div>
+                  </div>
+                  <div className="flex gap-2 flex-shrink-0">
+                    <button onClick={() => approve(entry)}
+                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#26a69a]/15 hover:bg-[#26a69a]/25 text-[#26a69a] text-xs font-semibold transition-colors">
+                      <CheckCircle2 className="h-3.5 w-3.5" /> Aprobar
+                    </button>
+                    <button onClick={() => reject(entry)}
+                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#ef5350]/15 hover:bg-[#ef5350]/25 text-[#ef5350] text-xs font-semibold transition-colors">
+                      <XCircle className="h-3.5 w-3.5" /> Rechazar
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* Historial */}
+      <div>
+        <h3 className="text-sm font-semibold text-[#8b8fa8] mb-3">Historial reciente</h3>
+        <div className="space-y-1.5">
+          {others.slice(0, 20).map(entry => {
+            const account = accounts.find(a => a.id === entry.account_id);
+            return (
+              <div key={entry.id} className="flex items-center gap-3 px-4 py-3 bg-[#0f1117] border border-[#1e2130] rounded-xl">
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs font-semibold text-white">{typeLabel[entry.type] || entry.type}</div>
+                  <div className="text-[10px] text-[#8b8fa8] truncate">{account ? (account.display_name || account.user_email) : entry.account_id}</div>
+                </div>
+                <div className={`text-xs font-bold font-mono ${entry.type === 'deposit' ? 'text-[#26a69a]' : 'text-[#ef5350]'}`}>
+                  {entry.type === 'deposit' ? '+' : '-'}${entry.amount?.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                </div>
+                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${statusColor[entry.status] || 'text-white/40 bg-white/5'}`}>
+                  {entry.status}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }
@@ -242,6 +373,7 @@ function AdminContent() {
         })}
       </div>
       {tab === 'settings' && <SettingsTab />}
+      {tab === 'deposits' && <DepositsTab />}
       {tab === 'awards' && <AwardsTab />}
       {tab === 'testimonials' && <TestimonialsTab />}
       {tab === 'faqs' && <FaqsTab />}
