@@ -121,25 +121,38 @@ function SettingsTab() {
 }
 
 function DepositsTab() {
-  const { data: ledger = [], isLoading } = useQuery({ queryKey: ['admin-ledger'], queryFn: () => base44.entities.LedgerEntry.list('-created_date', 100) });
-  const { data: accounts = [] } = useQuery({ queryKey: ['admin-broker-accounts'], queryFn: () => base44.entities.BrokerAccount.list() });
+  const { data: ledger = [], isLoading, refetch } = useQuery({
+    queryKey: ['admin-ledger'],
+    queryFn: () => base44.entities.LedgerEntry.list('-created_date', 100),
+    refetchInterval: 15000,
+  });
+  const { data: accounts = [], refetch: refetchAccounts } = useQuery({
+    queryKey: ['admin-broker-accounts'],
+    queryFn: () => base44.entities.BrokerAccount.list(),
+    refetchInterval: 15000,
+  });
   const qc = useQueryClient();
+  const [processingId, setProcessingId] = useState(null);
   const pending = ledger.filter(l => l.status === 'pending');
   const others = ledger.filter(l => l.status !== 'pending');
 
   const approve = async (entry) => {
+    setProcessingId(entry.id);
     await base44.entities.LedgerEntry.update(entry.id, { status: 'completed' });
     const account = accounts.find(a => a.id === entry.account_id);
     if (account) {
       if (entry.type === 'deposit') await base44.entities.BrokerAccount.update(account.id, { cash_balance: (account.cash_balance || 0) + entry.amount });
       if (entry.type === 'withdrawal') await base44.entities.BrokerAccount.update(account.id, { cash_balance: Math.max(0, (account.cash_balance || 0) - entry.amount) });
     }
-    qc.invalidateQueries();
+    await Promise.all([refetch(), refetchAccounts()]);
+    setProcessingId(null);
     toast.success('Transacción aprobada y balance actualizado');
   };
   const reject = async (entry) => {
+    setProcessingId(entry.id);
     await base44.entities.LedgerEntry.update(entry.id, { status: 'rejected' });
-    qc.invalidateQueries({ queryKey: ['admin-ledger'] });
+    await refetch();
+    setProcessingId(null);
     toast.success('Transacción rechazada');
   };
 
@@ -150,10 +163,17 @@ function DepositsTab() {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />
-          Pendientes de aprobación ({pending.length})
-        </h3>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />
+            Pendientes de aprobación ({pending.length})
+          </h3>
+          <button onClick={() => { refetch(); refetchAccounts(); }}
+            className="text-xs text-[#8b8fa8] hover:text-white flex items-center gap-1.5 px-2 py-1 rounded hover:bg-[#1e2130] transition-colors">
+            <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+            Actualizar
+          </button>
+        </div>
         {pending.length === 0 ? (
           <div className="bg-[#0f1117] border border-[#1e2130] rounded-xl p-6 text-center text-[#8b8fa8] text-sm">No hay transacciones pendientes.</div>
         ) : (
@@ -178,10 +198,19 @@ function DepositsTab() {
                     <div className="text-[10px] text-[#8b8fa8]">{entry.currency || 'USD'}</div>
                   </div>
                   <div className="flex gap-2 flex-shrink-0">
-                    <button onClick={() => approve(entry)} className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#26a69a]/15 hover:bg-[#26a69a]/25 text-[#26a69a] text-xs font-semibold transition-colors">
-                      <CheckCircle2 className="h-3.5 w-3.5" /> Aprobar
+                    <button
+                      onClick={() => approve(entry)}
+                      disabled={processingId === entry.id}
+                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#26a69a]/15 hover:bg-[#26a69a]/25 text-[#26a69a] text-xs font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                      {processingId === entry.id
+                        ? <span className="w-3.5 h-3.5 border-2 border-[#26a69a]/30 border-t-[#26a69a] rounded-full animate-spin" />
+                        : <CheckCircle2 className="h-3.5 w-3.5" />
+                      } Aprobar
                     </button>
-                    <button onClick={() => reject(entry)} className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#ef5350]/15 hover:bg-[#ef5350]/25 text-[#ef5350] text-xs font-semibold transition-colors">
+                    <button
+                      onClick={() => reject(entry)}
+                      disabled={processingId === entry.id}
+                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#ef5350]/15 hover:bg-[#ef5350]/25 text-[#ef5350] text-xs font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                       <XCircle className="h-3.5 w-3.5" /> Rechazar
                     </button>
                   </div>
