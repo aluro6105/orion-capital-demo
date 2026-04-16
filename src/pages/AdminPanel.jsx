@@ -1,28 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
-  Settings, Award, MessageSquare, HelpCircle, Users, Plus, Trash2,
-  CheckCircle2, XCircle, Edit3, Save, DollarSign, ArrowUpRight, ArrowDownRight, LogOut, ShieldCheck
+  ShieldCheck, LogOut, DollarSign, ArrowUpRight, ArrowDownRight,
+  CheckCircle2, XCircle, ArrowRight, RefreshCw, Clock, Activity, Archive
 } from 'lucide-react';
 import { toast } from 'sonner';
 
 const ADMIN_USER = 'm4admin';
 const ADMIN_PASS = 'M4Markets@2025!';
 
-const TABS = [
-  { id: 'settings', label: 'Configuración', icon: Settings },
-  { id: 'deposits', label: 'Depósitos', icon: DollarSign },
-  { id: 'awards', label: 'Premios', icon: Award },
-  { id: 'testimonials', label: 'Testimonios', icon: MessageSquare },
-  { id: 'faqs', label: 'FAQs', icon: HelpCircle },
-  { id: 'instruments', label: 'Instrumentos', icon: Users },
-];
+const TYPE_LABEL = {
+  deposit: 'Depósito', withdrawal: 'Retiro', fee: 'Comisión',
+  adjustment: 'Ajuste', trade_buy: 'Compra', trade_sell: 'Venta', virtual_add: 'Adición virtual'
+};
+
+// status mapping per tab
+// pending  → tab "pendientes"
+// completed → tab "activos"
+// rejected | cancelled → tab "inactivos"
+
+function statusTab(status) {
+  if (status === 'pending') return 'pendientes';
+  if (status === 'completed') return 'activos';
+  return 'inactivos';
+}
 
 // ─── LOGIN ────────────────────────────────────────────────────────────────────
 function AdminLogin({ onLogin }) {
@@ -74,299 +76,244 @@ function AdminLogin({ onLogin }) {
   );
 }
 
-// ─── TABS ─────────────────────────────────────────────────────────────────────
-function SettingsTab() {
-  const { data: settings = [] } = useQuery({ queryKey: ['admin-settings'], queryFn: () => base44.entities.AdminSettings.list() });
-  const qc = useQueryClient();
-  const cfg = settings[0];
-  const [form, setForm] = useState({ cash_default: 100000, fee_type: 'fixed', fee_value: 0 });
-  useEffect(() => { if (cfg) setForm({ cash_default: cfg.cash_default || 100000, fee_type: cfg.fee_type || 'fixed', fee_value: cfg.fee_value || 0 }); }, [cfg]);
-  const save = async () => {
-    if (cfg) await base44.entities.AdminSettings.update(cfg.id, form);
-    else await base44.entities.AdminSettings.create(form);
-    qc.invalidateQueries({ queryKey: ['admin-settings'] });
-    toast.success('Configuración guardada');
-  };
+// ─── ENTRY CARD ───────────────────────────────────────────────────────────────
+function EntryCard({ entry, account, tab, onMove, processing }) {
+  const isDeposit = entry.type === 'deposit';
+  const amountColor = isDeposit ? 'text-[#26a69a]' : 'text-[#ef5350]';
+  const iconBg = isDeposit ? 'bg-[#26a69a]/15' : 'bg-[#ef5350]/15';
+
   return (
-    <div className="space-y-6 max-w-lg">
-      <div className="bg-[#0f1117] border border-[#1e2130] rounded-xl p-5 space-y-4">
-        <h3 className="font-semibold text-white">Cuenta Demo</h3>
-        <div>
-          <Label className="text-xs text-[#8b8fa8] uppercase">Capital inicial por defecto ($)</Label>
-          <Input type="number" value={form.cash_default} onChange={e => setForm(p => ({ ...p, cash_default: +e.target.value }))} className="mt-1 bg-[#131722] border-[#1e2130] text-white" />
-        </div>
+    <div className={`flex items-center gap-4 p-4 bg-[#0f1117] rounded-xl border transition-all ${
+      tab === 'pendientes' ? 'border-yellow-500/25' :
+      tab === 'activos'   ? 'border-[#26a69a]/20'  :
+                            'border-[#1e2130]'
+    }`}>
+      {/* Icon */}
+      <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${iconBg}`}>
+        {isDeposit
+          ? <ArrowUpRight className="h-5 w-5 text-[#26a69a]" />
+          : <ArrowDownRight className="h-5 w-5 text-[#ef5350]" />}
       </div>
-      <div className="bg-[#0f1117] border border-[#1e2130] rounded-xl p-5 space-y-4">
-        <h3 className="font-semibold text-white">Comisiones simuladas</h3>
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <Label className="text-xs text-[#8b8fa8] uppercase">Tipo</Label>
-            <Select value={form.fee_type} onValueChange={v => setForm(p => ({ ...p, fee_type: v }))}>
-              <SelectTrigger className="mt-1 bg-[#131722] border-[#1e2130] text-white"><SelectValue /></SelectTrigger>
-              <SelectContent className="bg-[#1e2130] border-[#2a2e3f]">
-                <SelectItem value="fixed" className="text-white">Fijo ($)</SelectItem>
-                <SelectItem value="percentage" className="text-white">Porcentaje (%)</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <Label className="text-xs text-[#8b8fa8] uppercase">Valor</Label>
-            <Input type="number" step="0.01" value={form.fee_value} onChange={e => setForm(p => ({ ...p, fee_value: +e.target.value }))} className="mt-1 bg-[#131722] border-[#1e2130] text-white" />
-          </div>
+
+      {/* Info */}
+      <div className="flex-1 min-w-0">
+        <div className="text-sm font-semibold text-white">{TYPE_LABEL[entry.type] || entry.type}</div>
+        <div className="text-xs text-[#8b8fa8] truncate">
+          {account ? `${account.display_name || account.user_email} · ${account.type}` : entry.account_id}
         </div>
+        {entry.method && <div className="text-xs text-white/35 mt-0.5">Método: {entry.method}</div>}
+        {entry.notes && <div className="text-xs text-white/35 italic mt-0.5">{entry.notes}</div>}
+        <div className="text-[10px] text-[#8b8fa8] mt-1">{new Date(entry.created_date).toLocaleString()}</div>
       </div>
-      <Button onClick={save} className="bg-[#2196F3] hover:bg-[#1976D2]"><Save className="h-4 w-4 mr-1.5" /> Guardar</Button>
+
+      {/* Amount */}
+      <div className="text-right flex-shrink-0 mr-2">
+        <div className={`text-base font-black ${amountColor}`}>
+          {isDeposit ? '+' : '-'}${entry.amount?.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+        </div>
+        <div className="text-[10px] text-[#8b8fa8]">{entry.currency || 'USD'}</div>
+      </div>
+
+      {/* Actions */}
+      <div className="flex flex-col gap-1.5 flex-shrink-0">
+        {tab === 'pendientes' && (
+          <>
+            <button
+              onClick={() => onMove(entry, 'completed')}
+              disabled={processing === entry.id}
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#26a69a]/15 hover:bg-[#26a69a]/25 text-[#26a69a] text-xs font-semibold transition-colors disabled:opacity-50">
+              {processing === entry.id
+                ? <span className="w-3 h-3 border-2 border-[#26a69a]/30 border-t-[#26a69a] rounded-full animate-spin" />
+                : <CheckCircle2 className="h-3.5 w-3.5" />}
+              Activar
+            </button>
+            <button
+              onClick={() => onMove(entry, 'rejected')}
+              disabled={processing === entry.id}
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#ef5350]/15 hover:bg-[#ef5350]/25 text-[#ef5350] text-xs font-semibold transition-colors disabled:opacity-50">
+              <XCircle className="h-3.5 w-3.5" /> Rechazar
+            </button>
+          </>
+        )}
+        {tab === 'activos' && (
+          <>
+            <button
+              onClick={() => onMove(entry, 'pending')}
+              disabled={processing === entry.id}
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-yellow-500/15 hover:bg-yellow-500/25 text-yellow-400 text-xs font-semibold transition-colors disabled:opacity-50">
+              <Clock className="h-3.5 w-3.5" /> Pendiente
+            </button>
+            <button
+              onClick={() => onMove(entry, 'cancelled')}
+              disabled={processing === entry.id}
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#8b8fa8]/10 hover:bg-[#8b8fa8]/20 text-[#8b8fa8] text-xs font-semibold transition-colors disabled:opacity-50">
+              <Archive className="h-3.5 w-3.5" /> Inactivar
+            </button>
+          </>
+        )}
+        {tab === 'inactivos' && (
+          <>
+            <button
+              onClick={() => onMove(entry, 'pending')}
+              disabled={processing === entry.id}
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-yellow-500/15 hover:bg-yellow-500/25 text-yellow-400 text-xs font-semibold transition-colors disabled:opacity-50">
+              <Clock className="h-3.5 w-3.5" /> Pendiente
+            </button>
+            <button
+              onClick={() => onMove(entry, 'completed')}
+              disabled={processing === entry.id}
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#26a69a]/15 hover:bg-[#26a69a]/25 text-[#26a69a] text-xs font-semibold transition-colors disabled:opacity-50">
+              <Activity className="h-3.5 w-3.5" /> Activar
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 }
 
-function DepositsTab() {
+// ─── DEPOSITS SECTION ─────────────────────────────────────────────────────────
+function DepositsSection() {
+  const [subTab, setSubTab] = useState('pendientes');
+  const [processing, setProcessing] = useState(null);
+
   const { data: ledger = [], isLoading, refetch } = useQuery({
     queryKey: ['admin-ledger'],
-    queryFn: () => base44.entities.LedgerEntry.list('-created_date', 100),
-    refetchInterval: 15000,
+    queryFn: () => base44.entities.LedgerEntry.list('-created_date', 200),
+    refetchInterval: 20000,
   });
   const { data: accounts = [], refetch: refetchAccounts } = useQuery({
     queryKey: ['admin-broker-accounts'],
     queryFn: () => base44.entities.BrokerAccount.list(),
-    refetchInterval: 15000,
+    refetchInterval: 20000,
   });
-  const qc = useQueryClient();
-  const [processingId, setProcessingId] = useState(null);
-  const pending = ledger.filter(l => l.status === 'pending');
-  const others = ledger.filter(l => l.status !== 'pending');
 
-  const approve = async (entry) => {
-    setProcessingId(entry.id);
-    await base44.entities.LedgerEntry.update(entry.id, { status: 'completed' });
+  const pending  = ledger.filter(l => statusTab(l.status) === 'pendientes');
+  const activos  = ledger.filter(l => statusTab(l.status) === 'activos');
+  const inactivos = ledger.filter(l => statusTab(l.status) === 'inactivos');
+
+  const currentList = subTab === 'pendientes' ? pending : subTab === 'activos' ? activos : inactivos;
+
+  const handleMove = async (entry, newStatus) => {
+    setProcessing(entry.id);
+    const prevStatus = entry.status;
+
+    await base44.entities.LedgerEntry.update(entry.id, { status: newStatus });
+
     const account = accounts.find(a => a.id === entry.account_id);
     if (account) {
-      if (entry.type === 'deposit') await base44.entities.BrokerAccount.update(account.id, { cash_balance: (account.cash_balance || 0) + entry.amount });
-      if (entry.type === 'withdrawal') await base44.entities.BrokerAccount.update(account.id, { cash_balance: Math.max(0, (account.cash_balance || 0) - entry.amount) });
+      // Si se activa un depósito que no estaba completed → sumar
+      if (newStatus === 'completed' && prevStatus !== 'completed' && entry.type === 'deposit') {
+        await base44.entities.BrokerAccount.update(account.id, {
+          cash_balance: (account.cash_balance || 0) + entry.amount,
+        });
+      }
+      // Si se activa un retiro que no estaba completed → descontar
+      if (newStatus === 'completed' && prevStatus !== 'completed' && entry.type === 'withdrawal') {
+        await base44.entities.BrokerAccount.update(account.id, {
+          cash_balance: Math.max(0, (account.cash_balance || 0) - entry.amount),
+        });
+      }
+      // Si se mueve de completed a otro estado → revertir balance
+      if (prevStatus === 'completed' && newStatus !== 'completed') {
+        if (entry.type === 'deposit') {
+          await base44.entities.BrokerAccount.update(account.id, {
+            cash_balance: Math.max(0, (account.cash_balance || 0) - entry.amount),
+          });
+        }
+        if (entry.type === 'withdrawal') {
+          await base44.entities.BrokerAccount.update(account.id, {
+            cash_balance: (account.cash_balance || 0) + entry.amount,
+          });
+        }
+      }
     }
+
     await Promise.all([refetch(), refetchAccounts()]);
-    setProcessingId(null);
-    toast.success('Transacción aprobada y balance actualizado');
-  };
-  const reject = async (entry) => {
-    setProcessingId(entry.id);
-    await base44.entities.LedgerEntry.update(entry.id, { status: 'rejected' });
-    await refetch();
-    setProcessingId(null);
-    toast.success('Transacción rechazada');
+    setProcessing(null);
+
+    const labels = { pending: 'Pendientes', completed: 'Activos', rejected: 'Inactivos', cancelled: 'Inactivos' };
+    toast.success(`Movido a ${labels[newStatus]}`);
   };
 
-  const typeLabel = { deposit: 'Depósito', withdrawal: 'Retiro', fee: 'Comisión', adjustment: 'Ajuste', trade_buy: 'Compra', trade_sell: 'Venta', virtual_add: 'Adición virtual' };
-  const statusColor = { pending: 'text-yellow-400 bg-yellow-500/15', completed: 'text-[#26a69a] bg-[#26a69a]/15', rejected: 'text-[#ef5350] bg-[#ef5350]/15', cancelled: 'text-[#8b8fa8] bg-[#8b8fa8]/15' };
+  const SUB_TABS = [
+    { id: 'pendientes', label: 'Pendientes', icon: Clock, count: pending.length, color: 'text-yellow-400', activeBg: 'bg-yellow-500/15', activeText: 'text-yellow-400', dot: 'bg-yellow-400' },
+    { id: 'activos',   label: 'Activos',    icon: Activity, count: activos.length,  color: 'text-[#26a69a]', activeBg: 'bg-[#26a69a]/15',  activeText: 'text-[#26a69a]',  dot: 'bg-[#26a69a]' },
+    { id: 'inactivos', label: 'Inactivos',  icon: Archive, count: inactivos.length, color: 'text-[#8b8fa8]', activeBg: 'bg-[#8b8fa8]/15',  activeText: 'text-[#8b8fa8]',  dot: 'bg-[#8b8fa8]' },
+  ];
 
-  if (isLoading) return <div className="text-center text-[#8b8fa8] py-12">Cargando...</div>;
+  if (isLoading) return (
+    <div className="flex items-center justify-center py-24 text-[#8b8fa8]">
+      <span className="w-5 h-5 border-2 border-[#8b8fa8]/30 border-t-[#8b8fa8] rounded-full animate-spin mr-2" />
+      Cargando depósitos…
+    </div>
+  );
+
   return (
-    <div className="space-y-6">
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-sm font-semibold text-white flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />
-            Pendientes de aprobación ({pending.length})
-          </h3>
-          <button onClick={() => { refetch(); refetchAccounts(); }}
-            className="text-xs text-[#8b8fa8] hover:text-white flex items-center gap-1.5 px-2 py-1 rounded hover:bg-[#1e2130] transition-colors">
-            <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-            Actualizar
-          </button>
-        </div>
-        {pending.length === 0 ? (
-          <div className="bg-[#0f1117] border border-[#1e2130] rounded-xl p-6 text-center text-[#8b8fa8] text-sm">No hay transacciones pendientes.</div>
-        ) : (
-          <div className="space-y-2">
-            {pending.map(entry => {
-              const account = accounts.find(a => a.id === entry.account_id);
-              return (
-                <div key={entry.id} className="flex items-center gap-4 p-4 bg-[#0f1117] border border-yellow-500/20 rounded-xl">
-                  <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${entry.type === 'deposit' ? 'bg-[#26a69a]/15' : 'bg-[#ef5350]/15'}`}>
-                    {entry.type === 'deposit' ? <ArrowUpRight className="h-4 w-4 text-[#26a69a]" /> : <ArrowDownRight className="h-4 w-4 text-[#ef5350]" />}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-semibold text-white">{typeLabel[entry.type] || entry.type}</div>
-                    <div className="text-xs text-[#8b8fa8] truncate">{account ? `${account.display_name || account.user_email} · ${account.type}` : entry.account_id}</div>
-                    {entry.notes && <div className="text-xs text-white/40 italic mt-0.5">{entry.notes}</div>}
-                    <div className="text-[10px] text-[#8b8fa8] mt-1">{new Date(entry.created_date).toLocaleString()}</div>
-                  </div>
-                  <div className="text-right flex-shrink-0">
-                    <div className={`text-base font-black ${entry.type === 'deposit' ? 'text-[#26a69a]' : 'text-[#ef5350]'}`}>
-                      {entry.type === 'deposit' ? '+' : '-'}${entry.amount?.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                    </div>
-                    <div className="text-[10px] text-[#8b8fa8]">{entry.currency || 'USD'}</div>
-                  </div>
-                  <div className="flex gap-2 flex-shrink-0">
-                    <button
-                      onClick={() => approve(entry)}
-                      disabled={processingId === entry.id}
-                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#26a69a]/15 hover:bg-[#26a69a]/25 text-[#26a69a] text-xs font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                      {processingId === entry.id
-                        ? <span className="w-3.5 h-3.5 border-2 border-[#26a69a]/30 border-t-[#26a69a] rounded-full animate-spin" />
-                        : <CheckCircle2 className="h-3.5 w-3.5" />
-                      } Aprobar
-                    </button>
-                    <button
-                      onClick={() => reject(entry)}
-                      disabled={processingId === entry.id}
-                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#ef5350]/15 hover:bg-[#ef5350]/25 text-[#ef5350] text-xs font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                      <XCircle className="h-3.5 w-3.5" /> Rechazar
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
-      <div>
-        <h3 className="text-sm font-semibold text-[#8b8fa8] mb-3">Historial reciente</h3>
-        <div className="space-y-1.5">
-          {others.slice(0, 20).map(entry => {
-            const account = accounts.find(a => a.id === entry.account_id);
+    <div className="space-y-5">
+      {/* Sub-tabs */}
+      <div className="flex items-center gap-2">
+        <div className="flex gap-1 bg-[#0f1117] border border-[#1e2130] rounded-xl p-1 flex-1">
+          {SUB_TABS.map(t => {
+            const Icon = t.icon;
+            const isActive = subTab === t.id;
             return (
-              <div key={entry.id} className="flex items-center gap-3 px-4 py-3 bg-[#0f1117] border border-[#1e2130] rounded-xl">
-                <div className="flex-1 min-w-0">
-                  <div className="text-xs font-semibold text-white">{typeLabel[entry.type] || entry.type}</div>
-                  <div className="text-[10px] text-[#8b8fa8] truncate">{account ? (account.display_name || account.user_email) : entry.account_id}</div>
-                </div>
-                <div className={`text-xs font-bold font-mono ${entry.type === 'deposit' ? 'text-[#26a69a]' : 'text-[#ef5350]'}`}>
-                  {entry.type === 'deposit' ? '+' : '-'}${entry.amount?.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                </div>
-                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${statusColor[entry.status] || 'text-white/40 bg-white/5'}`}>{entry.status}</span>
-              </div>
+              <button key={t.id} onClick={() => setSubTab(t.id)}
+                className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                  isActive ? `${t.activeBg} ${t.activeText}` : 'text-[#8b8fa8] hover:text-white'
+                }`}>
+                <Icon className="h-4 w-4" />
+                {t.label}
+                <span className={`text-xs px-1.5 py-0.5 rounded-full font-bold ${
+                  isActive ? 'bg-white/10' : 'bg-[#1e2130]'
+                }`}>
+                  {t.count}
+                </span>
+              </button>
             );
           })}
         </div>
-      </div>
-    </div>
-  );
-}
 
-function AwardsTab() {
-  const { data: awards = [] } = useQuery({ queryKey: ['awards-admin'], queryFn: () => base44.entities.Award.list() });
-  const qc = useQueryClient();
-  const [form, setForm] = useState({ title: '', year: new Date().getFullYear(), issuer: '', description: '', category: 'innovation', is_active: true });
-  const [editing, setEditing] = useState(null);
-  const save = async () => {
-    if (editing) await base44.entities.Award.update(editing, form);
-    else await base44.entities.Award.create(form);
-    qc.invalidateQueries({ queryKey: ['awards-admin'] });
-    toast.success(editing ? 'Premio actualizado' : 'Premio creado');
-    setForm({ title: '', year: new Date().getFullYear(), issuer: '', description: '', category: 'innovation', is_active: true });
-    setEditing(null);
-  };
-  return (
-    <div className="space-y-5">
-      <div className="bg-[#0f1117] border border-[#1e2130] rounded-xl p-5 space-y-3">
-        <h3 className="font-semibold text-white text-sm">{editing ? 'Editar premio' : 'Añadir premio'}</h3>
-        <div className="grid grid-cols-2 gap-3">
-          <div className="col-span-2"><Label className="text-xs text-[#8b8fa8]">Título</Label><Input value={form.title} onChange={e => setForm(p => ({...p, title: e.target.value}))} className="mt-1 bg-[#131722] border-[#1e2130] text-white" /></div>
-          <div><Label className="text-xs text-[#8b8fa8]">Año</Label><Input type="number" value={form.year} onChange={e => setForm(p => ({...p, year: +e.target.value}))} className="mt-1 bg-[#131722] border-[#1e2130] text-white" /></div>
-          <div><Label className="text-xs text-[#8b8fa8]">Emisor</Label><Input value={form.issuer} onChange={e => setForm(p => ({...p, issuer: e.target.value}))} className="mt-1 bg-[#131722] border-[#1e2130] text-white" /></div>
-          <div className="col-span-2"><Label className="text-xs text-[#8b8fa8]">Descripción</Label><Textarea value={form.description} onChange={e => setForm(p => ({...p, description: e.target.value}))} rows={2} className="mt-1 bg-[#131722] border-[#1e2130] text-white resize-none" /></div>
-        </div>
-        <div className="flex gap-2">
-          <Button onClick={save} className="bg-[#2196F3] hover:bg-[#1976D2] text-xs"><Plus className="h-3.5 w-3.5 mr-1" />{editing ? 'Actualizar' : 'Añadir'}</Button>
-          {editing && <Button variant="outline" onClick={() => { setEditing(null); setForm({ title: '', year: new Date().getFullYear(), issuer: '', description: '', category: 'innovation', is_active: true }); }} className="border-[#1e2130] text-[#d1d4dc] text-xs">Cancelar</Button>}
-        </div>
+        {/* Refresh */}
+        <button
+          onClick={() => { refetch(); refetchAccounts(); }}
+          className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-[#0f1117] border border-[#1e2130] text-xs text-[#8b8fa8] hover:text-white transition-colors">
+          <RefreshCw className="h-3.5 w-3.5" />
+          Actualizar
+        </button>
       </div>
-      <div className="space-y-2">
-        {awards.map(a => (
-          <div key={a.id} className="flex items-center gap-3 p-3 bg-[#0f1117] border border-[#1e2130] rounded-xl">
-            <div className="flex-1">
-              <div className="text-sm font-semibold text-white">{a.title}</div>
-              <div className="text-xs text-[#8b8fa8]">{a.issuer} · {a.year}</div>
-            </div>
-            <button onClick={() => { setEditing(a.id); setForm({ title: a.title, year: a.year, issuer: a.issuer, description: a.description || '', category: a.category || 'innovation', is_active: a.is_active !== false }); }} className="p-1.5 rounded hover:bg-[#1e2130] text-[#8b8fa8] hover:text-white"><Edit3 className="h-3.5 w-3.5" /></button>
-            <button onClick={async () => { await base44.entities.Award.delete(a.id); qc.invalidateQueries({ queryKey: ['awards-admin'] }); toast.success('Eliminado'); }} className="p-1.5 rounded hover:bg-[#ef5350]/10 text-[#8b8fa8] hover:text-[#ef5350]"><Trash2 className="h-3.5 w-3.5" /></button>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
-function TestimonialsTab() {
-  const { data: testimonials = [] } = useQuery({ queryKey: ['testimonials-admin'], queryFn: () => base44.entities.Testimonial.list() });
-  const qc = useQueryClient();
-  const toggle = async (t) => { await base44.entities.Testimonial.update(t.id, { approved: !t.approved }); qc.invalidateQueries({ queryKey: ['testimonials-admin'] }); toast.success(t.approved ? 'Desaprobado' : 'Aprobado'); };
-  const del = async (id) => { await base44.entities.Testimonial.delete(id); qc.invalidateQueries({ queryKey: ['testimonials-admin'] }); toast.success('Eliminado'); };
-  return (
-    <div className="space-y-2">
-      {testimonials.length === 0 && <p className="text-sm text-[#8b8fa8] text-center py-8">No hay testimonios aún.</p>}
-      {testimonials.map(t => (
-        <div key={t.id} className="flex items-start gap-3 p-4 bg-[#0f1117] border border-[#1e2130] rounded-xl">
-          <div className="flex-1">
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-semibold text-white">{t.name}</span>
-              <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${t.approved ? 'bg-[#26a69a]/20 text-[#26a69a]' : 'bg-yellow-500/20 text-yellow-400'}`}>{t.approved ? 'APROBADO' : 'PENDIENTE'}</span>
-            </div>
-            <div className="text-xs text-[#8b8fa8]">{t.role}{t.company ? ` · ${t.company}` : ''}</div>
-            <p className="text-xs text-white/60 mt-1.5 italic">"{t.text?.slice(0, 120)}…"</p>
-          </div>
-          <div className="flex gap-1">
-            <button onClick={() => toggle(t)} className={`p-1.5 rounded transition-colors ${t.approved ? 'hover:bg-[#ef5350]/10 text-[#26a69a] hover:text-[#ef5350]' : 'hover:bg-[#26a69a]/10 text-[#8b8fa8] hover:text-[#26a69a]'}`}>
-              {t.approved ? <XCircle className="h-4 w-4" /> : <CheckCircle2 className="h-4 w-4" />}
-            </button>
-            <button onClick={() => del(t.id)} className="p-1.5 rounded hover:bg-[#ef5350]/10 text-[#8b8fa8] hover:text-[#ef5350]"><Trash2 className="h-4 w-4" /></button>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
+      {/* Description */}
+      <div className={`px-4 py-3 rounded-xl border text-xs ${
+        subTab === 'pendientes' ? 'bg-yellow-500/5 border-yellow-500/15 text-yellow-400/70' :
+        subTab === 'activos'   ? 'bg-[#26a69a]/5 border-[#26a69a]/15 text-[#26a69a]/70' :
+                                 'bg-[#8b8fa8]/5 border-[#8b8fa8]/15 text-[#8b8fa8]/70'
+      }`}>
+        {subTab === 'pendientes' && '⏳ Solicitudes en espera de revisión. Puedes activarlas o rechazarlas.'}
+        {subTab === 'activos'    && '✅ Depósitos aprobados y con balance actualizado. Puedes moverlos a pendiente o inactivar.'}
+        {subTab === 'inactivos'  && '🚫 Transacciones rechazadas o canceladas. Puedes reactivarlas si es necesario.'}
+      </div>
 
-function FaqsTab() {
-  const { data: faqs = [] } = useQuery({ queryKey: ['faqs-admin'], queryFn: () => base44.entities.Faq.list() });
-  const qc = useQueryClient();
-  const [form, setForm] = useState({ category: 'cuenta', question: '', answer: '', order_index: 0, is_active: true });
-  const [editing, setEditing] = useState(null);
-  const save = async () => {
-    if (!form.question || !form.answer) { toast.error('Pregunta y respuesta requeridas'); return; }
-    if (editing) await base44.entities.Faq.update(editing, form);
-    else await base44.entities.Faq.create(form);
-    qc.invalidateQueries({ queryKey: ['faqs-admin'] });
-    toast.success(editing ? 'FAQ actualizado' : 'FAQ creado');
-    setForm({ category: 'cuenta', question: '', answer: '', order_index: 0, is_active: true });
-    setEditing(null);
-  };
-  return (
-    <div className="space-y-5">
-      <div className="bg-[#0f1117] border border-[#1e2130] rounded-xl p-5 space-y-3">
-        <h3 className="font-semibold text-white text-sm">{editing ? 'Editar FAQ' : 'Añadir FAQ'}</h3>
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <Label className="text-xs text-[#8b8fa8]">Categoría</Label>
-            <Select value={form.category} onValueChange={v => setForm(p => ({...p, category: v}))}>
-              <SelectTrigger className="mt-1 bg-[#131722] border-[#1e2130] text-white text-sm"><SelectValue /></SelectTrigger>
-              <SelectContent className="bg-[#1e2130] border-[#2a2e3f]">
-                {['cuenta','mercado','trading','seguridad','precios'].map(c => <SelectItem key={c} value={c} className="text-white text-sm capitalize">{c}</SelectItem>)}
-              </SelectContent>
-            </Select>
-          </div>
-          <div><Label className="text-xs text-[#8b8fa8]">Orden</Label><Input type="number" value={form.order_index} onChange={e => setForm(p => ({...p, order_index: +e.target.value}))} className="mt-1 bg-[#131722] border-[#1e2130] text-white" /></div>
-          <div className="col-span-2"><Label className="text-xs text-[#8b8fa8]">Pregunta</Label><Input value={form.question} onChange={e => setForm(p => ({...p, question: e.target.value}))} className="mt-1 bg-[#131722] border-[#1e2130] text-white" /></div>
-          <div className="col-span-2"><Label className="text-xs text-[#8b8fa8]">Respuesta</Label><Textarea value={form.answer} onChange={e => setForm(p => ({...p, answer: e.target.value}))} rows={3} className="mt-1 bg-[#131722] border-[#1e2130] text-white resize-none" /></div>
+      {/* List */}
+      {currentList.length === 0 ? (
+        <div className="bg-[#0f1117] border border-[#1e2130] rounded-xl p-12 text-center">
+          <DollarSign className="h-10 w-10 text-[#1e2130] mx-auto mb-3" />
+          <p className="text-[#8b8fa8] text-sm">No hay depósitos en esta sección.</p>
         </div>
-        <div className="flex gap-2">
-          <Button onClick={save} className="bg-[#2196F3] hover:bg-[#1976D2] text-xs"><Plus className="h-3.5 w-3.5 mr-1" />{editing ? 'Actualizar' : 'Añadir'}</Button>
-          {editing && <Button variant="outline" onClick={() => { setEditing(null); setForm({ category: 'cuenta', question: '', answer: '', order_index: 0, is_active: true }); }} className="border-[#1e2130] text-[#d1d4dc] text-xs">Cancelar</Button>}
+      ) : (
+        <div className="space-y-2">
+          {currentList.map(entry => (
+            <EntryCard
+              key={entry.id}
+              entry={entry}
+              account={accounts.find(a => a.id === entry.account_id)}
+              tab={subTab}
+              onMove={handleMove}
+              processing={processing}
+            />
+          ))}
         </div>
-      </div>
-      <div className="space-y-2">
-        {faqs.map(f => (
-          <div key={f.id} className="flex items-center gap-3 p-3 bg-[#0f1117] border border-[#1e2130] rounded-xl">
-            <div className="flex-1">
-              <div className="text-sm text-white">{f.question}</div>
-              <div className="text-xs text-[#8b8fa8] mt-0.5">{f.category} · orden: {f.order_index}</div>
-            </div>
-            <button onClick={() => { setEditing(f.id); setForm({ category: f.category, question: f.question, answer: f.answer, order_index: f.order_index || 0, is_active: f.is_active !== false }); }} className="p-1.5 rounded hover:bg-[#1e2130] text-[#8b8fa8] hover:text-white"><Edit3 className="h-3.5 w-3.5" /></button>
-            <button onClick={async () => { await base44.entities.Faq.delete(f.id); qc.invalidateQueries({ queryKey: ['faqs-admin'] }); toast.success('Eliminado'); }} className="p-1.5 rounded hover:bg-[#ef5350]/10 text-[#8b8fa8] hover:text-[#ef5350]"><Trash2 className="h-3.5 w-3.5" /></button>
-          </div>
-        ))}
-      </div>
+      )}
     </div>
   );
 }
@@ -374,7 +321,6 @@ function FaqsTab() {
 // ─── MAIN PANEL ───────────────────────────────────────────────────────────────
 function PanelContent() {
   const [authed, setAuthed] = useState(() => sessionStorage.getItem('m4_admin_auth') === '1');
-  const [tab, setTab] = useState('settings');
 
   if (!authed) return <AdminLogin onLogin={() => setAuthed(true)} />;
 
@@ -391,40 +337,31 @@ function PanelContent() {
             <span className="text-[#8b8fa8] text-xs ml-2">· Panel Admin</span>
           </div>
         </div>
-        <button onClick={() => { sessionStorage.removeItem('m4_admin_auth'); setAuthed(false); }}
+        <button
+          onClick={() => { sessionStorage.removeItem('m4_admin_auth'); setAuthed(false); }}
           className="flex items-center gap-1.5 text-xs text-[#8b8fa8] hover:text-[#ef5350] transition-colors">
           <LogOut className="h-3.5 w-3.5" /> Cerrar sesión
         </button>
       </div>
 
       {/* Body */}
-      <div className="p-6 max-w-5xl mx-auto space-y-5">
-        <h1 className="text-2xl font-bold text-white">Panel de Administración</h1>
-        <div className="flex flex-wrap gap-1 bg-[#0f1117] border border-[#1e2130] rounded-xl p-1">
-          {TABS.map(t => {
-            const Icon = t.icon;
-            return (
-              <button key={t.id} onClick={() => setTab(t.id)}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all ${tab === t.id ? 'bg-[#2196F3]/20 text-[#2196F3]' : 'text-[#8b8fa8] hover:text-white'}`}>
-                <Icon className="h-3.5 w-3.5" /> {t.label}
-              </button>
-            );
-          })}
+      <div className="p-6 max-w-5xl mx-auto space-y-6">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-[#2196F3]/15 border border-[#2196F3]/25 flex items-center justify-center">
+            <DollarSign className="h-5 w-5 text-[#2196F3]" />
+          </div>
+          <div>
+            <h1 className="text-xl font-bold text-white">Gestión de Depósitos</h1>
+            <p className="text-xs text-[#8b8fa8]">Administra y mueve depósitos entre estados</p>
+          </div>
         </div>
-        {tab === 'settings' && <SettingsTab />}
-        {tab === 'deposits' && <DepositsTab />}
-        {tab === 'awards' && <AwardsTab />}
-        {tab === 'testimonials' && <TestimonialsTab />}
-        {tab === 'faqs' && <FaqsTab />}
+
+        <DepositsSection />
       </div>
     </div>
   );
 }
 
 export default function AdminPanelPage() {
-  return (
-    <>
-      <PanelContent />
-    </>
-  );
+  return <PanelContent />;
 }
