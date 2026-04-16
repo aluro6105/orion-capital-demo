@@ -175,6 +175,10 @@ class PriceEngine {
     return this.prices[symbol] || BASE_PRICES[symbol] || 100;
   }
 
+  getLastPrice(symbol) {
+    return this.prices[symbol] || BASE_PRICES[symbol] || null;
+  }
+
   getChange(symbol) {
     const current = this.prices[symbol] || BASE_PRICES[symbol];
     const prev = this.previousClose[symbol] || BASE_PRICES[symbol];

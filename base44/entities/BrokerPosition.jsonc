@@ -1,0 +1,45 @@
+{
+  "name": "BrokerPosition",
+  "type": "object",
+  "properties": {
+    "account_id": {
+      "type": "string"
+    },
+    "account_type": {
+      "type": "string",
+      "enum": [
+        "DEMO",
+        "REAL"
+      ]
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "symbol": {
+      "type": "string"
+    },
+    "instrument_name": {
+      "type": "string"
+    },
+    "qty": {
+      "type": "number",
+      "default": 0
+    },
+    "avg_price": {
+      "type": "number",
+      "default": 0
+    },
+    "take_profit": {
+      "type": "number",
+      "description": "Precio de Take Profit (opcional)"
+    },
+    "stop_loss": {
+      "type": "number",
+      "description": "Precio de Stop Loss (opcional)"
+    }
+  },
+  "required": [
+    "account_id",
+    "symbol"
+  ]
+}

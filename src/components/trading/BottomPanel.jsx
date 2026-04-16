@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Download, ChevronUp, ChevronDown } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Download, Target, ShieldAlert, X, Check, Edit3 } from 'lucide-react';
 import priceEngine from './PriceEngine';
+import { toast } from 'sonner';
 
-export default function BottomPanel({ positions, trades, account, equitySnapshots }) {
+export default function BottomPanel({ positions, trades, account, equitySnapshots, onUpdatePosition, onClosePosition }) {
   const [tab, setTab] = useState('positions');
   const [livePrices, setLivePrices] = useState({});
+  const [editingId, setEditingId] = useState(null);
+  const [editTP, setEditTP] = useState('');
+  const [editSL, setEditSL] = useState('');
 
   useEffect(() => {
     const unsubs = [];
@@ -45,6 +50,36 @@ export default function BottomPanel({ positions, trades, account, equitySnapshot
     return sum + (last * p.qty);
   }, 0);
 
+  const startEdit = (pos) => {
+    setEditingId(pos.id);
+    setEditTP(pos.take_profit ? String(pos.take_profit) : '');
+    setEditSL(pos.stop_loss ? String(pos.stop_loss) : '');
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditTP('');
+    setEditSL('');
+  };
+
+  const saveTPSL = async (pos) => {
+    const tp = parseFloat(editTP) || null;
+    const sl = parseFloat(editSL) || null;
+    
+    if (onUpdatePosition) {
+      await onUpdatePosition(pos.id, { take_profit: tp, stop_loss: sl });
+      toast.success('TP/SL actualizado');
+    }
+    cancelEdit();
+  };
+
+  const handleClose = async (pos) => {
+    if (onClosePosition) {
+      const currentPrice = livePrices[pos.symbol] || pos.avg_price;
+      await onClosePosition(pos, currentPrice);
+    }
+  };
+
   return (
     <div className="bg-[#131722] border-t border-[#2a2e39] flex flex-col" style={{ minHeight: 180 }}>
       <Tabs value={tab} onValueChange={setTab} className="flex flex-col h-full">
@@ -75,10 +110,13 @@ export default function BottomPanel({ positions, trades, account, equitySnapshot
                 <tr className="text-[#787b86] uppercase text-[10px]">
                   <th className="text-left p-2 font-medium">Símbolo</th>
                   <th className="text-right p-2 font-medium">Cant.</th>
-                  <th className="text-right p-2 font-medium">Precio Prom.</th>
+                  <th className="text-right p-2 font-medium">P. Prom.</th>
                   <th className="text-right p-2 font-medium">Último</th>
                   <th className="text-right p-2 font-medium">G/P</th>
-                  <th className="text-right p-2 font-medium">% Cambio</th>
+                  <th className="text-center p-2 font-medium">
+                    <span className="text-[#26a69a]">TP</span> / <span className="text-[#ef5350]">SL</span>
+                  </th>
+                  <th className="text-center p-2 font-medium">Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -87,6 +125,8 @@ export default function BottomPanel({ positions, trades, account, equitySnapshot
                   const pnl = (last - p.avg_price) * p.qty;
                   const pnlPct = p.avg_price > 0 ? ((last - p.avg_price) / p.avg_price * 100) : 0;
                   const isUp = pnl >= 0;
+                  const isEditing = editingId === p.id;
+
                   return (
                     <tr key={p.id || p.symbol} className="border-t border-[#1e222d] hover:bg-[#1e222d]/50">
                       <td className="p-2 font-semibold text-white">{p.symbol}</td>
@@ -94,16 +134,85 @@ export default function BottomPanel({ positions, trades, account, equitySnapshot
                       <td className="p-2 text-right text-[#d1d4dc] font-mono">${p.avg_price?.toFixed(2)}</td>
                       <td className="p-2 text-right text-[#d1d4dc] font-mono">${last?.toFixed(2)}</td>
                       <td className={`p-2 text-right font-mono font-semibold ${isUp ? 'text-[#26a69a]' : 'text-[#ef5350]'}`}>
-                        {isUp ? '+' : ''}{pnl.toFixed(2)}
+                        {isUp ? '+' : ''}{pnl.toFixed(2)} ({isUp ? '+' : ''}{pnlPct.toFixed(2)}%)
                       </td>
-                      <td className={`p-2 text-right font-mono ${isUp ? 'text-[#26a69a]' : 'text-[#ef5350]'}`}>
-                        {isUp ? '+' : ''}{pnlPct.toFixed(2)}%
+                      <td className="p-2">
+                        {isEditing ? (
+                          <div className="flex items-center gap-1 justify-center">
+                            <div className="flex flex-col gap-0.5">
+                              <div className="flex items-center gap-0.5">
+                                <Target className="h-3 w-3 text-[#26a69a]" />
+                                <Input
+                                  type="number"
+                                  step="0.01"
+                                  value={editTP}
+                                  onChange={e => setEditTP(e.target.value)}
+                                  placeholder="TP"
+                                  className="h-5 w-16 text-[10px] bg-[#1e222d] border-[#26a69a]/40 text-white font-mono px-1"
+                                />
+                              </div>
+                              <div className="flex items-center gap-0.5">
+                                <ShieldAlert className="h-3 w-3 text-[#ef5350]" />
+                                <Input
+                                  type="number"
+                                  step="0.01"
+                                  value={editSL}
+                                  onChange={e => setEditSL(e.target.value)}
+                                  placeholder="SL"
+                                  className="h-5 w-16 text-[10px] bg-[#1e222d] border-[#ef5350]/40 text-white font-mono px-1"
+                                />
+                              </div>
+                            </div>
+                            <div className="flex flex-col gap-0.5">
+                              <button onClick={() => saveTPSL(p)} className="p-1 rounded bg-[#26a69a]/20 hover:bg-[#26a69a]/30 text-[#26a69a]">
+                                <Check className="h-3 w-3" />
+                              </button>
+                              <button onClick={cancelEdit} className="p-1 rounded bg-[#ef5350]/20 hover:bg-[#ef5350]/30 text-[#ef5350]">
+                                <X className="h-3 w-3" />
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-center gap-2 text-[10px] font-mono">
+                            {p.take_profit ? (
+                              <span className="text-[#26a69a]">${p.take_profit.toFixed(2)}</span>
+                            ) : (
+                              <span className="text-[#787b86]">—</span>
+                            )}
+                            <span className="text-[#787b86]">/</span>
+                            {p.stop_loss ? (
+                              <span className="text-[#ef5350]">${p.stop_loss.toFixed(2)}</span>
+                            ) : (
+                              <span className="text-[#787b86]">—</span>
+                            )}
+                          </div>
+                        )}
+                      </td>
+                      <td className="p-2">
+                        <div className="flex items-center justify-center gap-1">
+                          {!isEditing && (
+                            <button
+                              onClick={() => startEdit(p)}
+                              className="p-1.5 rounded bg-[#2196F3]/20 hover:bg-[#2196F3]/30 text-[#2196F3] transition-colors"
+                              title="Configurar TP/SL"
+                            >
+                              <Edit3 className="h-3 w-3" />
+                            </button>
+                          )}
+                          <button
+                            onClick={() => handleClose(p)}
+                            className="px-2 py-1 rounded bg-[#ef5350]/20 hover:bg-[#ef5350]/30 text-[#ef5350] text-[9px] font-semibold transition-colors"
+                            title="Cerrar posición"
+                          >
+                            CERRAR
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );
                 })}
                 {(!positions || positions.filter(p => p.qty > 0).length === 0) && (
-                  <tr><td colSpan={6} className="p-4 text-center text-[#787b86]">Sin posiciones abiertas</td></tr>
+                  <tr><td colSpan={7} className="p-4 text-center text-[#787b86]">Sin posiciones abiertas</td></tr>
                 )}
               </tbody>
             </table>

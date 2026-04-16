@@ -189,6 +189,28 @@ function ChartsContent() {
   const [rightPanel, setRightPanel] = useState('watchlist'); // 'watchlist' | 'signals'
   const [chartTP, setChartTP] = useState(null);
   const [chartSL, setChartSL] = useState(null);
+
+  // Monitor TP/SL hits on active positions
+  useEffect(() => {
+    if (!positions.length || !activeAccount) return;
+    const checkTPSL = () => {
+      positions.forEach(pos => {
+        if (pos.qty <= 0) return;
+        const currentPrice = priceEngine.getLastPrice(pos.symbol);
+        if (!currentPrice) return;
+        
+        if (pos.take_profit && currentPrice >= pos.take_profit) {
+          handleClosePosition(pos, currentPrice);
+          toast.success(`TP alcanzado en ${pos.symbol} @ $${currentPrice.toFixed(2)}`);
+        } else if (pos.stop_loss && currentPrice <= pos.stop_loss) {
+          handleClosePosition(pos, currentPrice);
+          toast.error(`SL alcanzado en ${pos.symbol} @ $${currentPrice.toFixed(2)}`);
+        }
+      });
+    };
+    const interval = setInterval(checkTPSL, 3000);
+    return () => clearInterval(interval);
+  }, [positions, activeAccount]);
   const queryClient = useQueryClient();
 
   const { data: positions = [] } = useQuery({
@@ -265,6 +287,40 @@ function ChartsContent() {
     queryClient.invalidateQueries({ queryKey: ['broker-accounts'] });
   };
 
+  const handleUpdatePosition = async (positionId, updates) => {
+    await base44.entities.BrokerPosition.update(positionId, updates);
+    queryClient.invalidateQueries({ queryKey: ['broker-positions', activeAccount?.id] });
+  };
+
+  const handleClosePosition = async (pos, currentPrice) => {
+    if (!activeAccount) return;
+    const realizedPnl = (currentPrice - pos.avg_price) * pos.qty;
+    const total = pos.qty * currentPrice;
+    const newCash = activeAccount.cash_balance + total;
+    
+    await base44.entities.BrokerAccount.update(activeAccount.id, { cash_balance: newCash });
+    await base44.entities.BrokerPosition.delete(pos.id);
+    await base44.entities.BrokerTrade.create({
+      account_id: activeAccount.id,
+      account_type: activeType,
+      user_id: activeAccount.user_id,
+      symbol: pos.symbol,
+      side: 'sell',
+      order_type: 'market',
+      qty: pos.qty,
+      price: currentPrice,
+      fee: 0,
+      total,
+      realized_pnl: realizedPnl,
+      instrument_name: pos.instrument_name || pos.symbol
+    });
+    
+    queryClient.invalidateQueries({ queryKey: ['broker-positions', activeAccount.id] });
+    queryClient.invalidateQueries({ queryKey: ['broker-trades-recent', activeAccount.id] });
+    queryClient.invalidateQueries({ queryKey: ['broker-accounts'] });
+    toast.success(`Posición cerrada | G/P: ${realizedPnl >= 0 ? '+' : ''}$${realizedPnl.toFixed(2)}`);
+  };
+
   // Adapt positions and account format for existing components
   const positionsForPanel = positions.map(p => ({ ...p, id: p.id }));
   const accountForPanel = activeAccount ? { ...activeAccount, current_cash: activeAccount.cash_balance } : null;
@@ -291,7 +347,7 @@ function ChartsContent() {
           <div className="flex-1 min-h-0">
             <CandlestickChart candles={candles} chartType={chartType} indicators={indicators} currentPrice={priceData?.price} symbol={activeSymbol} takeProfit={chartTP} stopLoss={chartSL} />
           </div>
-          <BottomPanel positions={positionsForPanel} trades={trades} account={accountForPanel} equitySnapshots={[]} />
+          <BottomPanel positions={positionsForPanel} trades={trades} account={accountForPanel} equitySnapshots={[]} onUpdatePosition={handleUpdatePosition} onClosePosition={handleClosePosition} />
         </div>
 
         <div className="hidden lg:flex flex-col w-64 border-l border-[#2a2e39] bg-[#131722]">
@@ -335,8 +391,6 @@ function ChartsContent() {
             account={accountForPanel}
             positions={positionsForPanel}
             onTrade={handleTrade}
-            onTPChange={setChartTP}
-            onSLChange={setChartSL}
           />
         </div>
 
@@ -357,7 +411,7 @@ function ChartsContent() {
                   onAdd={inst => setWatchlistItems(p => p.find(i => i.symbol === inst.symbol) ? p : [...p, { symbol: inst.symbol, order_index: p.length }])}
                 />
               </div>
-              <TradePanel symbol={activeSymbol} currentPrice={priceData?.price} account={accountForPanel} positions={positionsForPanel} onTrade={handleTrade} onTPChange={setChartTP} onSLChange={setChartSL} />
+              <TradePanel symbol={activeSymbol} currentPrice={priceData?.price} account={accountForPanel} positions={positionsForPanel} onTrade={handleTrade} />
             </SheetContent>
           </Sheet>
         </div>
