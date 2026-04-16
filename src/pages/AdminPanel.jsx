@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery, useQueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { queryClientInstance } from '@/lib/query-client';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,7 +11,6 @@ import {
   CheckCircle2, XCircle, Edit3, Save, DollarSign, ArrowUpRight, ArrowDownRight, LogOut, ShieldCheck
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { Toaster } from '@/components/ui/toaster';
 
 const ADMIN_USER = 'm4admin';
 const ADMIN_PASS = 'M4Markets@2025!';
@@ -396,9 +394,8 @@ function PanelContent() {
 
 export default function AdminPanelPage() {
   return (
-    <QueryClientProvider client={queryClientInstance}>
+    <>
       <PanelContent />
-      <Toaster />
-    </QueryClientProvider>
+    </>
   );
 }
