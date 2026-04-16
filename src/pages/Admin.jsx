@@ -354,13 +354,66 @@ function FaqsTab() {
   );
 }
 
+const ADMIN_USER = 'm4admin';
+const ADMIN_PASS = 'M4Markets@2025!';
+
+function AdminLogin({ onLogin }) {
+  const [u, setU] = useState('');
+  const [p, setP] = useState('');
+  const [err, setErr] = useState('');
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (u === ADMIN_USER && p === ADMIN_PASS) {
+      sessionStorage.setItem('m4_admin_auth', '1');
+      onLogin();
+    } else {
+      setErr('Credenciales incorrectas.');
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-[#0a0d14] flex items-center justify-center px-4">
+      <div className="w-full max-w-sm">
+        <div className="text-center mb-8">
+          <div className="w-14 h-14 rounded-2xl bg-[#2196F3]/15 border border-[#2196F3]/30 flex items-center justify-center mx-auto mb-4">
+            <Settings className="h-7 w-7 text-[#2196F3]" />
+          </div>
+          <h1 className="text-xl font-black text-white mb-1">Área de Administración</h1>
+          <p className="text-white/40 text-sm">Acceso restringido · M4 Markets Latam</p>
+        </div>
+        <form onSubmit={handleLogin} className="bg-[#0f1117] border border-[#1e2130] rounded-2xl p-6 space-y-4">
+          {err && <div className="px-3 py-2 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-xs">{err}</div>}
+          <div>
+            <label className="block text-xs text-[#8b8fa8] uppercase tracking-wide mb-1.5">Usuario</label>
+            <input type="text" value={u} onChange={e => setU(e.target.value)} required autoComplete="off"
+              className="w-full px-3 py-2.5 bg-[#131722] border border-[#1e2130] rounded-lg text-white text-sm focus:outline-none focus:border-[#2196F3] transition-colors" />
+          </div>
+          <div>
+            <label className="block text-xs text-[#8b8fa8] uppercase tracking-wide mb-1.5">Contraseña</label>
+            <input type="password" value={p} onChange={e => setP(e.target.value)} required
+              className="w-full px-3 py-2.5 bg-[#131722] border border-[#1e2130] rounded-lg text-white text-sm focus:outline-none focus:border-[#2196F3] transition-colors" />
+          </div>
+          <Button type="submit" className="w-full bg-[#2196F3] hover:bg-[#1976D2]">Acceder</Button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 function AdminContent() {
   const [tab, setTab] = useState('settings');
-  const { user } = base44.auth;
+  const [authed, setAuthed] = useState(() => sessionStorage.getItem('m4_admin_auth') === '1');
+
+  if (!authed) return <AdminLogin onLogin={() => setAuthed(true)} />;
 
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-5">
-      <h1 className="text-2xl font-bold text-white">Panel de Administración</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-white">Panel de Administración</h1>
+        <button onClick={() => { sessionStorage.removeItem('m4_admin_auth'); setAuthed(false); }}
+          className="text-xs text-[#8b8fa8] hover:text-[#ef5350] transition-colors">Cerrar sesión</button>
+      </div>
       <div className="flex flex-wrap gap-1 bg-[#0f1117] border border-[#1e2130] rounded-xl p-1">
         {TABS.map(t => {
           const Icon = t.icon;

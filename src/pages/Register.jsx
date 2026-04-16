@@ -102,6 +102,36 @@ export default function RegisterPage() {
       source: 'registro_web',
     });
 
+    // Enviar email de bienvenida con datos de acceso
+    await base44.integrations.Core.SendEmail({
+      to: form.email.toLowerCase().trim(),
+      from_name: 'M4 Markets Latam',
+      subject: '¡Bienvenido a M4 Markets Latam! Tus datos de acceso',
+      body: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #04052e; color: #ffffff; padding: 40px; border-radius: 12px;">
+          <div style="text-align: center; margin-bottom: 32px;">
+            <h1 style="color: #80cc00; font-size: 28px; margin: 0;">M4 Markets Latam</h1>
+            <p style="color: rgba(255,255,255,0.5); margin: 8px 0 0;">Bienvenido a la plataforma</p>
+          </div>
+          <p style="color: rgba(255,255,255,0.8);">Hola <strong>${form.full_name}</strong>,</p>
+          <p style="color: rgba(255,255,255,0.6); line-height: 1.6;">Tu cuenta en <strong style="color:#80cc00;">M4 Markets Latam</strong> ha sido creada exitosamente. A continuación encontrarás tus datos de acceso:</p>
+          <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 20px; margin: 24px 0;">
+            <p style="margin: 0 0 8px; color: rgba(255,255,255,0.5); font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">Datos de acceso</p>
+            <p style="margin: 8px 0; color: #ffffff;"><strong>Correo:</strong> ${form.email.toLowerCase().trim()}</p>
+            <p style="margin: 8px 0; color: #ffffff;"><strong>Contraseña:</strong> ${form.password}</p>
+            <p style="margin: 8px 0; color: #ffffff;"><strong>Tipo de cuenta:</strong> ${form.account_type === 'Demo' ? 'Cuenta Demo ($10,000 virtuales)' : 'Cuenta Real'}</p>
+          </div>
+          <div style="text-align: center; margin: 32px 0;">
+            <a href="https://m4marketslatam.base44.app/Acceso" style="background: #80cc00; color: #0d0d0d; padding: 14px 32px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 15px;">Acceder a mi cuenta</a>
+          </div>
+          <p style="color: rgba(255,255,255,0.3); font-size: 12px; text-align: center; margin-top: 32px;">
+            Por seguridad, te recomendamos cambiar tu contraseña después del primer acceso.<br/>
+            Operar con CFDs implica un riesgo significativo de pérdida de capital.
+          </p>
+        </div>
+      `,
+    });
+
     setLoading(false);
     setSubmitted(true);
   };
