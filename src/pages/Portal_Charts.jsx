@@ -190,27 +190,6 @@ function ChartsContent() {
   const [chartTP, setChartTP] = useState(null);
   const [chartSL, setChartSL] = useState(null);
 
-  // Monitor TP/SL hits on active positions
-  useEffect(() => {
-    if (!positions.length || !activeAccount) return;
-    const checkTPSL = () => {
-      positions.forEach(pos => {
-        if (pos.qty <= 0) return;
-        const currentPrice = priceEngine.getLastPrice(pos.symbol);
-        if (!currentPrice) return;
-        
-        if (pos.take_profit && currentPrice >= pos.take_profit) {
-          handleClosePosition(pos, currentPrice);
-          toast.success(`TP alcanzado en ${pos.symbol} @ $${currentPrice.toFixed(2)}`);
-        } else if (pos.stop_loss && currentPrice <= pos.stop_loss) {
-          handleClosePosition(pos, currentPrice);
-          toast.error(`SL alcanzado en ${pos.symbol} @ $${currentPrice.toFixed(2)}`);
-        }
-      });
-    };
-    const interval = setInterval(checkTPSL, 3000);
-    return () => clearInterval(interval);
-  }, [positions, activeAccount]);
   const queryClient = useQueryClient();
 
   const { data: positions = [] } = useQuery({
@@ -320,6 +299,27 @@ function ChartsContent() {
     queryClient.invalidateQueries({ queryKey: ['broker-accounts'] });
     toast.success(`Posición cerrada | G/P: ${realizedPnl >= 0 ? '+' : ''}$${realizedPnl.toFixed(2)}`);
   };
+
+  // Monitor TP/SL hits on active positions
+  useEffect(() => {
+    if (!positions.length || !activeAccount) return;
+    const checkTPSL = () => {
+      positions.forEach(pos => {
+        if (pos.qty <= 0) return;
+        const currentPrice = priceEngine.getLastPrice(pos.symbol);
+        if (!currentPrice) return;
+        if (pos.take_profit && currentPrice >= pos.take_profit) {
+          handleClosePosition(pos, currentPrice);
+          toast.success(`TP alcanzado en ${pos.symbol} @ $${currentPrice.toFixed(2)}`);
+        } else if (pos.stop_loss && currentPrice <= pos.stop_loss) {
+          handleClosePosition(pos, currentPrice);
+          toast.error(`SL alcanzado en ${pos.symbol} @ $${currentPrice.toFixed(2)}`);
+        }
+      });
+    };
+    const interval = setInterval(checkTPSL, 3000);
+    return () => clearInterval(interval);
+  }, [positions, activeAccount]);
 
   // Adapt positions and account format for existing components
   const positionsForPanel = positions.map(p => ({ ...p, id: p.id }));
