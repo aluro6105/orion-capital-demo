@@ -1,0 +1,61 @@
+{
+  "name": "CrmAppointment",
+  "type": "object",
+  "properties": {
+    "lead_id": {
+      "type": "string"
+    },
+    "lead_name": {
+      "type": "string"
+    },
+    "lead_email": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "time": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "demo",
+        "seguimiento",
+        "onboarding",
+        "soporte",
+        "llamada",
+        "reunion"
+      ],
+      "default": "llamada"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pendiente",
+        "confirmada",
+        "completada",
+        "cancelada"
+      ],
+      "default": "pendiente"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "link": {
+      "type": "string"
+    },
+    "reminder_sent": {
+      "type": "boolean",
+      "default": false
+    },
+    "reminder_email": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "lead_id",
+    "date"
+  ]
+}

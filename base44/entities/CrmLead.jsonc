@@ -1,0 +1,54 @@
+{
+  "name": "CrmLead",
+  "type": "object",
+  "properties": {
+    "full_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "stage": {
+      "type": "string",
+      "enum": [
+        "sin_asignar",
+        "contactado",
+        "seguimiento",
+        "convertido",
+        "rechazado"
+      ],
+      "default": "sin_asignar"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    },
+    "account_type": {
+      "type": "string"
+    },
+    "kyc_status": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "assigned_to": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "full_name",
+    "email"
+  ]
+}

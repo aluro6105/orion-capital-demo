@@ -8,6 +8,7 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import AccesoPage from './pages/Acceso';
 import AdminPanelPage from './pages/AdminPanel';
+import CRMPage from './pages/CRM';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -72,6 +73,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/admin-panel" element={<AdminPanelPage />} />
+          <Route path="/crm" element={<CRMPage />} />
           <Route path="/*" element={
             <AuthProvider>
               <AuthenticatedApp />
