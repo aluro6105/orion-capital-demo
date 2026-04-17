@@ -253,34 +253,66 @@ async function fetchMetalPrices() {
   }
 }
 
+// ── localStorage cache key & TTL ─────────────────────────────────────────────
+const CACHE_KEY = 'm4_real_prices_v2';
+const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
+
+function loadCachedPrices() {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const { ts, prices } = JSON.parse(raw);
+    if (Date.now() - ts > CACHE_TTL) return null; // expired
+    return prices;
+  } catch {
+    return null;
+  }
+}
+
+function saveCachedPrices(prices) {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), prices }));
+  } catch {
+    // ignore storage errors
+  }
+}
+
 // ── Main Price Engine ─────────────────────────────────────────────────────────
 class PriceEngine {
   constructor() {
-    this.prices = { ...FALLBACK_PRICES };
+    // Start with fallback, then immediately overlay cached real prices if available
+    const cached = loadCachedPrices();
+    this.prices = cached ? { ...FALLBACK_PRICES, ...cached } : { ...FALLBACK_PRICES };
     this.listeners = new Map();
     this.intervals = new Map();
-    this.previousClose = { ...FALLBACK_PRICES };
+    this.previousClose = { ...this.prices };
     this.seeded = false;
     this._seedRealPrices();
+    // Re-seed every 5 minutes with setInterval (persistent, not one-shot)
+    this._reseedInterval = setInterval(() => this._seedRealPrices(), 5 * 60 * 1000);
+  }
+
+  _applyUpdates(updates) {
+    const changed = {};
+    for (const [symbol, price] of Object.entries(updates)) {
+      if (price && isFinite(price) && price > 0) {
+        this.prices[symbol] = price;
+        this.previousClose[symbol] = price;
+        changed[symbol] = price;
+      }
+    }
+    // Persist to cache so page reloads don't revert to stale hardcoded values
+    saveCachedPrices(this.prices);
+    // Notify active listeners
+    for (const [symbol, subs] of this.listeners.entries()) {
+      if (subs.size > 0 && changed[symbol]) {
+        const data = { symbol, price: this.prices[symbol], timestamp: Date.now(), ...this.getChange(symbol) };
+        subs.forEach(cb => cb(data));
+      }
+    }
   }
 
   async _seedRealPrices() {
-    const applyUpdates = (updates) => {
-      for (const [symbol, price] of Object.entries(updates)) {
-        if (price && isFinite(price) && price > 0) {
-          this.prices[symbol] = price;
-          this.previousClose[symbol] = price;
-        }
-      }
-      // Notify active listeners with updated prices
-      for (const [symbol, subs] of this.listeners.entries()) {
-        if (subs.size > 0 && this.prices[symbol]) {
-          const data = { symbol, price: this.prices[symbol], timestamp: Date.now(), ...this.getChange(symbol) };
-          subs.forEach(cb => cb(data));
-        }
-      }
-    };
-
     try {
       const [crypto, forex, metals] = await Promise.allSettled([
         fetchCryptoPrices(),
@@ -288,29 +320,26 @@ class PriceEngine {
         fetchMetalPrices(),
       ]);
 
-      applyUpdates({
+      this._applyUpdates({
         ...(crypto.status === 'fulfilled' ? crypto.value : {}),
         ...(forex.status === 'fulfilled' ? forex.value : {}),
         ...(metals.status === 'fulfilled' ? metals.value : {}),
       });
     } catch {
-      // ignore
+      // ignore — next interval will retry
     } finally {
       this.seeded = true;
     }
 
-    // Retry metals after 5s in case first call failed (metals API is sometimes slow)
+    // Retry metals alone after 6s in case gold-api was slow on first load
     setTimeout(async () => {
       try {
         const metals = await fetchMetalPrices();
-        applyUpdates(metals);
+        this._applyUpdates(metals);
       } catch {
         // ignore
       }
-    }, 5000);
-
-    // Re-seed all prices every 5 minutes to stay fresh
-    setTimeout(() => this._seedRealPrices(), 5 * 60 * 1000);
+    }, 6000);
   }
 
   getPrice(symbol) {
@@ -439,6 +468,7 @@ class PriceEngine {
     this.intervals.forEach((id) => clearTimeout(id));
     this.intervals.clear();
     this.listeners.clear();
+    if (this._reseedInterval) clearInterval(this._reseedInterval);
   }
 }
 
