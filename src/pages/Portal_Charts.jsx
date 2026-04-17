@@ -204,25 +204,45 @@ function ChartsContent() {
     enabled: !!activeAccount?.id,
   });
 
-  useEffect(() => {
-    const data = priceEngine.generateCandles(activeSymbol, timeframe, 150);
+  // Regenerate candles when symbol OR timeframe changes.
+  // We always pass the live price so the last candle is anchored to the real current price.
+  const regenerateCandles = useCallback((symbol, tf, livePrice) => {
+    // Temporarily pin the engine's price to the live price before generating
+    // so that all timeframes end at the exact same value.
+    if (livePrice && livePrice > 0) {
+      priceEngine.prices[symbol] = livePrice;
+    }
+    const data = priceEngine.generateCandles(symbol, tf, 150);
     setCandles(data);
-  }, [activeSymbol, timeframe]);
+  }, []);
 
   useEffect(() => {
+    // When timeframe changes, use the current priceData price so the chart
+    // doesn't jump. When symbol changes, priceData is null so we use the engine value.
+    const livePrice = priceData?.price || priceEngine.getPrice(activeSymbol);
+    regenerateCandles(activeSymbol, timeframe, livePrice);
+  }, [timeframe]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    // When symbol changes, reset and subscribe fresh
+    const livePrice = priceEngine.getPrice(activeSymbol);
+    regenerateCandles(activeSymbol, timeframe, livePrice);
+
     const unsub = priceEngine.subscribe(activeSymbol, (data) => {
       setPriceData(data);
       setCandles(prev => {
         if (prev.length === 0) return prev;
         const last = { ...prev[prev.length - 1] };
-        last.close = data.price; last.high = Math.max(last.high, data.price); last.low = Math.min(last.low, data.price);
+        last.close = data.price;
+        last.high = Math.max(last.high, data.price);
+        last.low = Math.min(last.low, data.price);
         return [...prev.slice(0, -1), last];
       });
     });
     return unsub;
-  }, [activeSymbol]);
+  }, [activeSymbol]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleSymbolChange = useCallback((symbol) => { setActiveSymbol(symbol); setPriceData(null); }, []);
+  const handleSymbolChange = useCallback((symbol) => { setActiveSymbol(symbol); }, []);
   const handleReorder = useCallback((from, to) => {
     setWatchlistItems(prev => {
       const items = [...prev]; const [removed] = items.splice(from, 1); items.splice(to, 0, removed);
