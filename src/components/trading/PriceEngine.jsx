@@ -433,34 +433,43 @@ class PriceEngine {
   }
 
   generateCandles(symbol, resolution = '1', count = 100) {
-    const basePrice = this.prices[symbol] || FALLBACK_PRICES[symbol] || 100;
+    // Always anchor the last candle to the current real price of the instrument
+    const currentPrice = this.prices[symbol] || FALLBACK_PRICES[symbol] || 100;
     const vol = (VOLATILITY[symbol] || 0.001) * 5;
-    const candles = [];
-    const now = Date.now();
     const resMinutes = { '1': 1, '5': 5, '15': 15, '60': 60, 'D': 1440 };
     const minutes = resMinutes[resolution] || 1;
-    let price = basePrice * (1 - vol * count * 0.1);
+    const now = Date.now();
 
-    for (let i = count; i >= 0; i--) {
-      const timestamp = now - i * minutes * 60 * 1000;
-      const open = price;
-      const closeChange = price * vol * (Math.random() - 0.45);
-      const close = price + closeChange;
-      const high = Math.max(open, close) + Math.abs(price * vol * Math.random());
-      const low = Math.min(open, close) - Math.abs(price * vol * Math.random());
+    // Generate candles backwards from currentPrice so the last close == currentPrice
+    // We walk backwards: start at currentPrice and reverse-simulate
+    const rawPrices = [currentPrice];
+    for (let i = 0; i < count; i++) {
+      const prev = rawPrices[rawPrices.length - 1];
+      // Reverse step: undo a random drift to get the "older" price
+      const drift = prev * vol * (Math.random() - 0.45);
+      rawPrices.push(prev - drift);
+    }
+    rawPrices.reverse(); // oldest first, newest last (== currentPrice)
+
+    const candles = [];
+    for (let i = 0; i <= count; i++) {
+      const timestamp = now - (count - i) * minutes * 60 * 1000;
+      const close = rawPrices[i];
+      const open = i === 0 ? close : rawPrices[i - 1];
+      const high = Math.max(open, close) + Math.abs(close * vol * Math.random());
+      const low  = Math.min(open, close) - Math.abs(close * vol * Math.random());
       const volume = Math.floor(1000000 + Math.random() * 5000000);
       candles.push({
         time: Math.floor(timestamp / 1000),
-        open: roundPrice(symbol, open),
-        high: roundPrice(symbol, high),
-        low: roundPrice(symbol, low),
+        open:  roundPrice(symbol, open),
+        high:  roundPrice(symbol, high),
+        low:   roundPrice(symbol, low),
         close: roundPrice(symbol, close),
         volume,
       });
-      price = close;
     }
 
-    this.prices[symbol] = candles[candles.length - 1].close;
+    // Do NOT overwrite this.prices[symbol] — keep the real fetched price intact
     return candles;
   }
 
