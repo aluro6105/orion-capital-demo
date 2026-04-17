@@ -43,48 +43,54 @@ const VOLATILITY = {
   COPUSD: 0.0012, ALMUSD: 0.0012, NICUSD: 0.0018, ZNUSD: 0.0014,
 };
 
-// ── Fallback prices (used if all APIs fail) ───────────────────────────────────
+// ── Fallback prices — updated 2026-04-17 ─────────────────────────────────────
 const FALLBACK_PRICES = {
-  AAPL: 178.50, MSFT: 415.20, NVDA: 875.30, TSLA: 245.60, AMZN: 178.90,
-  META: 505.00, GOOGL: 175.00, NFLX: 625.00, AMD: 165.00, INTC: 34.50,
-  CRM: 285.00, ORCL: 128.00, ADBE: 510.00,
-  JPM: 198.00, GS: 465.00, BAC: 38.50, WFC: 56.80,
-  WMT: 68.00, PG: 162.00, KO: 62.00,
-  XOM: 112.00, CVX: 158.00,
-  V: 278.00, MA: 482.00, PYPL: 62.00,
-  COIN: 215.00, HOOD: 22.00, SQ: 68.00,
-  UBER: 78.00, ABNB: 145.00, SPOT: 285.00, PLTR: 28.00,
-  BABA: 78.00, TSM: 145.00, ASML: 845.00,
-  SPY: 502.40, QQQ: 432.10, IWM: 198.70,
-  GLD: 225.00, SLV: 26.80, ARKK: 48.00,
-  IBIT: 38.50, BITO: 22.00,
-  XLF: 42.00, XLE: 88.00, XLK: 218.00,
-  TLT: 92.00, LQD: 108.00,
-  SPX500: 5180.00, US30: 39200.00, NAS100: 18200.00, RUT2000: 2080.00,
-  VIXUSD: 15.80,
-  GER40: 18450.00, UK100: 8100.00, FRA40: 8050.00, ESP35: 10950.00, EU50: 5020.00,
-  JPN225: 38500.00, HK50: 17800.00, AUS200: 7820.00, IND50: 22500.00,
-  EURUSD: 1.0850, GBPUSD: 1.2640, USDJPY: 150.25, AUDUSD: 0.6540,
-  USDCAD: 1.3650, USDCHF: 0.8980, NZDUSD: 0.6020,
-  EURGBP: 0.8580, EURJPY: 162.80, GBPJPY: 190.50, AUDJPY: 98.20,
-  EURAUD: 1.6580, EURCHF: 0.9720, GBPAUD: 1.9320, GBPCHF: 1.1340,
-  CHFJPY: 167.40, AUDNZD: 1.0860, EURCAD: 1.4780,
-  USDMXN: 17.20, USDBRL: 4.97, USDCOP: 3920.00, USDCLP: 945.00, USDARS: 890.00,
-  USDINR: 83.50, USDCNY: 7.24, USDZAR: 18.65, USDTRY: 32.10,
-  USDHKD: 7.82, USDSGD: 1.345, USDNOK: 10.58, USDSEK: 10.42,
-  BTCUSD: 62450.00, ETHUSD: 3420.00, BNBUSD: 420.00, SOLUSD: 178.00,
-  XRPUSD: 0.625, ADAUSD: 0.465, AVAXUSD: 38.00, DOTUSD: 8.50,
-  MATICUSD: 0.920, LINKUSD: 18.50, UNIUSD: 9.80, ARBUSD: 1.42,
-  OPUSD: 2.85, MKRUSD: 2850.00, AAVEUSD: 105.00,
-  DOGEUSD: 0.185, SHIBUSD: 0.0000285, PEPEUSD: 0.0000142,
-  SUIUSD: 1.85, APTUSD: 9.20, NEARUSD: 5.40, TONUSD: 5.80,
-  ATOMUSD: 9.60, LTCUSD: 92.00, TRXUSD: 0.128, FTMUSD: 0.72,
-  INJUSD: 28.00, SEIUNUSD: 0.58, RNDUSD: 8.20, JUPUSD: 1.12,
-  XAUUSD: 2340.00, XAGUSD: 28.50, XPTUSD: 980.00, XPDUSD: 1050.00,
-  WTIUSD: 78.50, BRTUSD: 82.30, NATGASUSD: 2.85,
-  WHTUSD: 5.82, CORNUSD: 4.45, SOYUSD: 11.80, COFUSD: 195.00,
-  SUGUSD: 24.50, CTTUSD: 80.20, CACUSD: 7850.00,
-  COPUSD: 4.28, ALMUSD: 2450.00, NICUSD: 18500.00, ZNUSD: 2680.00,
+  // Stocks (approximate current levels)
+  AAPL: 198.00, MSFT: 385.00, NVDA: 105.00, TSLA: 240.00, AMZN: 188.00,
+  META: 510.00, GOOGL: 158.00, NFLX: 970.00, AMD: 96.00, INTC: 20.00,
+  CRM: 268.00, ORCL: 165.00, ADBE: 380.00,
+  JPM: 235.00, GS: 520.00, BAC: 38.00, WFC: 64.00,
+  WMT: 97.00, PG: 172.00, KO: 72.00,
+  XOM: 108.00, CVX: 148.00,
+  V: 335.00, MA: 520.00, PYPL: 64.00,
+  COIN: 178.00, HOOD: 38.00, SQ: 58.00,
+  UBER: 63.00, ABNB: 120.00, SPOT: 620.00, PLTR: 108.00,
+  BABA: 108.00, TSM: 155.00, ASML: 660.00,
+  // ETFs & Indices
+  SPY: 530.00, QQQ: 440.00, IWM: 195.00,
+  GLD: 285.00, SLV: 36.00, ARKK: 42.00,
+  IBIT: 48.00, BITO: 24.00,
+  XLF: 47.00, XLE: 84.00, XLK: 220.00,
+  TLT: 88.00, LQD: 105.00,
+  SPX500: 5310.00, US30: 39800.00, NAS100: 18500.00, RUT2000: 1980.00,
+  VIXUSD: 32.00,
+  GER40: 21800.00, UK100: 8300.00, FRA40: 7650.00, ESP35: 12700.00, EU50: 5170.00,
+  JPN225: 34200.00, HK50: 21900.00, AUS200: 7780.00, IND50: 23500.00,
+  // Forex — sourced from Frankfurter 2026-04-17
+  EURUSD: 1.1798, GBPUSD: 1.3534, USDJPY: 159.13, AUDUSD: 0.6360,
+  USDCAD: 1.3672, USDCHF: 0.7825, NZDUSD: 0.5920,
+  EURGBP: 0.8714, EURJPY: 187.80, GBPJPY: 215.50, AUDJPY: 101.30,
+  EURAUD: 1.8550, EURCHF: 0.9231, GBPAUD: 2.1280, GBPCHF: 1.0592,
+  CHFJPY: 203.40, AUDNZD: 1.0740, EURCAD: 1.6132,
+  USDMXN: 19.75, USDBRL: 5.87, USDCOP: 4280.00, USDCLP: 948.00, USDARS: 1180.00,
+  USDINR: 84.45, USDCNY: 7.31, USDZAR: 18.20, USDTRY: 38.50,
+  USDHKD: 7.76, USDSGD: 1.338, USDNOK: 10.32, USDSEK: 10.18,
+  // Crypto — sourced live 2026-04-17
+  BTCUSD: 77471.00, ETHUSD: 2435.00, BNBUSD: 642.00, SOLUSD: 89.64,
+  XRPUSD: 1.49, ADAUSD: 0.62, AVAXUSD: 19.50, DOTUSD: 3.80,
+  MATICUSD: 0.21, LINKUSD: 11.50, UNIUSD: 5.20, ARBUSD: 0.34,
+  OPUSD: 0.72, MKRUSD: 1420.00, AAVEUSD: 138.00,
+  DOGEUSD: 0.155, SHIBUSD: 0.0000118, PEPEUSD: 0.0000070,
+  SUIUSD: 2.15, APTUSD: 4.90, NEARUSD: 2.40, TONUSD: 2.85,
+  ATOMUSD: 3.90, LTCUSD: 78.00, TRXUSD: 0.245, FTMUSD: 0.55,
+  INJUSD: 8.20, RNDUSD: 3.10, JUPUSD: 0.48,
+  // Metals — sourced from gold-api.com 2026-04-17
+  XAUUSD: 4862.00, XAGUSD: 81.67, XPTUSD: 980.00, XPDUSD: 940.00,
+  // Energy & Commodities
+  WTIUSD: 62.50, BRTUSD: 65.80, NATGASUSD: 3.25,
+  WHTUSD: 5.35, CORNUSD: 4.65, SOYUSD: 9.80, COFUSD: 380.00,
+  SUGUSD: 18.20, CTTUSD: 65.50, CACUSD: 8950.00,
+  COPUSD: 4.65, ALMUSD: 2380.00, NICUSD: 15200.00, ZNUSD: 2620.00,
 };
 
 // ── CoinGecko ID map (crypto) ─────────────────────────────────────────────────
@@ -237,6 +243,22 @@ class PriceEngine {
   }
 
   async _seedRealPrices() {
+    const applyUpdates = (updates) => {
+      for (const [symbol, price] of Object.entries(updates)) {
+        if (price && isFinite(price) && price > 0) {
+          this.prices[symbol] = price;
+          this.previousClose[symbol] = price;
+        }
+      }
+      // Notify active listeners with updated prices
+      for (const [symbol, subs] of this.listeners.entries()) {
+        if (subs.size > 0 && this.prices[symbol]) {
+          const data = { symbol, price: this.prices[symbol], timestamp: Date.now(), ...this.getChange(symbol) };
+          subs.forEach(cb => cb(data));
+        }
+      }
+    };
+
     try {
       const [crypto, forex, metals] = await Promise.allSettled([
         fetchCryptoPrices(),
@@ -244,31 +266,29 @@ class PriceEngine {
         fetchMetalPrices(),
       ]);
 
-      const updates = {
+      applyUpdates({
         ...(crypto.status === 'fulfilled' ? crypto.value : {}),
         ...(forex.status === 'fulfilled' ? forex.value : {}),
         ...(metals.status === 'fulfilled' ? metals.value : {}),
-      };
-
-      for (const [symbol, price] of Object.entries(updates)) {
-        if (price && isFinite(price) && price > 0) {
-          this.prices[symbol] = price;
-          this.previousClose[symbol] = price;
-        }
-      }
-
-      this.seeded = true;
-
-      // Notify active listeners with updated real prices
-      for (const [symbol, subs] of this.listeners.entries()) {
-        if (subs.size > 0 && this.prices[symbol]) {
-          const data = { symbol, price: this.prices[symbol], timestamp: Date.now(), ...this.getChange(symbol) };
-          subs.forEach(cb => cb(data));
-        }
-      }
+      });
     } catch {
+      // ignore
+    } finally {
       this.seeded = true;
     }
+
+    // Retry metals after 5s in case first call failed (metals API is sometimes slow)
+    setTimeout(async () => {
+      try {
+        const metals = await fetchMetalPrices();
+        applyUpdates(metals);
+      } catch {
+        // ignore
+      }
+    }, 5000);
+
+    // Re-seed all prices every 5 minutes to stay fresh
+    setTimeout(() => this._seedRealPrices(), 5 * 60 * 1000);
   }
 
   getPrice(symbol) {
