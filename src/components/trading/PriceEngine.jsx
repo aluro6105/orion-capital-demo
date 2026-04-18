@@ -262,10 +262,10 @@ function loadCachedPrices() {
     const raw = localStorage.getItem(CACHE_KEY);
     if (!raw) return null;
     const { ts, prices } = JSON.parse(raw);
-    if (Date.now() - ts > CACHE_TTL) return null; // expired
+    if (Date.now() - ts > CACHE_TTL) return null;
     return prices;
   } catch {
-    return null;
+    return null; // Safari private mode or quota exceeded
   }
 }
 
@@ -273,7 +273,7 @@ function saveCachedPrices(prices) {
   try {
     localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), prices }));
   } catch {
-    // ignore storage errors
+    // Safari private mode blocks localStorage — silently ignore
   }
 }
 

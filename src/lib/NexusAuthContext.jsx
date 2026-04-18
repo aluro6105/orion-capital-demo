@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { createPageUrl } from '@/utils';
+import { safeGet, safeRemove } from '@/lib/safeStorage';
 
 const NexusAuthContext = createContext();
 
@@ -8,7 +9,7 @@ export const NexusAuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const stored = localStorage.getItem('nexus_user');
+    const stored = safeGet('nexus_user');
     if (stored) {
       try { setUser(JSON.parse(stored)); } catch {}
     }
@@ -16,7 +17,7 @@ export const NexusAuthProvider = ({ children }) => {
   }, []);
 
   const logout = () => {
-    localStorage.removeItem('nexus_user');
+    safeRemove('nexus_user');
     setUser(null);
     window.location.href = createPageUrl('Login');
   };

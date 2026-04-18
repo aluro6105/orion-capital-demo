@@ -2,19 +2,20 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { createPageUrl } from '@/utils';
+import { safeGet, safeSet } from '@/lib/safeStorage';
 
 const AccountContext = createContext(null);
 
 export function AccountProvider({ children }) {
   const [activeType, setActiveType] = useState(() => {
-    return localStorage.getItem('portal_account_type') || 'DEMO';
+    return safeGet('portal_account_type') || 'DEMO';
   });
   const [user, setUser] = useState(null);
   const [userLoading, setUserLoading] = useState(true);
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    const stored = localStorage.getItem('nexus_user');
+    const stored = safeGet('nexus_user');
     if (stored) {
       try {
         setUser(JSON.parse(stored));
@@ -35,7 +36,7 @@ export function AccountProvider({ children }) {
 
   const switchAccount = (type) => {
     setActiveType(type);
-    localStorage.setItem('portal_account_type', type);
+    safeSet('portal_account_type', type);
   };
 
   const createDemoAccount = async () => {

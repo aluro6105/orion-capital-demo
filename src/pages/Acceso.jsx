@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { TrendingUp, Eye, EyeOff, Mail, Lock, ArrowRight } from 'lucide-react';
+import { safeSet } from '@/lib/safeStorage';
 
 const FIELD_CLASS = "w-full px-4 py-3 border border-gray-200 rounded-lg text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#00C853] focus:ring-2 focus:ring-[#00C853]/10 transition-all bg-white";
 
@@ -30,7 +31,7 @@ export default function AccesoPage() {
     const users = await base44.entities.AppUser.filter({ email: form.email.toLowerCase().trim() });
     const user = users.find(u => u.password_hash === hashed && u.is_active !== false);
     if (!user) { setError('Correo o contraseña incorrectos.'); setLoading(false); return; }
-    localStorage.setItem('nexus_user', JSON.stringify({ id: user.id, email: user.email, full_name: user.full_name, role: user.role }));
+    safeSet('nexus_user', JSON.stringify({ id: user.id, email: user.email, full_name: user.full_name, role: user.role }));
     window.location.href = createPageUrl('Dashboard');
   };
 
@@ -51,7 +52,7 @@ export default function AccesoPage() {
       role: 'user',
       is_active: true,
     });
-    localStorage.setItem('nexus_user', JSON.stringify({ id: user.id, email: user.email, full_name: user.full_name, role: user.role }));
+    safeSet('nexus_user', JSON.stringify({ id: user.id, email: user.email, full_name: user.full_name, role: user.role }));
     window.location.href = createPageUrl('Dashboard');
   };
 
