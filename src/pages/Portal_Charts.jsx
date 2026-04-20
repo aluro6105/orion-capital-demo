@@ -252,12 +252,15 @@ function ChartsContent() {
 
   const handleTrade = async ({ side, orderType, qty, price, symbol }) => {
     if (!activeAccount) { toast.error('Sin cuenta activa'); return; }
-    const total = qty * price;
+    const leverage = activeAccount.leverage || 500;
+    const notional = qty * price;
+    const margin = notional / leverage;
+    const total = notional; // para el P&L y registro
     const fee = 0;
 
     if (side === 'buy') {
-      if (activeAccount.cash_balance < total) { toast.error('Fondos insuficientes'); return; }
-      const newCash = activeAccount.cash_balance - total - fee;
+      if (activeAccount.cash_balance < margin) { toast.error('Fondos insuficientes'); return; }
+      const newCash = activeAccount.cash_balance - margin - fee;
       await base44.entities.BrokerAccount.update(activeAccount.id, { cash_balance: newCash });
       const existingPos = positions.find(p => p.symbol === symbol);
       if (existingPos) {
@@ -267,18 +270,19 @@ function ChartsContent() {
       } else {
         await base44.entities.BrokerPosition.create({ account_id: activeAccount.id, account_type: activeType, user_id: activeAccount.user_id, symbol, qty, avg_price: price, instrument_name: DEFAULT_INSTRUMENTS.find(i => i.symbol === symbol)?.name || symbol });
       }
-      await base44.entities.BrokerTrade.create({ account_id: activeAccount.id, account_type: activeType, user_id: activeAccount.user_id, symbol, side: 'buy', order_type: orderType, qty, price, fee, total, instrument_name: DEFAULT_INSTRUMENTS.find(i => i.symbol === symbol)?.name || symbol });
-      toast.success(`Comprado ${qty} ${symbol} @ $${price.toFixed(2)}`);
+      await base44.entities.BrokerTrade.create({ account_id: activeAccount.id, account_type: activeType, user_id: activeAccount.user_id, symbol, side: 'buy', order_type: orderType, qty, price, fee, total: margin, instrument_name: DEFAULT_INSTRUMENTS.find(i => i.symbol === symbol)?.name || symbol });
+      toast.success(`Comprado ${qty} ${symbol} @ $${price.toFixed(2)} (margen: $${margin.toFixed(2)})`);
     } else {
       const existingPos = positions.find(p => p.symbol === symbol);
       if (!existingPos || existingPos.qty < qty) { toast.error('Posición insuficiente'); return; }
       const realizedPnl = (price - existingPos.avg_price) * qty;
-      const newCash = activeAccount.cash_balance + total - fee;
+      const sellMargin = notional / leverage;
+      const newCash = activeAccount.cash_balance + sellMargin + realizedPnl - fee;
       await base44.entities.BrokerAccount.update(activeAccount.id, { cash_balance: newCash });
       const newQty = existingPos.qty - qty;
       if (newQty <= 0) await base44.entities.BrokerPosition.delete(existingPos.id);
       else await base44.entities.BrokerPosition.update(existingPos.id, { qty: newQty });
-      await base44.entities.BrokerTrade.create({ account_id: activeAccount.id, account_type: activeType, user_id: activeAccount.user_id, symbol, side: 'sell', order_type: orderType, qty, price, fee, total, realized_pnl: realizedPnl, instrument_name: DEFAULT_INSTRUMENTS.find(i => i.symbol === symbol)?.name || symbol });
+      await base44.entities.BrokerTrade.create({ account_id: activeAccount.id, account_type: activeType, user_id: activeAccount.user_id, symbol, side: 'sell', order_type: orderType, qty, price, fee, total: sellMargin, realized_pnl: realizedPnl, instrument_name: DEFAULT_INSTRUMENTS.find(i => i.symbol === symbol)?.name || symbol });
       toast.success(`Vendido ${qty} ${symbol} | G/P: ${realizedPnl >= 0 ? '+' : ''}$${realizedPnl.toFixed(2)}`);
     }
     queryClient.invalidateQueries({ queryKey: ['broker-positions', activeAccount.id] });
@@ -293,9 +297,10 @@ function ChartsContent() {
 
   const handleClosePosition = async (pos, currentPrice) => {
     if (!activeAccount) return;
+    const lev = activeAccount.leverage || 500;
     const realizedPnl = (currentPrice - pos.avg_price) * pos.qty;
-    const total = pos.qty * currentPrice;
-    const newCash = activeAccount.cash_balance + total;
+    const closingMargin = (pos.qty * pos.avg_price) / lev;
+    const newCash = activeAccount.cash_balance + closingMargin + realizedPnl;
     
     await base44.entities.BrokerAccount.update(activeAccount.id, { cash_balance: newCash });
     await base44.entities.BrokerPosition.delete(pos.id);
@@ -309,7 +314,7 @@ function ChartsContent() {
       qty: pos.qty,
       price: currentPrice,
       fee: 0,
-      total,
+      total: closingMargin,
       realized_pnl: realizedPnl,
       instrument_name: pos.instrument_name || pos.symbol
     });

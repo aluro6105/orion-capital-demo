@@ -13,9 +13,13 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
   const cash = account?.current_cash || 0;
   const price = currentPrice || 0;
   const qtyNum = parseFloat(qty) || 0;
-  const total = qtyNum * price;
+  const leverage = account?.leverage || 500;
+  // Margen requerido = valor nocional / apalancamiento
+  const notional = qtyNum * price;
+  const margin = leverage > 0 ? notional / leverage : notional;
+  const total = margin; // lo que realmente se bloquea del efectivo
 
-  const canBuy = qtyNum > 0 && price > 0 && total <= cash;
+  const canBuy = qtyNum > 0 && price > 0 && margin <= cash;
   const canSell = qtyNum > 0 && price > 0 && position && position.qty >= qtyNum;
 
   const handleQuickTrade = async (side) => {
@@ -32,7 +36,7 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
     setSubmitting(false);
   };
 
-  const maxBuyQty = price > 0 ? Math.floor(cash / price) : 0;
+  const maxBuyQty = price > 0 && leverage > 0 ? Math.floor((cash * leverage) / price) : 0;
 
   return (
     <div className="bg-[#131722] border-t border-[#2a2e39] p-3">
@@ -91,8 +95,12 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
       {/* Order summary */}
       <div className="bg-[#1e222d] rounded p-2 mb-3 space-y-1">
         <div className="flex justify-between text-[10px]">
-          <span className="text-[#787b86]">Total estimado</span>
-          <span className="text-white font-semibold font-mono">${total.toFixed(2)}</span>
+          <span className="text-[#787b86]">Valor nocional</span>
+          <span className="text-white font-semibold font-mono">${notional.toFixed(2)}</span>
+        </div>
+        <div className="flex justify-between text-[10px]">
+          <span className="text-[#787b86]">Margen requerido (1:{leverage})</span>
+          <span className="text-[#2196F3] font-semibold font-mono">${margin.toFixed(2)}</span>
         </div>
         <div className="flex justify-between text-[10px]">
           <span className="text-[#787b86]">Efectivo disponible</span>

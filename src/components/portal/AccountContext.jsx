@@ -39,7 +39,7 @@ export function AccountProvider({ children }) {
     safeSet('portal_account_type', type);
   };
 
-  const createDemoAccount = async () => {
+  const createDemoAccount = async (leverage = 500) => {
     if (!user || demoAccount) return;
     const acc = await base44.entities.BrokerAccount.create({
       user_id: user.id,
@@ -49,12 +49,13 @@ export function AccountProvider({ children }) {
       starting_cash: 10000,
       display_name: `${user.full_name || user.email.split('@')[0]} — DEMO`,
       status: 'active',
+      leverage,
     });
     queryClient.invalidateQueries({ queryKey: ['broker-accounts'] });
     return acc;
   };
 
-  const createRealAccount = async () => {
+  const createRealAccount = async (leverage = 500) => {
     if (!user || realAccount) return;
     const acc = await base44.entities.BrokerAccount.create({
       user_id: user.id,
@@ -64,6 +65,7 @@ export function AccountProvider({ children }) {
       starting_cash: 0,
       display_name: `${user.full_name || user.email.split('@')[0]} — REAL`,
       status: 'pending',
+      leverage,
     });
     queryClient.invalidateQueries({ queryKey: ['broker-accounts'] });
     return acc;

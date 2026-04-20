@@ -1,0 +1,55 @@
+{
+  "name": "BrokerAccount",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "DEMO",
+        "REAL"
+      ],
+      "default": "DEMO"
+    },
+    "base_currency": {
+      "type": "string",
+      "default": "USD"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "suspended",
+        "pending",
+        "closed"
+      ],
+      "default": "active"
+    },
+    "cash_balance": {
+      "type": "number",
+      "default": 100000
+    },
+    "starting_cash": {
+      "type": "number",
+      "default": 100000
+    },
+    "display_name": {
+      "type": "string"
+    },
+    "leverage": {
+      "type": "number",
+      "default": 500,
+      "description": "Apalancamiento seleccionado: 50, 100, 200 o 500"
+    }
+  },
+  "required": [
+    "user_id",
+    "user_email",
+    "type"
+  ]
+}
