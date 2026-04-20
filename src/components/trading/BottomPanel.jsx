@@ -6,6 +6,24 @@ import { Download, Target, ShieldAlert, X, Check, Edit3 } from 'lucide-react';
 import priceEngine from './PriceEngine';
 import { toast } from 'sonner';
 
+// Formatea precio con decimales correctos según instrumento
+function fmtPrice(symbol, price) {
+  if (price == null || isNaN(price)) return '—';
+  if (!symbol) return price.toFixed(2);
+  const sym = symbol.toUpperCase();
+  if (sym.includes('JPY')) return price.toFixed(3);
+  // Pares forex/commodities con precio menor a 100 (EUR, GBP, AUD, etc.)
+  const isSmallForex = price > 0 && price < 100 && (
+    sym.endsWith('USD') || sym.startsWith('USD') ||
+    sym.endsWith('EUR') || sym.endsWith('GBP') || sym.endsWith('CHF') ||
+    sym.endsWith('CAD') || sym.endsWith('NZD') || sym.endsWith('AUD')
+  ) && !['SPX500','US30','NAS100','RUT2000','GER40','UK100','FRA40','ESP35','EU50','JPN225','HK50','AUS200','IND50'].includes(sym);
+  if (isSmallForex && price < 10) return price.toFixed(5);
+  if (price < 1) return price.toFixed(6);
+  if (price >= 10000) return price.toFixed(1);
+  return price.toFixed(2);
+}
+
 export default function BottomPanel({ positions, trades, account, equitySnapshots, onUpdatePosition, onClosePosition }) {
   const [tab, setTab] = useState('positions');
   const [livePrices, setLivePrices] = useState({});
@@ -131,8 +149,8 @@ export default function BottomPanel({ positions, trades, account, equitySnapshot
                     <tr key={p.id || p.symbol} className="border-t border-[#1e222d] hover:bg-[#1e222d]/50">
                       <td className="p-2 font-semibold text-white">{p.symbol}</td>
                       <td className="p-2 text-right text-[#d1d4dc] font-mono">{p.qty}</td>
-                      <td className="p-2 text-right text-[#d1d4dc] font-mono">${p.avg_price?.toFixed(2)}</td>
-                      <td className="p-2 text-right text-[#d1d4dc] font-mono">${last?.toFixed(2)}</td>
+                      <td className="p-2 text-right text-[#d1d4dc] font-mono">{fmtPrice(p.symbol, p.avg_price)}</td>
+                      <td className="p-2 text-right text-[#d1d4dc] font-mono">{fmtPrice(p.symbol, last)}</td>
                       <td className={`p-2 text-right font-mono font-semibold ${isUp ? 'text-[#26a69a]' : 'text-[#ef5350]'}`}>
                         {isUp ? '+' : ''}{pnl.toFixed(2)} ({isUp ? '+' : ''}{pnlPct.toFixed(2)}%)
                       </td>
@@ -175,13 +193,13 @@ export default function BottomPanel({ positions, trades, account, equitySnapshot
                         ) : (
                           <div className="flex items-center justify-center gap-2 text-[10px] font-mono">
                             {p.take_profit ? (
-                              <span className="text-[#26a69a]">${p.take_profit.toFixed(2)}</span>
+                              <span className="text-[#26a69a]">{fmtPrice(p.symbol, p.take_profit)}</span>
                             ) : (
                               <span className="text-[#787b86]">—</span>
                             )}
                             <span className="text-[#787b86]">/</span>
                             {p.stop_loss ? (
-                              <span className="text-[#ef5350]">${p.stop_loss.toFixed(2)}</span>
+                              <span className="text-[#ef5350]">{fmtPrice(p.symbol, p.stop_loss)}</span>
                             ) : (
                               <span className="text-[#787b86]">—</span>
                             )}
@@ -245,7 +263,7 @@ export default function BottomPanel({ positions, trades, account, equitySnapshot
                       {t.side?.toUpperCase()}
                     </td>
                     <td className="p-2 text-right text-[#d1d4dc] font-mono">{t.qty}</td>
-                    <td className="p-2 text-right text-[#d1d4dc] font-mono">${t.price?.toFixed(2)}</td>
+                    <td className="p-2 text-right text-[#d1d4dc] font-mono">{fmtPrice(t.symbol, t.price)}</td>
                     <td className="p-2 text-right text-[#d1d4dc] font-mono">${t.total?.toFixed(2)}</td>
                     <td className={`p-2 text-right font-mono ${(t.realized_pnl || 0) >= 0 ? 'text-[#26a69a]' : 'text-[#ef5350]'}`}>
                       {t.realized_pnl ? `${t.realized_pnl >= 0 ? '+' : ''}${t.realized_pnl.toFixed(2)}` : '—'}

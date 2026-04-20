@@ -5,38 +5,51 @@ import { Label } from '@/components/ui/label';
 import { ArrowUpRight, ArrowDownRight, Zap } from 'lucide-react';
 import { toast } from 'sonner';
 
+// Formatea precio con los decimales adecuados según el instrumento
+function fmtPrice(symbol, price) {
+  if (!price && price !== 0) return '—';
+  // Pares forex y commodities con precio < 10: 5 decimales
+  const isForex = /^(EUR|GBP|AUD|NZD|USD|CHF|CAD|JPY|MXN|BRL|COP|CLP|ARS|INR|CNY|ZAR|TRY|HKD|SGD|NOK|SEK|XAU|XAG|XPT|XPD|WTI|BRT|NAT|WHT|COR|SOY|COF|SUG|CTT|CAC|COP2|ALM|NIC|ZN)/.test(symbol);
+  const isJPY = symbol.includes('JPY');
+  if (isJPY) return price.toFixed(3);
+  if (price < 10 && isForex) return price.toFixed(5);
+  if (price < 1) return price.toFixed(6);
+  if (price >= 10000) return price.toFixed(1);
+  return price.toFixed(2);
+}
+
 export default function TradePanel({ symbol, currentPrice, account, positions, onTrade }) {
   const [qty, setQty] = useState('1');
   const [submitting, setSubmitting] = useState(false);
 
   const position = positions?.find(p => p.symbol === symbol);
   const cash = account?.current_cash || 0;
-  const price = currentPrice || 0;
+  // Usar precio actual o fallback 0; los botones esperan a que llegue el precio
+  const price = currentPrice ?? 0;
+  const priceReady = price > 0;
   const qtyNum = parseFloat(qty) || 0;
   const leverage = account?.leverage || 500;
+
   // Margen requerido = valor nocional / apalancamiento
   const notional = qtyNum * price;
   const margin = leverage > 0 ? notional / leverage : notional;
-  const total = margin; // lo que realmente se bloquea del efectivo
 
-  const canBuy = qtyNum > 0 && price > 0 && margin <= cash;
-  const canSell = qtyNum > 0 && price > 0 && position && position.qty >= qtyNum;
+  const hasEnoughCash = margin <= cash && margin > 0;
+  const canBuy = submitting ? false : (priceReady && qtyNum > 0 && hasEnoughCash);
+  const canSell = submitting ? false : (priceReady && qtyNum > 0 && !!position && position.qty >= qtyNum);
 
   const handleQuickTrade = async (side) => {
-    if (side === 'buy' && !canBuy) {
-      toast.error(total > cash ? 'Fondos insuficientes' : 'Orden inválida');
-      return;
-    }
-    if (side === 'sell' && !canSell) {
-      toast.error(!position ? 'Sin posición para vender' : position.qty < qtyNum ? 'Acciones insuficientes' : 'Orden inválida');
-      return;
-    }
+    if (!priceReady) { toast.error('Esperando precio de mercado…'); return; }
+    if (side === 'buy' && !hasEnoughCash) { toast.error('Fondos insuficientes'); return; }
+    if (side === 'sell' && !position) { toast.error('Sin posición abierta para vender'); return; }
+    if (side === 'sell' && position.qty < qtyNum) { toast.error(`Solo tienes ${position.qty} unidades`); return; }
     setSubmitting(true);
     await onTrade({ side, orderType: 'market', qty: qtyNum, price, symbol });
     setSubmitting(false);
   };
 
-  const maxBuyQty = price > 0 && leverage > 0 ? Math.floor((cash * leverage) / price) : 0;
+  const maxBuyQty = priceReady && leverage > 0 ? Math.floor((cash * leverage) / price) : 0;
+  const priceLabel = priceReady ? fmtPrice(symbol, price) : '...';
 
   return (
     <div className="bg-[#131722] border-t border-[#2a2e39] p-3">
@@ -48,17 +61,17 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
       </div>
 
       {/* Current price display */}
-      {currentPrice && (
-        <div className="bg-[#1e222d] rounded-lg p-2 mb-3 text-center">
-          <div className="text-[10px] text-[#787b86] uppercase">Precio actual</div>
-          <div className="text-xl font-bold text-white font-mono">${currentPrice.toFixed(2)}</div>
+      <div className="bg-[#1e222d] rounded-lg p-2 mb-3 text-center">
+        <div className="text-[10px] text-[#787b86] uppercase">Precio actual</div>
+        <div className={`text-xl font-bold font-mono ${priceReady ? 'text-white' : 'text-[#4a5568]'}`}>
+          {priceReady ? priceLabel : <span className="animate-pulse">Cargando…</span>}
         </div>
-      )}
+      </div>
 
       {/* Quantity input */}
       <div className="mb-3">
         <div className="flex items-center justify-between mb-1">
-          <Label className="text-[10px] text-[#787b86] uppercase">Cantidad</Label>
+          <Label className="text-[10px] text-[#787b86] uppercase">Cantidad (unidades)</Label>
           <div className="flex gap-1">
             {position && position.qty > 0 && (
               <button onClick={() => setQty(String(position.qty))} className="text-[9px] text-[#ef5350] hover:underline px-1">
@@ -84,6 +97,7 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
           ))}
           <Input
             type="number"
+            inputMode="decimal"
             min="1"
             value={qty}
             onChange={e => setQty(e.target.value)}
@@ -96,11 +110,11 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
       <div className="bg-[#1e222d] rounded p-2 mb-3 space-y-1">
         <div className="flex justify-between text-[10px]">
           <span className="text-[#787b86]">Valor nocional</span>
-          <span className="text-white font-semibold font-mono">${notional.toFixed(2)}</span>
+          <span className="text-white font-semibold font-mono">{priceReady ? `$${notional.toFixed(2)}` : '—'}</span>
         </div>
         <div className="flex justify-between text-[10px]">
-          <span className="text-[#787b86]">Margen requerido (1:{leverage})</span>
-          <span className="text-[#2196F3] font-semibold font-mono">${margin.toFixed(2)}</span>
+          <span className="text-[#787b86]">Margen req. (1:{leverage})</span>
+          <span className="text-[#2196F3] font-semibold font-mono">{priceReady ? `$${margin.toFixed(4)}` : '—'}</span>
         </div>
         <div className="flex justify-between text-[10px]">
           <span className="text-[#787b86]">Efectivo disponible</span>
@@ -109,40 +123,50 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
         {position && position.qty > 0 && (
           <div className="flex justify-between text-[10px]">
             <span className="text-[#787b86]">Posición actual</span>
-            <span className="text-[#d1d4dc] font-mono">{position.qty} @ ${position.avg_price?.toFixed(2)}</span>
+            <span className="text-[#d1d4dc] font-mono">{position.qty} @ {fmtPrice(symbol, position.avg_price)}</span>
           </div>
         )}
       </div>
 
       {/* Quick trade buttons */}
       <div className="grid grid-cols-2 gap-2">
-        <Button
+        <button
           onClick={() => handleQuickTrade('buy')}
-          disabled={submitting || !canBuy}
-          className="h-12 text-sm font-bold bg-[#26a69a] hover:bg-[#26a69a]/90 text-white flex flex-col items-center justify-center gap-0"
+          disabled={submitting}
+          className={`h-12 rounded-md text-sm font-bold text-white flex flex-col items-center justify-center gap-0 transition-colors
+            ${submitting ? 'opacity-50 cursor-not-allowed bg-[#26a69a]' : !canBuy ? 'bg-[#26a69a]/40 cursor-not-allowed' : 'bg-[#26a69a] hover:bg-[#2bbbad] active:scale-95'}`}
         >
           <span className="flex items-center gap-1">
             <ArrowUpRight className="h-4 w-4" />
             COMPRAR
           </span>
-          <span className="text-[10px] font-normal opacity-75">{qtyNum} × ${price.toFixed(2)}</span>
-        </Button>
-        <Button
+          <span className="text-[10px] font-normal opacity-75">{qtyNum} × {priceLabel}</span>
+        </button>
+        <button
           onClick={() => handleQuickTrade('sell')}
-          disabled={submitting || !canSell}
-          className="h-12 text-sm font-bold bg-[#ef5350] hover:bg-[#ef5350]/90 text-white flex flex-col items-center justify-center gap-0"
+          disabled={submitting}
+          className={`h-12 rounded-md text-sm font-bold text-white flex flex-col items-center justify-center gap-0 transition-colors
+            ${submitting ? 'opacity-50 cursor-not-allowed bg-[#ef5350]' : !canSell ? 'bg-[#ef5350]/40 cursor-not-allowed' : 'bg-[#ef5350] hover:bg-[#f44336] active:scale-95'}`}
         >
           <span className="flex items-center gap-1">
             <ArrowDownRight className="h-4 w-4" />
             VENDER
           </span>
-          <span className="text-[10px] font-normal opacity-75">{qtyNum} × ${price.toFixed(2)}</span>
-        </Button>
+          <span className="text-[10px] font-normal opacity-75">{qtyNum} × {priceLabel}</span>
+        </button>
       </div>
 
-      {/* Hint */}
-      <p className="text-[9px] text-[#787b86] text-center mt-2 leading-relaxed">
-        Configura TP/SL después de abrir la posición desde la pestaña "Posiciones"
+      {/* Estado */}
+      {!priceReady && (
+        <p className="text-[9px] text-yellow-500 text-center mt-2">Esperando precio de mercado…</p>
+      )}
+      {priceReady && !canBuy && !position && (
+        <p className="text-[9px] text-[#787b86] text-center mt-2">
+          {cash === 0 ? 'Sin fondos disponibles' : `Margen requerido: $${margin.toFixed(4)} | Disponible: $${cash.toFixed(2)}`}
+        </p>
+      )}
+      <p className="text-[9px] text-[#787b86] text-center mt-1 leading-relaxed">
+        Configura TP/SL desde la pestaña "Posiciones"
       </p>
     </div>
   );
