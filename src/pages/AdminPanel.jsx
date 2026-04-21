@@ -79,13 +79,15 @@ function AdminLogin({ onLogin }) {
 const BONUS_OPTIONS = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
 // ─── CONFIRM BONUS MODAL ──────────────────────────────────────────────────────
-function ConfirmBonusModal({ entry, bonusPct, onConfirm, onCancel, processing }) {
+function ConfirmBonusModal({ entry, bonusPct, onConfirm, onCancel, processing, extraOnly }) {
   const bonus = entry.amount * (bonusPct / 100);
   const total = entry.amount + bonus;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
       <div className="w-full max-w-sm bg-[#0f1117] border border-[#2196F3]/30 rounded-2xl p-6 shadow-2xl">
-        <h2 className="text-white font-bold text-lg mb-1">Confirmar activación con bono</h2>
+        <h2 className="text-white font-bold text-lg mb-1">
+          {extraOnly ? 'Confirmar bono adicional' : 'Confirmar activación con bono'}
+        </h2>
         <p className="text-[#8b8fa8] text-xs mb-5">Revisa los montos antes de confirmar.</p>
         <div className="space-y-2 mb-6">
           <div className="flex justify-between text-sm">
@@ -96,10 +98,18 @@ function ConfirmBonusModal({ entry, bonusPct, onConfirm, onCancel, processing })
             <span className="text-[#8b8fa8]">Bono ({bonusPct}%)</span>
             <span className="text-[#2196F3] font-mono font-bold">+${bonus.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
           </div>
-          <div className="border-t border-[#1e2130] pt-2 flex justify-between text-base font-bold">
-            <span className="text-white">Total a acreditar</span>
-            <span className="text-[#26a69a] font-mono">${total.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
-          </div>
+          {!extraOnly && (
+            <div className="border-t border-[#1e2130] pt-2 flex justify-between text-base font-bold">
+              <span className="text-white">Total a acreditar</span>
+              <span className="text-[#26a69a] font-mono">${total.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+            </div>
+          )}
+          {extraOnly && (
+            <div className="border-t border-[#1e2130] pt-2 flex justify-between text-base font-bold">
+              <span className="text-white">Bono a acreditar</span>
+              <span className="text-[#2196F3] font-mono">+${bonus.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+            </div>
+          )}
         </div>
         <div className="flex gap-2">
           <button onClick={onCancel} className="flex-1 py-2.5 rounded-xl bg-[#1e2130] text-[#8b8fa8] text-sm font-semibold hover:text-white transition-colors">
@@ -119,12 +129,13 @@ function ConfirmBonusModal({ entry, bonusPct, onConfirm, onCancel, processing })
 }
 
 // ─── ENTRY CARD ───────────────────────────────────────────────────────────────
-function EntryCard({ entry, account, tab, onMove, onActivateWithBonus, processing }) {
+function EntryCard({ entry, account, tab, onMove, onActivateWithBonus, onApplyExtraBonus, processing }) {
   const isDeposit = entry.type === 'deposit';
   const amountColor = isDeposit ? 'text-[#26a69a]' : 'text-[#ef5350]';
   const iconBg = isDeposit ? 'bg-[#26a69a]/15' : 'bg-[#ef5350]/15';
   const [bonusPct, setBonusPct] = useState(0);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showExtraConfirm, setShowExtraConfirm] = useState(false);
 
   const handleActivate = () => {
     if (isDeposit && tab === 'pendientes' && bonusPct > 0) {
@@ -140,15 +151,32 @@ function EntryCard({ entry, account, tab, onMove, onActivateWithBonus, processin
     setBonusPct(0);
   };
 
+  const handleConfirmExtraBonus = async () => {
+    await onApplyExtraBonus(entry, bonusPct);
+    setShowExtraConfirm(false);
+    setBonusPct(0);
+  };
+
+  const showBonusBar = isDeposit && (tab === 'pendientes' || tab === 'activos');
+
   return (
     <>
       {showConfirm && (
         <ConfirmBonusModal
-          entry={entry}
-          bonusPct={bonusPct}
+          entry={entry} bonusPct={bonusPct}
           onConfirm={handleConfirmBonus}
           onCancel={() => setShowConfirm(false)}
           processing={processing === entry.id}
+          extraOnly={false}
+        />
+      )}
+      {showExtraConfirm && (
+        <ConfirmBonusModal
+          entry={entry} bonusPct={bonusPct}
+          onConfirm={handleConfirmExtraBonus}
+          onCancel={() => setShowExtraConfirm(false)}
+          processing={processing === entry.id}
+          extraOnly={true}
         />
       )}
       <div className={`p-4 bg-[#0f1117] rounded-xl border transition-all ${
@@ -239,8 +267,8 @@ function EntryCard({ entry, account, tab, onMove, onActivateWithBonus, processin
           </div>
         </div>
 
-        {/* Bonus selector — solo en depósitos pendientes */}
-        {isDeposit && tab === 'pendientes' && (
+        {/* Bonus selector — depósitos pendientes Y activos */}
+        {showBonusBar && (
           <div className="mt-3 pt-3 border-t border-[#1e2130] flex items-center gap-3">
             <span className="text-xs text-[#8b8fa8] flex-shrink-0">Bono:</span>
             <select
@@ -252,7 +280,15 @@ function EntryCard({ entry, account, tab, onMove, onActivateWithBonus, processin
                 <option key={pct} value={pct}>{pct === 0 ? 'Sin bono' : `${pct}% (+$${(entry.amount * pct / 100).toFixed(2)})`}</option>
               ))}
             </select>
-            {bonusPct > 0 && (
+            {bonusPct > 0 && tab === 'activos' && (
+              <button
+                onClick={() => setShowExtraConfirm(true)}
+                disabled={processing === entry.id}
+                className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#2196F3]/15 hover:bg-[#2196F3]/25 text-[#2196F3] text-xs font-semibold transition-colors disabled:opacity-50 flex-shrink-0">
+                <CheckCircle2 className="h-3.5 w-3.5" /> Aplicar bono
+              </button>
+            )}
+            {bonusPct > 0 && tab === 'pendientes' && (
               <span className="text-xs font-bold text-[#2196F3] flex-shrink-0">
                 Total: ${(entry.amount * (1 + bonusPct / 100)).toLocaleString('en-US', { minimumFractionDigits: 2 })}
               </span>
@@ -323,6 +359,33 @@ function DepositsSection() {
 
     const labels = { pending: 'Pendientes', completed: 'Activos', rejected: 'Inactivos', cancelled: 'Inactivos' };
     toast.success(`Movido a ${labels[newStatus]}`);
+  };
+
+  const handleApplyExtraBonus = async (entry, bonusPct) => {
+    setProcessing(entry.id);
+    const bonus = entry.amount * (bonusPct / 100);
+
+    // Solo crear entrada de bono y acreditar, sin tocar el depósito original
+    await base44.entities.LedgerEntry.create({
+      account_id: entry.account_id,
+      user_id: entry.user_id,
+      type: 'virtual_add',
+      amount: bonus,
+      currency: entry.currency || 'USD',
+      status: 'completed',
+      notes: `Bono adicional ${bonusPct}% sobre depósito $${entry.amount.toFixed(2)}`,
+    });
+
+    const account = accounts.find(a => a.id === entry.account_id);
+    if (account) {
+      await base44.entities.BrokerAccount.update(account.id, {
+        cash_balance: (account.cash_balance || 0) + bonus,
+      });
+    }
+
+    await Promise.all([refetch(), refetchAccounts()]);
+    setProcessing(null);
+    toast.success(`Bono adicional de $${bonus.toFixed(2)} acreditado`);
   };
 
   const handleActivateWithBonus = async (entry, bonusPct) => {
@@ -433,6 +496,7 @@ function DepositsSection() {
               tab={subTab}
               onMove={handleMove}
               onActivateWithBonus={handleActivateWithBonus}
+              onApplyExtraBonus={handleApplyExtraBonus}
               processing={processing}
             />
           ))}
