@@ -295,35 +295,42 @@ function ChartsContent() {
     queryClient.invalidateQueries({ queryKey: ['broker-positions', activeAccount?.id] });
   };
 
-  const handleClosePosition = async (pos, currentPrice) => {
-    if (!activeAccount) return;
-    const lev = activeAccount.leverage || 500;
-    const realizedPnl = (currentPrice - pos.avg_price) * pos.qty;
+  const handleClosePosition = useCallback(async (pos, currentPrice) => {
+    if (!activeAccount) { toast.error('Sin cuenta activa'); return; }
+
+    // Always fetch the freshest account balance to avoid stale-closure bugs
+    const freshAccounts = await base44.entities.BrokerAccount.filter({ user_id: activeAccount.user_id });
+    const freshAccount = freshAccounts.find(a => a.id === activeAccount.id);
+    if (!freshAccount) { toast.error('No se pudo obtener la cuenta'); return; }
+
+    const lev = freshAccount.leverage || 500;
+    const price = currentPrice || priceEngine.getPrice(pos.symbol) || pos.avg_price;
+    const realizedPnl = (price - pos.avg_price) * pos.qty;
     const closingMargin = (pos.qty * pos.avg_price) / lev;
-    const newCash = activeAccount.cash_balance + closingMargin + realizedPnl;
-    
-    await base44.entities.BrokerAccount.update(activeAccount.id, { cash_balance: newCash });
+    const newCash = freshAccount.cash_balance + closingMargin + realizedPnl;
+
+    await base44.entities.BrokerAccount.update(freshAccount.id, { cash_balance: newCash });
     await base44.entities.BrokerPosition.delete(pos.id);
     await base44.entities.BrokerTrade.create({
-      account_id: activeAccount.id,
+      account_id: freshAccount.id,
       account_type: activeType,
-      user_id: activeAccount.user_id,
+      user_id: freshAccount.user_id,
       symbol: pos.symbol,
       side: 'sell',
       order_type: 'market',
       qty: pos.qty,
-      price: currentPrice,
+      price,
       fee: 0,
       total: closingMargin,
       realized_pnl: realizedPnl,
-      instrument_name: pos.instrument_name || pos.symbol
+      instrument_name: pos.instrument_name || pos.symbol,
     });
-    
-    queryClient.invalidateQueries({ queryKey: ['broker-positions', activeAccount.id] });
-    queryClient.invalidateQueries({ queryKey: ['broker-trades-recent', activeAccount.id] });
+
+    queryClient.invalidateQueries({ queryKey: ['broker-positions', freshAccount.id] });
+    queryClient.invalidateQueries({ queryKey: ['broker-trades-recent', freshAccount.id] });
     queryClient.invalidateQueries({ queryKey: ['broker-accounts'] });
     toast.success(`Posición cerrada | G/P: ${realizedPnl >= 0 ? '+' : ''}$${realizedPnl.toFixed(2)}`);
-  };
+  }, [activeAccount, activeType, queryClient]);
 
   // Monitor TP/SL hits on active positions
   useEffect(() => {
@@ -335,10 +342,8 @@ function ChartsContent() {
         if (!currentPrice) return;
         if (pos.take_profit && currentPrice >= pos.take_profit) {
           handleClosePosition(pos, currentPrice);
-          toast.success(`TP alcanzado en ${pos.symbol} @ $${currentPrice.toFixed(2)}`);
         } else if (pos.stop_loss && currentPrice <= pos.stop_loss) {
           handleClosePosition(pos, currentPrice);
-          toast.error(`SL alcanzado en ${pos.symbol} @ $${currentPrice.toFixed(2)}`);
         }
       });
     };
