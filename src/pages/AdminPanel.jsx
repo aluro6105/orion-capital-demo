@@ -76,99 +76,191 @@ function AdminLogin({ onLogin }) {
   );
 }
 
+const BONUS_OPTIONS = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+
+// ─── CONFIRM BONUS MODAL ──────────────────────────────────────────────────────
+function ConfirmBonusModal({ entry, bonusPct, onConfirm, onCancel, processing }) {
+  const bonus = entry.amount * (bonusPct / 100);
+  const total = entry.amount + bonus;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
+      <div className="w-full max-w-sm bg-[#0f1117] border border-[#2196F3]/30 rounded-2xl p-6 shadow-2xl">
+        <h2 className="text-white font-bold text-lg mb-1">Confirmar activación con bono</h2>
+        <p className="text-[#8b8fa8] text-xs mb-5">Revisa los montos antes de confirmar.</p>
+        <div className="space-y-2 mb-6">
+          <div className="flex justify-between text-sm">
+            <span className="text-[#8b8fa8]">Depósito base</span>
+            <span className="text-white font-mono">${entry.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="text-[#8b8fa8]">Bono ({bonusPct}%)</span>
+            <span className="text-[#2196F3] font-mono font-bold">+${bonus.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+          </div>
+          <div className="border-t border-[#1e2130] pt-2 flex justify-between text-base font-bold">
+            <span className="text-white">Total a acreditar</span>
+            <span className="text-[#26a69a] font-mono">${total.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <button onClick={onCancel} className="flex-1 py-2.5 rounded-xl bg-[#1e2130] text-[#8b8fa8] text-sm font-semibold hover:text-white transition-colors">
+            Cancelar
+          </button>
+          <button onClick={onConfirm} disabled={processing}
+            className="flex-1 py-2.5 rounded-xl bg-[#26a69a] hover:bg-[#2bbbad] text-white text-sm font-bold transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
+            {processing
+              ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              : <CheckCircle2 className="h-4 w-4" />}
+            Confirmar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── ENTRY CARD ───────────────────────────────────────────────────────────────
-function EntryCard({ entry, account, tab, onMove, processing }) {
+function EntryCard({ entry, account, tab, onMove, onActivateWithBonus, processing }) {
   const isDeposit = entry.type === 'deposit';
   const amountColor = isDeposit ? 'text-[#26a69a]' : 'text-[#ef5350]';
   const iconBg = isDeposit ? 'bg-[#26a69a]/15' : 'bg-[#ef5350]/15';
+  const [bonusPct, setBonusPct] = useState(0);
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const handleActivate = () => {
+    if (isDeposit && tab === 'pendientes' && bonusPct > 0) {
+      setShowConfirm(true);
+    } else {
+      onMove(entry, 'completed');
+    }
+  };
+
+  const handleConfirmBonus = async () => {
+    await onActivateWithBonus(entry, bonusPct);
+    setShowConfirm(false);
+    setBonusPct(0);
+  };
 
   return (
-    <div className={`flex items-center gap-4 p-4 bg-[#0f1117] rounded-xl border transition-all ${
-      tab === 'pendientes' ? 'border-yellow-500/25' :
-      tab === 'activos'   ? 'border-[#26a69a]/20'  :
-                            'border-[#1e2130]'
-    }`}>
-      {/* Icon */}
-      <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${iconBg}`}>
-        {isDeposit
-          ? <ArrowUpRight className="h-5 w-5 text-[#26a69a]" />
-          : <ArrowDownRight className="h-5 w-5 text-[#ef5350]" />}
-      </div>
+    <>
+      {showConfirm && (
+        <ConfirmBonusModal
+          entry={entry}
+          bonusPct={bonusPct}
+          onConfirm={handleConfirmBonus}
+          onCancel={() => setShowConfirm(false)}
+          processing={processing === entry.id}
+        />
+      )}
+      <div className={`p-4 bg-[#0f1117] rounded-xl border transition-all ${
+        tab === 'pendientes' ? 'border-yellow-500/25' :
+        tab === 'activos'   ? 'border-[#26a69a]/20'  :
+                              'border-[#1e2130]'
+      }`}>
+        <div className="flex items-center gap-4">
+          {/* Icon */}
+          <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${iconBg}`}>
+            {isDeposit
+              ? <ArrowUpRight className="h-5 w-5 text-[#26a69a]" />
+              : <ArrowDownRight className="h-5 w-5 text-[#ef5350]" />}
+          </div>
 
-      {/* Info */}
-      <div className="flex-1 min-w-0">
-        <div className="text-sm font-semibold text-white">{TYPE_LABEL[entry.type] || entry.type}</div>
-        <div className="text-xs text-[#8b8fa8] truncate">
-          {account ? `${account.display_name || account.user_email} · ${account.type}` : entry.account_id}
+          {/* Info */}
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-semibold text-white">{TYPE_LABEL[entry.type] || entry.type}</div>
+            <div className="text-xs text-[#8b8fa8] truncate">
+              {account ? `${account.display_name || account.user_email} · ${account.type}` : entry.account_id}
+            </div>
+            {entry.method && <div className="text-xs text-white/35 mt-0.5">Método: {entry.method}</div>}
+            {entry.notes && <div className="text-xs text-white/35 italic mt-0.5">{entry.notes}</div>}
+            <div className="text-[10px] text-[#8b8fa8] mt-1">{new Date(entry.created_date).toLocaleString()}</div>
+          </div>
+
+          {/* Amount */}
+          <div className="text-right flex-shrink-0 mr-2">
+            <div className={`text-base font-black ${amountColor}`}>
+              {isDeposit ? '+' : '-'}${entry.amount?.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+            </div>
+            <div className="text-[10px] text-[#8b8fa8]">{entry.currency || 'USD'}</div>
+          </div>
+
+          {/* Actions */}
+          <div className="flex flex-col gap-1.5 flex-shrink-0">
+            {tab === 'pendientes' && (
+              <>
+                <button
+                  onClick={handleActivate}
+                  disabled={processing === entry.id}
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#26a69a]/15 hover:bg-[#26a69a]/25 text-[#26a69a] text-xs font-semibold transition-colors disabled:opacity-50">
+                  {processing === entry.id
+                    ? <span className="w-3 h-3 border-2 border-[#26a69a]/30 border-t-[#26a69a] rounded-full animate-spin" />
+                    : <CheckCircle2 className="h-3.5 w-3.5" />}
+                  Activar
+                </button>
+                <button
+                  onClick={() => onMove(entry, 'rejected')}
+                  disabled={processing === entry.id}
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#ef5350]/15 hover:bg-[#ef5350]/25 text-[#ef5350] text-xs font-semibold transition-colors disabled:opacity-50">
+                  <XCircle className="h-3.5 w-3.5" /> Rechazar
+                </button>
+              </>
+            )}
+            {tab === 'activos' && (
+              <>
+                <button
+                  onClick={() => onMove(entry, 'pending')}
+                  disabled={processing === entry.id}
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-yellow-500/15 hover:bg-yellow-500/25 text-yellow-400 text-xs font-semibold transition-colors disabled:opacity-50">
+                  <Clock className="h-3.5 w-3.5" /> Pendiente
+                </button>
+                <button
+                  onClick={() => onMove(entry, 'cancelled')}
+                  disabled={processing === entry.id}
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#8b8fa8]/10 hover:bg-[#8b8fa8]/20 text-[#8b8fa8] text-xs font-semibold transition-colors disabled:opacity-50">
+                  <Archive className="h-3.5 w-3.5" /> Inactivar
+                </button>
+              </>
+            )}
+            {tab === 'inactivos' && (
+              <>
+                <button
+                  onClick={() => onMove(entry, 'pending')}
+                  disabled={processing === entry.id}
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-yellow-500/15 hover:bg-yellow-500/25 text-yellow-400 text-xs font-semibold transition-colors disabled:opacity-50">
+                  <Clock className="h-3.5 w-3.5" /> Pendiente
+                </button>
+                <button
+                  onClick={() => onMove(entry, 'completed')}
+                  disabled={processing === entry.id}
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#26a69a]/15 hover:bg-[#26a69a]/25 text-[#26a69a] text-xs font-semibold transition-colors disabled:opacity-50">
+                  <Activity className="h-3.5 w-3.5" /> Activar
+                </button>
+              </>
+            )}
+          </div>
         </div>
-        {entry.method && <div className="text-xs text-white/35 mt-0.5">Método: {entry.method}</div>}
-        {entry.notes && <div className="text-xs text-white/35 italic mt-0.5">{entry.notes}</div>}
-        <div className="text-[10px] text-[#8b8fa8] mt-1">{new Date(entry.created_date).toLocaleString()}</div>
-      </div>
 
-      {/* Amount */}
-      <div className="text-right flex-shrink-0 mr-2">
-        <div className={`text-base font-black ${amountColor}`}>
-          {isDeposit ? '+' : '-'}${entry.amount?.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-        </div>
-        <div className="text-[10px] text-[#8b8fa8]">{entry.currency || 'USD'}</div>
-      </div>
-
-      {/* Actions */}
-      <div className="flex flex-col gap-1.5 flex-shrink-0">
-        {tab === 'pendientes' && (
-          <>
-            <button
-              onClick={() => onMove(entry, 'completed')}
-              disabled={processing === entry.id}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#26a69a]/15 hover:bg-[#26a69a]/25 text-[#26a69a] text-xs font-semibold transition-colors disabled:opacity-50">
-              {processing === entry.id
-                ? <span className="w-3 h-3 border-2 border-[#26a69a]/30 border-t-[#26a69a] rounded-full animate-spin" />
-                : <CheckCircle2 className="h-3.5 w-3.5" />}
-              Activar
-            </button>
-            <button
-              onClick={() => onMove(entry, 'rejected')}
-              disabled={processing === entry.id}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#ef5350]/15 hover:bg-[#ef5350]/25 text-[#ef5350] text-xs font-semibold transition-colors disabled:opacity-50">
-              <XCircle className="h-3.5 w-3.5" /> Rechazar
-            </button>
-          </>
-        )}
-        {tab === 'activos' && (
-          <>
-            <button
-              onClick={() => onMove(entry, 'pending')}
-              disabled={processing === entry.id}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-yellow-500/15 hover:bg-yellow-500/25 text-yellow-400 text-xs font-semibold transition-colors disabled:opacity-50">
-              <Clock className="h-3.5 w-3.5" /> Pendiente
-            </button>
-            <button
-              onClick={() => onMove(entry, 'cancelled')}
-              disabled={processing === entry.id}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#8b8fa8]/10 hover:bg-[#8b8fa8]/20 text-[#8b8fa8] text-xs font-semibold transition-colors disabled:opacity-50">
-              <Archive className="h-3.5 w-3.5" /> Inactivar
-            </button>
-          </>
-        )}
-        {tab === 'inactivos' && (
-          <>
-            <button
-              onClick={() => onMove(entry, 'pending')}
-              disabled={processing === entry.id}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-yellow-500/15 hover:bg-yellow-500/25 text-yellow-400 text-xs font-semibold transition-colors disabled:opacity-50">
-              <Clock className="h-3.5 w-3.5" /> Pendiente
-            </button>
-            <button
-              onClick={() => onMove(entry, 'completed')}
-              disabled={processing === entry.id}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#26a69a]/15 hover:bg-[#26a69a]/25 text-[#26a69a] text-xs font-semibold transition-colors disabled:opacity-50">
-              <Activity className="h-3.5 w-3.5" /> Activar
-            </button>
-          </>
+        {/* Bonus selector — solo en depósitos pendientes */}
+        {isDeposit && tab === 'pendientes' && (
+          <div className="mt-3 pt-3 border-t border-[#1e2130] flex items-center gap-3">
+            <span className="text-xs text-[#8b8fa8] flex-shrink-0">Bono:</span>
+            <select
+              value={bonusPct}
+              onChange={e => setBonusPct(Number(e.target.value))}
+              className="flex-1 bg-[#131722] border border-[#1e2130] rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-[#2196F3] transition-colors"
+            >
+              {BONUS_OPTIONS.map(pct => (
+                <option key={pct} value={pct}>{pct === 0 ? 'Sin bono' : `${pct}% (+$${(entry.amount * pct / 100).toFixed(2)})`}</option>
+              ))}
+            </select>
+            {bonusPct > 0 && (
+              <span className="text-xs font-bold text-[#2196F3] flex-shrink-0">
+                Total: ${(entry.amount * (1 + bonusPct / 100)).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              </span>
+            )}
+          </div>
         )}
       </div>
-    </div>
+    </>
   );
 }
 
@@ -202,19 +294,16 @@ function DepositsSection() {
 
     const account = accounts.find(a => a.id === entry.account_id);
     if (account) {
-      // Si se activa un depósito que no estaba completed → sumar
       if (newStatus === 'completed' && prevStatus !== 'completed' && entry.type === 'deposit') {
         await base44.entities.BrokerAccount.update(account.id, {
           cash_balance: (account.cash_balance || 0) + entry.amount,
         });
       }
-      // Si se activa un retiro que no estaba completed → descontar
       if (newStatus === 'completed' && prevStatus !== 'completed' && entry.type === 'withdrawal') {
         await base44.entities.BrokerAccount.update(account.id, {
           cash_balance: Math.max(0, (account.cash_balance || 0) - entry.amount),
         });
       }
-      // Si se mueve de completed a otro estado → revertir balance
       if (prevStatus === 'completed' && newStatus !== 'completed') {
         if (entry.type === 'deposit') {
           await base44.entities.BrokerAccount.update(account.id, {
@@ -234,6 +323,40 @@ function DepositsSection() {
 
     const labels = { pending: 'Pendientes', completed: 'Activos', rejected: 'Inactivos', cancelled: 'Inactivos' };
     toast.success(`Movido a ${labels[newStatus]}`);
+  };
+
+  const handleActivateWithBonus = async (entry, bonusPct) => {
+    setProcessing(entry.id);
+    const bonus = entry.amount * (bonusPct / 100);
+    const total = entry.amount + bonus;
+
+    // Activar el depósito original
+    await base44.entities.LedgerEntry.update(entry.id, { status: 'completed' });
+
+    // Crear entrada de ledger para el bono
+    if (bonus > 0) {
+      await base44.entities.LedgerEntry.create({
+        account_id: entry.account_id,
+        user_id: entry.user_id,
+        type: 'virtual_add',
+        amount: bonus,
+        currency: entry.currency || 'USD',
+        status: 'completed',
+        notes: `Bono del ${bonusPct}% sobre depósito $${entry.amount.toFixed(2)}`,
+      });
+    }
+
+    // Acreditar el total (depósito + bono) al balance
+    const account = accounts.find(a => a.id === entry.account_id);
+    if (account) {
+      await base44.entities.BrokerAccount.update(account.id, {
+        cash_balance: (account.cash_balance || 0) + total,
+      });
+    }
+
+    await Promise.all([refetch(), refetchAccounts()]);
+    setProcessing(null);
+    toast.success(`Activado con bono ${bonusPct}% · Total acreditado: $${total.toFixed(2)}`);
   };
 
   const SUB_TABS = [
@@ -309,6 +432,7 @@ function DepositsSection() {
               account={accounts.find(a => a.id === entry.account_id)}
               tab={subTab}
               onMove={handleMove}
+              onActivateWithBonus={handleActivateWithBonus}
               processing={processing}
             />
           ))}
