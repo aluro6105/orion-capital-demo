@@ -255,36 +255,42 @@ function ChartsContent() {
     const leverage = activeAccount.leverage || 500;
     const notional = qty * price;
     const margin = notional / leverage;
-    const total = notional; // para el P&L y registro
     const fee = 0;
+    const instrumentName = DEFAULT_INSTRUMENTS.find(i => i.symbol === symbol)?.name || symbol;
 
-    if (side === 'buy') {
-      if (activeAccount.cash_balance < margin) { toast.error('Fondos insuficientes'); return; }
-      const newCash = activeAccount.cash_balance - margin - fee;
-      await base44.entities.BrokerAccount.update(activeAccount.id, { cash_balance: newCash });
-      const existingPos = positions.find(p => p.symbol === symbol);
-      if (existingPos) {
-        const newQty = existingPos.qty + qty;
-        const newAvg = ((existingPos.avg_price * existingPos.qty) + (price * qty)) / newQty;
-        await base44.entities.BrokerPosition.update(existingPos.id, { qty: newQty, avg_price: newAvg });
-      } else {
-        await base44.entities.BrokerPosition.create({ account_id: activeAccount.id, account_type: activeType, user_id: activeAccount.user_id, symbol, qty, avg_price: price, instrument_name: DEFAULT_INSTRUMENTS.find(i => i.symbol === symbol)?.name || symbol });
-      }
-      await base44.entities.BrokerTrade.create({ account_id: activeAccount.id, account_type: activeType, user_id: activeAccount.user_id, symbol, side: 'buy', order_type: orderType, qty, price, fee, total: margin, instrument_name: DEFAULT_INSTRUMENTS.find(i => i.symbol === symbol)?.name || symbol });
-      toast.success(`Comprado ${qty} ${symbol} @ $${price.toFixed(2)} (margen: $${margin.toFixed(2)})`);
-    } else {
-      const existingPos = positions.find(p => p.symbol === symbol);
-      if (!existingPos || existingPos.qty < qty) { toast.error('Posición insuficiente'); return; }
-      const realizedPnl = (price - existingPos.avg_price) * qty;
-      const sellMargin = notional / leverage;
-      const newCash = activeAccount.cash_balance + sellMargin + realizedPnl - fee;
-      await base44.entities.BrokerAccount.update(activeAccount.id, { cash_balance: newCash });
-      const newQty = existingPos.qty - qty;
-      if (newQty <= 0) await base44.entities.BrokerPosition.delete(existingPos.id);
-      else await base44.entities.BrokerPosition.update(existingPos.id, { qty: newQty });
-      await base44.entities.BrokerTrade.create({ account_id: activeAccount.id, account_type: activeType, user_id: activeAccount.user_id, symbol, side: 'sell', order_type: orderType, qty, price, fee, total: sellMargin, realized_pnl: realizedPnl, instrument_name: DEFAULT_INSTRUMENTS.find(i => i.symbol === symbol)?.name || symbol });
-      toast.success(`Vendido ${qty} ${symbol} | G/P: ${realizedPnl >= 0 ? '+' : ''}$${realizedPnl.toFixed(2)}`);
-    }
+    if (activeAccount.cash_balance < margin) { toast.error('Fondos insuficientes'); return; }
+
+    const newCash = activeAccount.cash_balance - margin - fee;
+    await base44.entities.BrokerAccount.update(activeAccount.id, { cash_balance: newCash });
+
+    // Cada operación es una posición independiente (no se agrupa por símbolo)
+    await base44.entities.BrokerPosition.create({
+      account_id: activeAccount.id,
+      account_type: activeType,
+      user_id: activeAccount.user_id,
+      symbol,
+      side,
+      qty,
+      avg_price: price,
+      instrument_name: instrumentName,
+    });
+
+    await base44.entities.BrokerTrade.create({
+      account_id: activeAccount.id,
+      account_type: activeType,
+      user_id: activeAccount.user_id,
+      symbol,
+      side,
+      order_type: orderType,
+      qty,
+      price,
+      fee,
+      total: margin,
+      instrument_name: instrumentName,
+    });
+
+    toast.success(`${side === 'buy' ? 'Compra' : 'Venta'} abierta: ${qty} ${symbol} @ ${price} (margen: $${margin.toFixed(4)})`);
+
     queryClient.invalidateQueries({ queryKey: ['broker-positions', activeAccount.id] });
     queryClient.invalidateQueries({ queryKey: ['broker-trades-recent', activeAccount.id] });
     queryClient.invalidateQueries({ queryKey: ['broker-accounts'] });
@@ -298,15 +304,20 @@ function ChartsContent() {
   const handleClosePosition = useCallback(async (pos, currentPrice) => {
     if (!activeAccount) { toast.error('Sin cuenta activa'); return; }
 
-    // Always fetch the freshest account balance to avoid stale-closure bugs
+    // Fetch fresh account balance to avoid stale-closure bugs
     const freshAccounts = await base44.entities.BrokerAccount.filter({ user_id: activeAccount.user_id });
     const freshAccount = freshAccounts.find(a => a.id === activeAccount.id);
     if (!freshAccount) { toast.error('No se pudo obtener la cuenta'); return; }
 
     const lev = freshAccount.leverage || 500;
-    const price = currentPrice || priceEngine.getPrice(pos.symbol) || pos.avg_price;
-    const realizedPnl = (price - pos.avg_price) * pos.qty;
+    const closePrice = currentPrice || priceEngine.getPrice(pos.symbol) || pos.avg_price;
     const closingMargin = (pos.qty * pos.avg_price) / lev;
+
+    // P&L depende del side: buy gana si precio sube, sell gana si precio baja
+    const realizedPnl = pos.side === 'sell'
+      ? (pos.avg_price - closePrice) * pos.qty   // venta corta: gana si baja
+      : (closePrice - pos.avg_price) * pos.qty;   // compra: gana si sube
+
     const newCash = freshAccount.cash_balance + closingMargin + realizedPnl;
 
     await base44.entities.BrokerAccount.update(freshAccount.id, { cash_balance: newCash });
@@ -316,10 +327,10 @@ function ChartsContent() {
       account_type: activeType,
       user_id: freshAccount.user_id,
       symbol: pos.symbol,
-      side: 'sell',
+      side: pos.side === 'buy' ? 'sell' : 'buy', // cierre es la operación contraria
       order_type: 'market',
       qty: pos.qty,
-      price,
+      price: closePrice,
       fee: 0,
       total: closingMargin,
       realized_pnl: realizedPnl,
@@ -340,9 +351,16 @@ function ChartsContent() {
         if (pos.qty <= 0) return;
         const currentPrice = priceEngine.getLastPrice(pos.symbol);
         if (!currentPrice) return;
-        if (pos.take_profit && currentPrice >= pos.take_profit) {
-          handleClosePosition(pos, currentPrice);
-        } else if (pos.stop_loss && currentPrice <= pos.stop_loss) {
+        const isBuy = !pos.side || pos.side === 'buy';
+        // Para compras: TP si precio >= take_profit, SL si precio <= stop_loss
+        // Para ventas:  TP si precio <= take_profit, SL si precio >= stop_loss
+        const tpHit = isBuy
+          ? (pos.take_profit && currentPrice >= pos.take_profit)
+          : (pos.take_profit && currentPrice <= pos.take_profit);
+        const slHit = isBuy
+          ? (pos.stop_loss && currentPrice <= pos.stop_loss)
+          : (pos.stop_loss && currentPrice >= pos.stop_loss);
+        if (tpHit || slHit) {
           handleClosePosition(pos, currentPrice);
         }
       });

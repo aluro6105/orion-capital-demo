@@ -22,9 +22,7 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
   const [qty, setQty] = useState('1');
   const [submitting, setSubmitting] = useState(false);
 
-  const position = positions?.find(p => p.symbol === symbol);
   const cash = account?.current_cash || 0;
-  // Usar precio actual o fallback 0; los botones esperan a que llegue el precio
   const price = currentPrice ?? 0;
   const priceReady = price > 0;
   const qtyNum = parseFloat(qty) || 0;
@@ -35,14 +33,12 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
   const margin = leverage > 0 ? notional / leverage : notional;
 
   const hasEnoughCash = margin <= cash && margin > 0;
-  const canBuy = submitting ? false : (priceReady && qtyNum > 0 && hasEnoughCash);
-  const canSell = submitting ? false : (priceReady && qtyNum > 0 && !!position && position.qty >= qtyNum);
+  // Ambas direcciones solo requieren margen disponible — son posiciones independientes
+  const canTrade = !submitting && priceReady && qtyNum > 0 && hasEnoughCash;
 
   const handleQuickTrade = async (side) => {
     if (!priceReady) { toast.error('Esperando precio de mercado…'); return; }
-    if (side === 'buy' && !hasEnoughCash) { toast.error('Fondos insuficientes'); return; }
-    if (side === 'sell' && !position) { toast.error('Sin posición abierta para vender'); return; }
-    if (side === 'sell' && position.qty < qtyNum) { toast.error(`Solo tienes ${position.qty} unidades`); return; }
+    if (!hasEnoughCash) { toast.error('Fondos insuficientes'); return; }
     setSubmitting(true);
     await onTrade({ side, orderType: 'market', qty: qtyNum, price, symbol });
     setSubmitting(false);
@@ -73,11 +69,6 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
         <div className="flex items-center justify-between mb-1">
           <Label className="text-[10px] text-[#787b86] uppercase">Cantidad (unidades)</Label>
           <div className="flex gap-1">
-            {position && position.qty > 0 && (
-              <button onClick={() => setQty(String(position.qty))} className="text-[9px] text-[#ef5350] hover:underline px-1">
-                Pos: {position.qty}
-              </button>
-            )}
             <button onClick={() => setQty(String(maxBuyQty))} className="text-[9px] text-[#26a69a] hover:underline px-1">
               Max: {maxBuyQty}
             </button>
@@ -120,12 +111,10 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
           <span className="text-[#787b86]">Efectivo disponible</span>
           <span className="text-[#d1d4dc] font-mono">${cash.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
         </div>
-        {position && position.qty > 0 && (
-          <div className="flex justify-between text-[10px]">
-            <span className="text-[#787b86]">Posición actual</span>
-            <span className="text-[#d1d4dc] font-mono">{position.qty} @ {fmtPrice(symbol, position.avg_price)}</span>
-          </div>
-        )}
+        <div className="flex justify-between text-[10px]">
+          <span className="text-[#787b86]">Posiciones abiertas</span>
+          <span className="text-[#d1d4dc] font-mono">{(positions || []).filter(p => p.symbol === symbol).length} en {symbol}</span>
+        </div>
       </div>
 
       {/* Quick trade buttons */}
@@ -134,7 +123,7 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
           onClick={() => handleQuickTrade('buy')}
           disabled={submitting}
           className={`h-12 rounded-md text-sm font-bold text-white flex flex-col items-center justify-center gap-0 transition-colors
-            ${submitting ? 'opacity-50 cursor-not-allowed bg-[#26a69a]' : !canBuy ? 'bg-[#26a69a]/40 cursor-not-allowed' : 'bg-[#26a69a] hover:bg-[#2bbbad] active:scale-95'}`}
+            ${submitting ? 'opacity-50 cursor-not-allowed bg-[#26a69a]' : !canTrade ? 'bg-[#26a69a]/40 cursor-not-allowed' : 'bg-[#26a69a] hover:bg-[#2bbbad] active:scale-95'}`}
         >
           <span className="flex items-center gap-1">
             <ArrowUpRight className="h-4 w-4" />
@@ -146,7 +135,7 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
           onClick={() => handleQuickTrade('sell')}
           disabled={submitting}
           className={`h-12 rounded-md text-sm font-bold text-white flex flex-col items-center justify-center gap-0 transition-colors
-            ${submitting ? 'opacity-50 cursor-not-allowed bg-[#ef5350]' : !canSell ? 'bg-[#ef5350]/40 cursor-not-allowed' : 'bg-[#ef5350] hover:bg-[#f44336] active:scale-95'}`}
+            ${submitting ? 'opacity-50 cursor-not-allowed bg-[#ef5350]' : !canTrade ? 'bg-[#ef5350]/40 cursor-not-allowed' : 'bg-[#ef5350] hover:bg-[#f44336] active:scale-95'}`}
         >
           <span className="flex items-center gap-1">
             <ArrowDownRight className="h-4 w-4" />
@@ -160,13 +149,13 @@ export default function TradePanel({ symbol, currentPrice, account, positions, o
       {!priceReady && (
         <p className="text-[9px] text-yellow-500 text-center mt-2">Esperando precio de mercado…</p>
       )}
-      {priceReady && !canBuy && !position && (
+      {priceReady && !canTrade && (
         <p className="text-[9px] text-[#787b86] text-center mt-2">
-          {cash === 0 ? 'Sin fondos disponibles' : `Margen requerido: $${margin.toFixed(4)} | Disponible: $${cash.toFixed(2)}`}
+          {cash === 0 ? 'Sin fondos disponibles' : `Margen req: $${margin.toFixed(4)} | Disponible: $${cash.toFixed(2)}`}
         </p>
       )}
       <p className="text-[9px] text-[#787b86] text-center mt-1 leading-relaxed">
-        Configura TP/SL desde la pestaña "Posiciones"
+        Cada operación es independiente · Cierra con ✕ en Posiciones
       </p>
     </div>
   );

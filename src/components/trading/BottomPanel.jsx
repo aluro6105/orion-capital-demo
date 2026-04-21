@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Download, Target, ShieldAlert, X, Check, Edit3, Loader2 } from 'lucide-react';
+import { Download, Target, ShieldAlert, X, Check, Edit3, Loader2, TrendingUp, TrendingDown } from 'lucide-react';
 import priceEngine from './PriceEngine';
 import { toast } from 'sonner';
 
@@ -144,14 +144,18 @@ export default function BottomPanel({ positions, trades, account, equitySnapshot
                 <div className="sm:hidden divide-y divide-[#1e222d]">
                   {openPositions.map(p => {
                     const last = getBestPrice(p.symbol, p.avg_price);
-                    const pnl = (last - p.avg_price) * p.qty;
-                    const pnlPct = p.avg_price > 0 ? ((last - p.avg_price) / p.avg_price * 100) : 0;
+                    const isBuy = !p.side || p.side === 'buy';
+                    const pnl = isBuy ? (last - p.avg_price) * p.qty : (p.avg_price - last) * p.qty;
+                    const pnlPct = p.avg_price > 0 ? (pnl / (p.qty * p.avg_price) * 100) : 0;
                     const isUp = pnl >= 0;
                     const isClosing = closingIds.has(p.id);
                     return (
-                      <div key={p.id || p.symbol} className="p-3 flex items-center justify-between gap-2">
+                      <div key={p.id} className="p-3 flex items-center justify-between gap-2">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
+                            <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${isBuy ? 'bg-[#26a69a]/20 text-[#26a69a]' : 'bg-[#ef5350]/20 text-[#ef5350]'}`}>
+                              {isBuy ? '▲ COMPRA' : '▼ VENTA'}
+                            </span>
                             <span className="font-bold text-white text-xs">{p.symbol}</span>
                             <span className="text-[#787b86] text-[10px]">{p.qty} uds</span>
                           </div>
@@ -166,13 +170,14 @@ export default function BottomPanel({ positions, trades, account, equitySnapshot
                         <button
                           onClick={() => handleClose(p)}
                           disabled={isClosing}
-                          className={`flex-shrink-0 flex items-center gap-1 px-3 py-2 rounded-md text-[11px] font-bold transition-all
+                          className={`flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-all
                             ${isClosing
                               ? 'bg-[#ef5350]/20 text-[#ef5350]/50 cursor-not-allowed'
                               : 'bg-[#ef5350] hover:bg-[#f44336] text-white active:scale-95'
                             }`}
+                          title="Cerrar posición"
                         >
-                          {isClosing ? <Loader2 className="h-3 w-3 animate-spin" /> : 'CERRAR'}
+                          {isClosing ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <X className="h-3.5 w-3.5" />}
                         </button>
                       </div>
                     );
@@ -184,6 +189,7 @@ export default function BottomPanel({ positions, trades, account, equitySnapshot
                   <table className="w-full text-[11px]">
                     <thead>
                       <tr className="text-[#787b86] uppercase text-[10px]">
+                        <th className="text-left p-2 font-medium">Lado</th>
                         <th className="text-left p-2 font-medium">Símbolo</th>
                         <th className="text-right p-2 font-medium">Cant.</th>
                         <th className="text-right p-2 font-medium">P. Entrada</th>
@@ -192,20 +198,26 @@ export default function BottomPanel({ positions, trades, account, equitySnapshot
                         <th className="text-center p-2 font-medium">
                           <span className="text-[#26a69a]">TP</span> / <span className="text-[#ef5350]">SL</span>
                         </th>
-                        <th className="text-center p-2 font-medium">Acciones</th>
+                        <th className="text-center p-2 font-medium">Cerrar</th>
                       </tr>
                     </thead>
                     <tbody>
                       {openPositions.map(p => {
                         const last = getBestPrice(p.symbol, p.avg_price);
-                        const pnl = (last - p.avg_price) * p.qty;
-                        const pnlPct = p.avg_price > 0 ? ((last - p.avg_price) / p.avg_price * 100) : 0;
+                        const isBuy = !p.side || p.side === 'buy';
+                        const pnl = isBuy ? (last - p.avg_price) * p.qty : (p.avg_price - last) * p.qty;
+                        const pnlPct = p.avg_price > 0 ? (pnl / (p.qty * p.avg_price) * 100) : 0;
                         const isUp = pnl >= 0;
                         const isEditing = editingId === p.id;
                         const isClosing = closingIds.has(p.id);
 
                         return (
-                          <tr key={p.id || p.symbol} className="border-t border-[#1e222d] hover:bg-[#1e222d]/50">
+                          <tr key={p.id} className="border-t border-[#1e222d] hover:bg-[#1e222d]/50">
+                            <td className="p-2">
+                              <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded whitespace-nowrap ${isBuy ? 'bg-[#26a69a]/20 text-[#26a69a]' : 'bg-[#ef5350]/20 text-[#ef5350]'}`}>
+                                {isBuy ? '▲ COMPRA' : '▼ VENTA'}
+                              </span>
+                            </td>
                             <td className="p-2 font-semibold text-white">{p.symbol}</td>
                             <td className="p-2 text-right text-[#d1d4dc] font-mono">{p.qty}</td>
                             <td className="p-2 text-right text-[#d1d4dc] font-mono">{fmtPrice(p.symbol, p.avg_price)}</td>
@@ -257,14 +269,14 @@ export default function BottomPanel({ positions, trades, account, equitySnapshot
                                 <button
                                   onClick={() => handleClose(p)}
                                   disabled={isClosing}
-                                  className={`flex items-center gap-1 px-2 py-1.5 rounded text-[10px] font-bold transition-all
+                                  className={`w-7 h-7 rounded-full flex items-center justify-center transition-all
                                     ${isClosing
                                       ? 'bg-[#ef5350]/20 text-[#ef5350]/50 cursor-not-allowed'
                                       : 'bg-[#ef5350] hover:bg-[#f44336] text-white active:scale-95'
                                     }`}
                                   title="Cerrar posición al precio de mercado"
                                 >
-                                  {isClosing ? <Loader2 className="h-3 w-3 animate-spin" /> : 'CERRAR'}
+                                  {isClosing ? <Loader2 className="h-3 w-3 animate-spin" /> : <X className="h-3 w-3" />}
                                 </button>
                               </div>
                             </td>

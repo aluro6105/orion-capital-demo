@@ -21,6 +21,15 @@
     "instrument_name": {
       "type": "string"
     },
+    "side": {
+      "type": "string",
+      "enum": [
+        "buy",
+        "sell"
+      ],
+      "default": "buy",
+      "description": "Direcci\u00f3n de la posici\u00f3n: compra o venta"
+    },
     "qty": {
       "type": "number",
       "default": 0
@@ -40,6 +49,7 @@
   },
   "required": [
     "account_id",
-    "symbol"
+    "symbol",
+    "side"
   ]
 }
