@@ -157,7 +157,7 @@ function EntryCard({ entry, account, tab, onMove, onActivateWithBonus, onApplyEx
     setBonusPct(0);
   };
 
-  const showBonusBar = isDeposit && (tab === 'pendientes' || tab === 'activos');
+  const showBonusBar = entry.type === 'deposit' && (tab === 'pendientes' || tab === 'activos');
 
   return (
     <>
@@ -268,7 +268,7 @@ function EntryCard({ entry, account, tab, onMove, onActivateWithBonus, onApplyEx
         </div>
 
         {/* Bonus selector — depósitos pendientes Y activos */}
-        {showBonusBar && (
+        {entry.type === 'deposit' && tab === 'pendientes' && (
           <div className="mt-3 pt-3 border-t border-[#1e2130] flex items-center gap-3">
             <span className="text-xs text-[#8b8fa8] flex-shrink-0">Bono:</span>
             <select
@@ -280,18 +280,32 @@ function EntryCard({ entry, account, tab, onMove, onActivateWithBonus, onApplyEx
                 <option key={pct} value={pct}>{pct === 0 ? 'Sin bono' : `${pct}% (+$${(entry.amount * pct / 100).toFixed(2)})`}</option>
               ))}
             </select>
-            {bonusPct > 0 && tab === 'activos' && (
+            {bonusPct > 0 && (
+              <span className="text-xs font-bold text-[#2196F3] flex-shrink-0">
+                Total: ${(entry.amount * (1 + bonusPct / 100)).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              </span>
+            )}
+          </div>
+        )}
+        {entry.type === 'deposit' && tab === 'activos' && (
+          <div className="mt-3 pt-3 border-t border-[#1e2130] flex items-center gap-3">
+            <span className="text-xs text-[#8b8fa8] flex-shrink-0">Bono adicional:</span>
+            <select
+              value={bonusPct}
+              onChange={e => setBonusPct(Number(e.target.value))}
+              className="flex-1 bg-[#131722] border border-[#1e2130] rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-[#2196F3] transition-colors"
+            >
+              {BONUS_OPTIONS.map(pct => (
+                <option key={pct} value={pct}>{pct === 0 ? 'Sin bono' : `${pct}% (+$${(entry.amount * pct / 100).toFixed(2)})`}</option>
+              ))}
+            </select>
+            {bonusPct > 0 && (
               <button
                 onClick={() => setShowExtraConfirm(true)}
                 disabled={processing === entry.id}
                 className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#2196F3]/15 hover:bg-[#2196F3]/25 text-[#2196F3] text-xs font-semibold transition-colors disabled:opacity-50 flex-shrink-0">
-                <CheckCircle2 className="h-3.5 w-3.5" /> Aplicar bono
+                <CheckCircle2 className="h-3.5 w-3.5" /> Aplicar
               </button>
-            )}
-            {bonusPct > 0 && tab === 'pendientes' && (
-              <span className="text-xs font-bold text-[#2196F3] flex-shrink-0">
-                Total: ${(entry.amount * (1 + bonusPct / 100)).toLocaleString('en-US', { minimumFractionDigits: 2 })}
-              </span>
             )}
           </div>
         )}
