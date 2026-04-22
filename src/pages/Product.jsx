@@ -162,26 +162,45 @@ export default function ProductPage() {
     { id: 'plataforma', label: 'Plataforma' },
   ];
 
+  const TAB_HERO = {
+    trading: {
+      badge: 'Herramientas de Trading',
+      title: <>Opera con precisión y<br /><span className="text-[#1E40AF]">análisis profesional</span></>,
+      desc: 'Gráficos avanzados, ejecución ultrarrápida e indicadores técnicos en tiempo real. Todo lo que un trader serio necesita para tomar decisiones informadas.',
+    },
+    mercados: {
+      badge: 'Mercados Globales',
+      title: <>Accede a los mercados<br /><span className="text-[#1E40AF]">más importantes del mundo</span></>,
+      desc: '184 instrumentos en un solo lugar: acciones, ETFs, Forex, criptomonedas y materias primas. Opera cualquier activo global desde una sola cuenta.',
+    },
+    plataforma: {
+      badge: 'Tecnología de Nivel Institucional',
+      title: <>Una plataforma construida<br /><span className="text-[#1E40AF]">para traders de verdad</span></>,
+      desc: 'Seguridad bancaria, análisis de rendimiento, cuenta demo y soporte 24/5. La infraestructura que necesitas para operar con confianza cada día.',
+    },
+  };
+
+  const hero = TAB_HERO[activeTab];
   const sections = activeTab === 'trading' ? TRADING_FEATURES : activeTab === 'mercados' ? MARKET_SECTIONS : PLATFORM_SECTIONS;
 
   return (
     <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
       <PublicNav currentPage="Product" />
 
-      {/* Hero */}
+      {/* Hero — cambia por tab */}
       <section className="relative pt-32 pb-12 px-4 text-center overflow-hidden bg-white">
         <div className="absolute inset-0 opacity-[0.025] bg-[linear-gradient(#000_1px,transparent_1px),linear-gradient(90deg,#000_1px,transparent_1px)] bg-[size:60px_60px]" />
         <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#EFF6FF] to-transparent pointer-events-none" />
         <div className="relative max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#EFF6FF] border border-[#BFDBFE] text-xs text-[#1E40AF] font-semibold mb-6 tracking-wide">
             <span className="w-2 h-2 rounded-full bg-[#1E40AF] animate-pulse" />
-            Plataforma Orion Capital
+            {hero.badge}
           </div>
           <h1 className="text-4xl sm:text-6xl font-black mb-5 leading-tight text-gray-900">
-            Todo lo que necesitas para<br /><span className="text-[#1E40AF]">operar con confianza</span>
+            {hero.title}
           </h1>
           <p className="text-lg text-gray-500 leading-relaxed mb-4 max-w-2xl mx-auto">
-            Herramientas profesionales, mercados globales y tecnología de nivel institucional, reunidos en una sola plataforma diseñada para el trader latinoamericano.
+            {hero.desc}
           </p>
         </div>
       </section>
