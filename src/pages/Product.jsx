@@ -206,23 +206,7 @@ export default function ProductPage() {
         </div>
       </div>
 
-      {/* Hero — cambia según tab activo */}
-      <section className="relative pt-16 pb-12 px-4 text-center overflow-hidden bg-white">
-        <div className="absolute inset-0 opacity-[0.025] bg-[linear-gradient(#000_1px,transparent_1px),linear-gradient(90deg,#000_1px,transparent_1px)] bg-[size:60px_60px]" />
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#EFF6FF] to-transparent pointer-events-none" />
-        <div className="relative max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#EFF6FF] border border-[#BFDBFE] text-xs text-[#1E40AF] font-semibold mb-6 tracking-wide">
-            <span className="w-2 h-2 rounded-full bg-[#1E40AF] animate-pulse" />
-            {hero.badge}
-          </div>
-          <h1 className="text-4xl sm:text-6xl font-black mb-5 leading-tight text-gray-900">
-            {hero.title}
-          </h1>
-          <p className="text-lg text-gray-500 leading-relaxed mb-4 max-w-2xl mx-auto">
-            {hero.desc}
-          </p>
-        </div>
-      </section>
+
 
       {/* Tab content */}
       <section className="py-16 px-4 bg-[#F8FAFC]">
