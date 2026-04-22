@@ -591,20 +591,53 @@ function AccountTradesPanel({ account, onClose }) {
 
   const handleSaveTrade = async (id, updates) => {
     setSaving(true);
+
+    // Calcular diferencia de PnL para reflejarla en el balance
+    const originalTrade = trades.find(t => t.id === id);
+    const oldPnl = originalTrade?.realized_pnl || 0;
+    const newPnl = updates.realized_pnl ?? oldPnl;
+    const pnlDiff = newPnl - oldPnl;
+
     await base44.entities.BrokerTrade.update(id, updates);
+
+    // Actualizar cash_balance con la diferencia de PnL
+    if (pnlDiff !== 0) {
+      const freshAccounts = await base44.entities.BrokerAccount.filter({ id: account.id });
+      const freshAccount = freshAccounts[0];
+      if (freshAccount) {
+        await base44.entities.BrokerAccount.update(account.id, {
+          cash_balance: (freshAccount.cash_balance || 0) + pnlDiff,
+        });
+      }
+    }
+
     await refetch();
     setSaving(false);
     setEditingTrade(null);
-    toast.success('Orden actualizada');
+    toast.success(`Orden actualizada${pnlDiff !== 0 ? ` · Balance ajustado ${pnlDiff >= 0 ? '+' : ''}$${pnlDiff.toFixed(2)}` : ''}`);
   };
 
   const handleDeleteTrade = async (trade) => {
     if (!confirm(`¿Eliminar orden ${trade.symbol} ${trade.side}?`)) return;
     setDeletingId(trade.id);
+
+    // Revertir el PnL de esta orden del balance
+    const pnlToRevert = trade.realized_pnl || 0;
     await base44.entities.BrokerTrade.delete(trade.id);
+
+    if (pnlToRevert !== 0) {
+      const freshAccounts = await base44.entities.BrokerAccount.filter({ id: account.id });
+      const freshAccount = freshAccounts[0];
+      if (freshAccount) {
+        await base44.entities.BrokerAccount.update(account.id, {
+          cash_balance: (freshAccount.cash_balance || 0) - pnlToRevert,
+        });
+      }
+    }
+
     await refetch();
     setDeletingId(null);
-    toast.success('Orden eliminada');
+    toast.success(`Orden eliminada${pnlToRevert !== 0 ? ` · Balance ajustado -$${pnlToRevert.toFixed(2)}` : ''}`);
   };
 
   return (
