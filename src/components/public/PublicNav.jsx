@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Menu, X } from 'lucide-react';
 
@@ -11,35 +10,32 @@ const NAV_LINKS = [
   { label: 'Premios', href: createPageUrl('Awards') },
 ];
 
-// ORION CAPITAL brand palette
-// Primary dark: #0B0F1A   Accent gold: #C9A84C   Accent light: #E8C97A
-
 export default function PublicNav({ currentPage }) {
   const [open, setOpen] = useState(false);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
       {/* Top bar */}
-      <div className="bg-[#C9A84C] py-1.5 px-4 text-center">
-        <p className="text-xs text-[#0B0F1A]/80 font-medium tracking-wide">
-          <span className="font-bold text-[#0B0F1A]">LICENCIAS GRUPALES:</span>&nbsp;&nbsp;
-          <span className="text-[#0B0F1A]/90">FSA</span>&nbsp;&nbsp;·&nbsp;&nbsp;
-          <span className="text-[#0B0F1A]/90">CySEC</span>&nbsp;&nbsp;·&nbsp;&nbsp;
-          <span className="text-[#0B0F1A]/90">DFSA</span>
+      <div className="bg-[#1E3A8A] py-1.5 px-4 text-center">
+        <p className="text-xs text-white/80 font-medium tracking-wide">
+          <span className="font-bold text-white">LICENCIAS GRUPALES:</span>&nbsp;&nbsp;
+          <span className="text-white/90">FSA</span>&nbsp;&nbsp;·&nbsp;&nbsp;
+          <span className="text-white/90">CySEC</span>&nbsp;&nbsp;·&nbsp;&nbsp;
+          <span className="text-white/90">DFSA</span>&nbsp;&nbsp;·&nbsp;&nbsp;
+          <span className="text-white/90">SEC · FINRA</span>
         </p>
       </div>
 
       {/* Main nav */}
-      <nav className="bg-[#0B0F1A]/97 backdrop-blur-md border-b border-white/[0.06]">
+      <nav className="bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
           {/* Logo */}
-          <a href={createPageUrl('Home')} className="flex items-center gap-2 flex-shrink-0">
-            <div className="w-8 h-8 rounded-lg bg-[#C9A84C] flex items-center justify-center mr-1">
-              <span className="text-[#0B0F1A] font-black text-xs">OC</span>
+          <a href={createPageUrl('Home')} className="flex items-center gap-2.5 flex-shrink-0">
+            <div className="w-9 h-9 rounded-lg bg-[#1E40AF] flex items-center justify-center">
+              <span className="text-white font-black text-xs tracking-tight">OC</span>
             </div>
-            <span className="text-xl font-black tracking-tight">
-              <span className="text-white">ORION</span>
-              <span className="text-[#C9A84C]"> Capital</span>
+            <span className="text-xl font-black tracking-tight text-gray-900">
+              Orion <span className="text-[#1E40AF]">Capital</span>
             </span>
           </a>
 
@@ -49,7 +45,7 @@ export default function PublicNav({ currentPage }) {
               <a
                 key={l.label}
                 href={l.href}
-                className="text-sm text-white/65 hover:text-white font-medium transition-colors"
+                className="text-sm text-gray-600 hover:text-[#1E40AF] font-medium transition-colors"
               >
                 {l.label}
               </a>
@@ -60,13 +56,13 @@ export default function PublicNav({ currentPage }) {
           <div className="hidden md:flex items-center gap-3">
             <a
               href={createPageUrl('Acceso')}
-              className="text-sm text-white/70 hover:text-white font-semibold transition-colors px-4 py-2 rounded-full border border-white/15 hover:border-white/30"
+              className="text-sm text-gray-600 hover:text-[#1E40AF] font-semibold transition-colors px-4 py-2 rounded-lg border border-gray-200 hover:border-[#1E40AF]/30 hover:bg-blue-50"
             >
               Iniciar sesión
             </a>
             <a
               href={createPageUrl('Register')}
-              className="text-sm font-black px-5 py-2.5 bg-[#C9A84C] hover:bg-[#b8943f] text-[#0B0F1A] rounded-full transition-all shadow-lg shadow-[#C9A84C]/20"
+              className="text-sm font-bold px-5 py-2.5 bg-[#1E40AF] hover:bg-[#1E3A8A] text-white rounded-lg transition-all shadow-sm"
             >
               Abrir Cuenta
             </a>
@@ -74,7 +70,7 @@ export default function PublicNav({ currentPage }) {
 
           {/* Mobile hamburger */}
           <button
-            className="md:hidden text-white/70 hover:text-white"
+            className="md:hidden text-gray-600 hover:text-[#1E40AF]"
             onClick={() => setOpen(!open)}
           >
             {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -83,22 +79,22 @@ export default function PublicNav({ currentPage }) {
 
         {/* Mobile menu */}
         {open && (
-          <div className="md:hidden bg-[#0B0F1A] border-t border-white/[0.06] px-4 py-4 space-y-3">
+          <div className="md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-3">
             {NAV_LINKS.map(l => (
               <a
                 key={l.label}
                 href={l.href}
-                className="block text-sm text-white/65 hover:text-white font-medium py-2 transition-colors"
+                className="block text-sm text-gray-600 hover:text-[#1E40AF] font-medium py-2 transition-colors"
                 onClick={() => setOpen(false)}
               >
                 {l.label}
               </a>
             ))}
             <div className="pt-3 flex flex-col gap-2">
-              <a href={createPageUrl('Acceso')} className="text-sm text-center font-semibold px-4 py-2.5 border border-white/20 text-white/70 rounded-full hover:text-white hover:border-white/40 transition-all">
+              <a href={createPageUrl('Acceso')} className="text-sm text-center font-semibold px-4 py-2.5 border border-gray-200 text-gray-700 rounded-lg hover:text-[#1E40AF] hover:border-[#1E40AF]/30 transition-all">
                 Iniciar sesión
               </a>
-              <a href={createPageUrl('Register')} className="text-sm text-center font-black px-4 py-2.5 bg-[#C9A84C] hover:bg-[#b8943f] text-[#0B0F1A] rounded-full transition-all">
+              <a href={createPageUrl('Register')} className="text-sm text-center font-bold px-4 py-2.5 bg-[#1E40AF] hover:bg-[#1E3A8A] text-white rounded-lg transition-all">
                 Abrir Cuenta
               </a>
             </div>
