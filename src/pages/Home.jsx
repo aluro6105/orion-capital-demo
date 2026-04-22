@@ -37,10 +37,10 @@ const TICKER_DATA = [
 ];
 
 const STATS = [
-  { value: '$5B+', label: 'Volumen mensual operado' },
-  { value: '6,000+', label: 'Instrumentos globales' },
-  { value: '25+', label: 'Mercados internacionales' },
-  { value: '15+', label: 'Años de trayectoria' },
+  { value: '$120M+', label: 'Volumen mensual operado' },
+  { value: '184', label: 'Instrumentos disponibles' },
+  { value: '20+', label: 'Países con operaciones' },
+  { value: '6+', label: 'Años de trayectoria' },
 ];
 
 const MARKETS = [
@@ -54,7 +54,7 @@ const MARKETS = [
 
 const WHY_ITEMS = [
   { icon: Zap, title: 'Ejecución ultrarrápida', desc: 'Órdenes ejecutadas en menos de 10 milisegundos. Sin latencia, sin slippage injustificado.' },
-  { icon: Globe, title: 'Acceso a 25+ mercados', desc: 'NYSE, NASDAQ, BMV, LSE, Tokio y más, desde una sola cuenta unificada sin restricciones.' },
+  { icon: Globe, title: 'Acceso a múltiples mercados', desc: 'NYSE, NASDAQ, Forex, Cripto y materias primas desde una sola cuenta unificada sin restricciones.' },
   { icon: Users, title: 'Mesa de trading 24/5', desc: 'Equipo de expertos disponibles durante toda la sesión. Soporte técnico en español, siempre.' },
   { icon: Lock, title: 'Seguridad bancaria', desc: 'Cifrado AES-256, autenticación de dos factores y cumplimiento regulatorio internacional.' },
 ];
@@ -88,9 +88,10 @@ const PORTFOLIO_ITEMS = [
 ];
 
 const STATIC_TESTIMONIALS = [
-  { name: 'Carlos Mendoza', role: 'Trader independiente', company: 'Ciudad de México, MX', text: 'Orion Capital transformó completamente mi forma de operar. La plataforma es increíblemente rápida y el equipo de asesoría siempre está disponible. Llevo 3 años con ellos y mis rendimientos han superado mis expectativas.', rating: 5 },
-  { name: 'Andrea Rodríguez', role: 'Gestora de portafolios', company: 'Buenos Aires, AR', text: 'Como gestora de portafolios necesitaba una plataforma robusta con acceso a mercados globales. Orion Capital ofrece herramientas institucionales con una interfaz muy intuitiva. El análisis técnico es de primer nivel.', rating: 5 },
-  { name: 'Miguel Torres', role: 'Empresario e inversionista', company: 'Bogotá, CO', text: 'Empecé con una cuenta pequeña y hoy manejo un portafolio diversificado en acciones, ETFs y activos digitales. La educación financiera de Orion Capital me dio las bases para tomar decisiones informadas.', rating: 5 },
+  { name: 'Carlos Mendoza', role: 'Trader independiente', company: 'Ciudad de México, MX', text: 'Orion Capital transformó completamente mi forma de operar. La plataforma es rápida y el equipo de asesoría siempre está disponible. Llevo más de un año con ellos y los resultados han superado mis expectativas.', rating: 5 },
+  { name: 'Andrea Rodríguez', role: 'Gestora de portafolios', company: 'Buenos Aires, AR', text: 'Como gestora necesitaba una plataforma robusta con acceso a mercados globales. Orion Capital ofrece herramientas institucionales con una interfaz muy intuitiva. El análisis técnico es de primer nivel.', rating: 5 },
+  { name: 'Miguel Torres', role: 'Empresario e inversionista', company: 'Bogotá, CO', text: 'Empecé con una cuenta demo y hoy manejo un portafolio diversificado en acciones, ETFs y activos digitales. La plataforma me dio las bases para tomar decisiones más informadas.', rating: 5 },
+  { name: 'Valentina Cruz', role: 'Analista financiera', company: 'Santiago, CL', text: 'Lo que más valoro de Orion Capital es la transparencia. Sin comisiones ocultas, spreads claros y soporte real cuando lo necesitas. Es la plataforma que recomiendo a quienes inician en el trading.', rating: 5 },
 ];
 
 const AWARDS_STATIC = [
@@ -172,10 +173,10 @@ export default function HomePage() {
               <span className="text-[#2563EB]">real</span>
             </h1>
             <p className="text-lg sm:text-xl text-gray-500 leading-relaxed mb-8 max-w-lg">
-              Accede a miles de activos globales — acciones, ETFs, divisas, commodities y criptomonedas — con la plataforma de inversión más avanzada de Latinoamérica.
+              Accede a cientos de activos globales — acciones, ETFs, divisas, commodities y criptomonedas — con la plataforma de inversión diseñada para el trader latinoamericano.
             </p>
             <div className="flex flex-wrap gap-2 mb-10">
-              {['Ejecución < 10ms', '6,000+ instrumentos', 'Spreads competitivos'].map(tag => (
+              {['Ejecución rápida', '184 instrumentos', 'Spreads competitivos'].map(tag => (
                 <span key={tag} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-100 text-xs text-gray-600 font-medium border border-gray-200">
                   <CheckCircle2 className="h-3 w-3 text-[#1E40AF]" />{tag}
                 </span>
@@ -275,7 +276,7 @@ export default function HomePage() {
           <div className="text-center mb-14">
             <span className="text-xs font-bold text-[#1E40AF] uppercase tracking-[0.2em] mb-3 block">Instrumentos de trading</span>
             <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-4">Opera en todos los mercados<br />desde una sola cuenta</h2>
-            <p className="text-gray-500 max-w-xl mx-auto">Más de 6,000 instrumentos financieros en mercados de México, Estados Unidos y el mundo. Sin restricciones, con tecnología de primer nivel.</p>
+            <p className="text-gray-500 max-w-xl mx-auto">184 instrumentos financieros en los mercados más relevantes del mundo. Acciones, ETFs, Forex, Cripto y materias primas en una sola cuenta.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {MARKETS.map((m, i) => {
@@ -420,9 +421,9 @@ export default function HomePage() {
           <div className="text-center mb-14">
             <span className="text-xs font-bold text-[#1E40AF] uppercase tracking-[0.2em] mb-3 block">Testimonios</span>
             <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Lo que dicen nuestros traders</h2>
-            <p className="text-gray-500 mt-4 max-w-xl mx-auto">Miles de inversores en toda Latinoamérica confían en Orion Capital para hacer crecer su patrimonio.</p>
+            <p className="text-gray-500 mt-4 max-w-xl mx-auto">Traders de toda Latinoamérica confían en Orion Capital para operar con confianza y hacer crecer su patrimonio.</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {displayTestimonials.map((t, i) => (
               <div key={t.id || i} className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-[#1E40AF]/20 transition-all flex flex-col">
                 <StarRating rating={t.rating || 5} />
@@ -471,7 +472,7 @@ export default function HomePage() {
           <div className="text-center">
             <p className="text-xs text-gray-400 uppercase tracking-widest mb-5 font-semibold">Regulado y respaldado por</p>
             <div className="flex flex-wrap justify-center gap-3">
-              {['SEC', 'FINRA', 'CNBV', 'CMF', 'AMV', 'SIPC'].map(r => (
+              {['FSA', 'CySEC', 'DFSA'].map(r => (
                 <div key={r} className="px-4 py-2 bg-[#F8FAFC] border border-gray-200 rounded-lg text-xs font-black text-gray-500">{r}</div>
               ))}
             </div>
@@ -513,7 +514,7 @@ export default function HomePage() {
             Empieza a invertir con<br />Orion Capital hoy
           </h2>
           <p className="text-lg text-white/60 mb-10">
-            Únete a más de 10,000 traders que ya confían en nuestra plataforma para hacer crecer su patrimonio en los mercados financieros globales.
+            Únete a los traders que ya confían en Orion Capital para operar con herramientas profesionales en los mercados financieros globales.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <button onClick={() => window.location.href = createPageUrl('Register')}
