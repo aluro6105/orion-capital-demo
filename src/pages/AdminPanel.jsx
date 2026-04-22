@@ -8,8 +8,8 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 
-const ADMIN_USER = 'm4admin';
-const ADMIN_PASS = 'M4Markets@2025!';
+const ADMIN_USER = 'orion_admin';
+const ADMIN_PASS = 'OrionAdmin@2026!';
 
 const TYPE_LABEL = {
   deposit: 'Depósito', withdrawal: 'Retiro', fee: 'Comisión',
@@ -51,7 +51,7 @@ function AdminLogin({ onLogin }) {
             <ShieldCheck className="h-8 w-8 text-[#2196F3]" />
           </div>
           <h1 className="text-2xl font-black text-white mb-1">Área de Administración</h1>
-          <p className="text-white/40 text-sm">Acceso restringido · M4 Markets Latam</p>
+          <p className="text-white/40 text-sm">Acceso restringido · Orion Capital</p>
         </div>
         <form onSubmit={handleLogin} className="bg-[#0f1117] border border-[#1e2130] rounded-2xl p-6 space-y-4">
           {err && (
@@ -832,7 +832,7 @@ function PanelContent() {
             <ShieldCheck className="h-4 w-4 text-[#2196F3]" />
           </div>
           <div>
-            <span className="text-white font-bold text-sm">M4 Markets Latam</span>
+            <span className="text-white font-bold text-sm">Orion Capital</span>
             <span className="text-[#8b8fa8] text-xs ml-2">· Panel Admin</span>
           </div>
         </div>

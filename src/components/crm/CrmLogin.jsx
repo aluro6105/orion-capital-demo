@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { ArrowRight, Users, Lock, User } from 'lucide-react';
 
-const CRM_USER = 'm4crm';
-const CRM_PASS = 'M4Markets@CRM2025!';
+const CRM_USER = 'orioncapital_crm';
+const CRM_PASS = 'OrionCRM@2026!';
 
 export default function CrmLogin({ onLogin }) {
   const [username, setUsername] = useState('');
@@ -26,7 +26,7 @@ export default function CrmLogin({ onLogin }) {
           <div className="w-16 h-16 rounded-2xl bg-[#2196F3]/15 border border-[#2196F3]/30 flex items-center justify-center mx-auto mb-4">
             <Users className="h-8 w-8 text-[#2196F3]" />
           </div>
-          <h1 className="text-2xl font-black text-white mb-1">M4 Markets CRM</h1>
+          <h1 className="text-2xl font-black text-white mb-1">Orion Capital CRM</h1>
           <p className="text-white/40 text-sm">Acceso restringido · Solo administradores</p>
         </div>
 
@@ -59,7 +59,7 @@ export default function CrmLogin({ onLogin }) {
             Acceder al CRM <ArrowRight className="h-4 w-4" />
           </button>
         </form>
-        <p className="text-center text-xs text-white/20 mt-4">M4 Markets Latam · Uso interno</p>
+        <p className="text-center text-xs text-white/20 mt-4">Orion Capital · Uso interno</p>
       </div>
     </div>
   );

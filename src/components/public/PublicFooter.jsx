@@ -30,23 +30,23 @@ const FOOTER_LINKS = {
 
 export default function PublicFooter() {
   return (
-    <footer className="bg-[#04052e] border-t border-white/[0.06]">
+    <footer className="bg-[#0B0F1A] border-t border-white/[0.06]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-12">
           {/* Brand */}
           <div className="md:col-span-1">
             <a href={createPageUrl('Home')} className="inline-flex items-center mb-5">
               <span className="text-xl font-black tracking-tight">
-                <span className="text-white">M4</span>
-                <span className="text-[#80cc00]"> Markets Latam</span>
+                <span className="text-white">ORION</span>
+                <span className="text-[#C9A84C]"> Capital</span>
               </span>
             </a>
             <p className="text-xs text-white/35 leading-relaxed mb-4">
-              Plataforma de trading educacional con datos de mercado en tiempo real. Opera con confianza.
+              Plataforma de trading de nivel institucional con datos de mercado en tiempo real. Opera con confianza.
             </p>
             <div className="flex gap-2 flex-wrap">
               {['FSA', 'CySEC', 'DFSA'].map(lic => (
-                <span key={lic} className="text-[10px] font-bold px-2 py-1 bg-[#1a1aff]/20 border border-[#1a1aff]/30 text-[#7a8aff] rounded-lg">
+                <span key={lic} className="text-[10px] font-bold px-2 py-1 bg-[#C9A84C]/15 border border-[#C9A84C]/30 text-[#E8C97A] rounded-lg">
                   {lic}
                 </span>
               ))}
@@ -73,7 +73,7 @@ export default function PublicFooter() {
         {/* Bottom bar */}
         <div className="mt-14 pt-8 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-white/25">
-            © {new Date().getFullYear()} M4 Markets Latam. Todos los derechos reservados.
+            © {new Date().getFullYear()} Orion Capital. Todos los derechos reservados.
           </p>
           <p className="text-xs text-white/20 text-center max-w-lg">
             Operar con CFDs implica un riesgo significativo de pérdida de capital. Esta plataforma es de uso educativo. Los resultados en cuentas demo no garantizan rendimientos reales.

@@ -109,11 +109,11 @@ export default function HomePage() {
   const [openFaq, setOpenFaq] = useState(null);
 
   const displayFaqs = faqs.length > 0 ? faqs.slice(0, 5) : [
-    { id: 1, question: '¿Cómo abro una cuenta en M4 Markets Latam?', answer: 'El registro tarda menos de 30 segundos. Tu cuenta demo con $10,000 queda activada inmediatamente, sin ningún depósito previo ni verificación de documentos.' },
-    { id: 2, question: '¿Los precios son datos reales de mercado?', answer: 'Sí, M4 Markets Latam utiliza datos de mercado de alta fidelidad actualizados en tiempo real para ofrecerte una experiencia lo más cercana posible al mercado real con spreads competitivos.' },
+    { id: 1, question: '¿Cómo abro una cuenta en Orion Capital?', answer: 'El registro tarda menos de 30 segundos. Tu cuenta demo con $10,000 queda activada inmediatamente, sin ningún depósito previo ni verificación de documentos.' },
+    { id: 2, question: '¿Los precios son datos reales de mercado?', answer: 'Sí, Orion Capital utiliza datos de mercado de alta fidelidad actualizados en tiempo real para ofrecerte una experiencia lo más cercana posible al mercado real con spreads competitivos.' },
     { id: 3, question: '¿Qué instrumentos están disponibles?', answer: 'Criptomonedas (BTC, ETH, SOL...), Forex (EUR/USD, GBP/USD...), Materias Primas (Oro, Plata, Petróleo) e Índices (SP500, Nasdaq, DAX). Más de 50 instrumentos disponibles.' },
     { id: 4, question: '¿Cuánto capital tiene la cuenta demo?', answer: 'La cuenta demo se activa con $10,000 virtuales. Puedes resetearla desde el panel de control en cualquier momento para empezar con capital fresco.' },
-    { id: 5, question: '¿Existen cargos ocultos en M4 Markets Latam?', answer: 'Cero cargos ocultos ni letra pequeña. M4 Markets Latam es completamente transparente con todos sus usuarios. Los spreads y condiciones de trading se publican abiertamente.' },
+    { id: 5, question: '¿Existen cargos ocultos en Orion Capital?', answer: 'Cero cargos ocultos ni letra pequeña. Orion Capital es completamente transparente con todos sus usuarios. Los spreads y condiciones de trading se publican abiertamente.' },
   ];
 
   return (
@@ -121,33 +121,33 @@ export default function HomePage() {
       <PublicNav currentPage="Home" />
 
       {/* ══════════════ HERO ══════════════ */}
-      <section className="relative min-h-[90vh] flex items-center bg-[#04052e] overflow-hidden">
+      <section className="relative min-h-[90vh] flex items-center bg-[#0B0F1A] overflow-hidden">
         {/* Background effects */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_60%_40%,rgba(26,26,255,0.25),transparent)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_50%_at_20%_80%,rgba(128,204,0,0.12),transparent)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_60%_40%,rgba(201,168,76,0.15),transparent)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_50%_at_20%_80%,rgba(201,168,76,0.06),transparent)]" />
         <div className="absolute inset-0 opacity-[0.04] bg-[linear-gradient(rgba(255,255,255,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.5)_1px,transparent_1px)] bg-[size:80px_80px]" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full grid lg:grid-cols-2 gap-12 items-center py-24">
           {/* Left: copy */}
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#80cc00]/15 border border-[#80cc00]/25 text-xs text-[#80cc00] font-bold mb-8 tracking-wide uppercase">
-              <span className="w-2 h-2 rounded-full bg-[#80cc00] animate-pulse" />
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C]/25 text-xs text-[#C9A84C] font-bold mb-8 tracking-wide uppercase">
+              <span className="w-2 h-2 rounded-full bg-[#C9A84C] animate-pulse" />
               En Vivo · Mercados en tiempo real
             </div>
 
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.0] tracking-tight mb-6 text-white">
-              Opera más<br />inteligente,<br />
-              <span className="text-[#80cc00]">no más duro.</span>
+              Invierte con<br />precisión,<br />
+              <span className="text-[#C9A84C]">crece con visión.</span>
             </h1>
 
             <p className="text-lg sm:text-xl text-white/55 leading-relaxed mb-10 max-w-lg">
-              Tecnología de trading de nivel institucional al alcance de cualquier trader. Spreads desde 0.0 pips, ejecución ultrarrápida y herramientas profesionales.
+              Tecnología de trading de nivel institucional al alcance de cualquier inversor. Spreads desde 0.0 pips, ejecución ultrarrápida y herramientas profesionales.
             </p>
 
             <div className="flex flex-wrap gap-3 mb-10">
               <button
                 onClick={() => window.location.href = createPageUrl('Register')}
-                className="group flex items-center gap-2 px-8 py-4 bg-[#80cc00] hover:bg-[#72b800] text-[#0d0d0d] font-black rounded-full transition-all text-base shadow-xl shadow-[#80cc00]/20 hover:scale-[1.03]"
+                className="group flex items-center gap-2 px-8 py-4 bg-[#C9A84C] hover:bg-[#b8943f] text-[#0B0F1A] font-black rounded-full transition-all text-base shadow-xl shadow-[#C9A84C]/20 hover:scale-[1.03]"
               >
                 Abrir Cuenta
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -167,33 +167,33 @@ export default function HomePage() {
 
           {/* Right: platform mockup */}
           <div className="relative hidden lg:block">
-            <div className="absolute -inset-6 bg-[#1a1aff]/10 rounded-3xl blur-3xl" />
-            <div className="relative bg-[#0a0c1e] border border-[#1a1aff]/25 rounded-2xl shadow-2xl overflow-hidden">
+            <div className="absolute -inset-6 bg-[#C9A84C]/8 rounded-3xl blur-3xl" />
+            <div className="relative bg-[#0D1120] border border-[#C9A84C]/20 rounded-2xl shadow-2xl overflow-hidden">
               {/* Window chrome */}
-              <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5 bg-[#060820]">
+              <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5 bg-[#090D18]">
                 <div className="w-2.5 h-2.5 rounded-full bg-[#ef5350]/70" />
                 <div className="w-2.5 h-2.5 rounded-full bg-[#f59e0b]/70" />
-                <div className="w-2.5 h-2.5 rounded-full bg-[#80cc00]/70" />
+                <div className="w-2.5 h-2.5 rounded-full bg-[#C9A84C]/70" />
                 <div className="ml-3 flex-1 h-5 bg-white/5 rounded-md px-2 flex items-center">
-                  <span className="text-[10px] text-white/25">m4marketslatam.io/portal/charts</span>
+                  <span className="text-[10px] text-white/25">orioncapital.io/portal/charts</span>
                 </div>
               </div>
               {/* Header bar */}
-              <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/5 bg-[#070920]">
+              <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/5 bg-[#090D18]">
                 <div className="flex items-center gap-3">
                   <span className="text-sm font-bold text-white">EUR/USD</span>
                   <span className="text-[10px] text-white/30">Euro / Dólar</span>
                   <span className="text-lg font-mono font-black text-white">1.0850</span>
-                  <span className="text-xs font-mono font-bold text-[#80cc00] bg-[#80cc00]/10 px-2 py-0.5 rounded">▲ +0.12%</span>
+                  <span className="text-xs font-mono font-bold text-[#C9A84C] bg-[#C9A84C]/10 px-2 py-0.5 rounded">▲ +0.12%</span>
                 </div>
                 <div className="flex gap-1 text-[10px] text-white/30">
                   {['1m','5m','1h','1D','1W'].map(t => (
-                    <button key={t} className={`px-2 py-0.5 rounded ${t === '1D' ? 'bg-[#1a1aff]/30 text-[#7a8aff]' : 'hover:bg-white/5'}`}>{t}</button>
+                    <button key={t} className={`px-2 py-0.5 rounded ${t === '1D' ? 'bg-[#C9A84C]/20 text-[#E8C97A]' : 'hover:bg-white/5'}`}>{t}</button>
                   ))}
                 </div>
               </div>
               {/* Chart */}
-              <div className="relative h-44 bg-[#060820] px-4 pt-4 pb-1">
+              <div className="relative h-44 bg-[#090D18] px-4 pt-4 pb-1">
                 {[0,25,50,75,100].map(p => (
                   <div key={p} className="absolute left-4 right-0 border-t border-white/[0.04]" style={{ top: `${100 - p}%` }} />
                 ))}
@@ -201,7 +201,7 @@ export default function HomePage() {
                   {CANDLES.map((c, i) => {
                     const bodyH = Math.abs(c.c - c.o);
                     const bodyTop = 100 - Math.max(c.o, c.c);
-                    const color = c.up ? '#80cc00' : '#ef5350';
+                    const color = c.up ? '#C9A84C' : '#ef5350';
                     return (
                       <div key={i} className="flex-1 relative flex flex-col items-center" style={{ height: '100%' }}>
                         <div className="absolute left-1/2 -translate-x-1/2 w-px" style={{ top: `${100 - c.h}%`, height: `${c.h - c.l}%`, background: color, opacity: 0.5 }} />
@@ -212,11 +212,11 @@ export default function HomePage() {
                 </div>
               </div>
               {/* Trade panel */}
-              <div className="grid grid-cols-2 gap-2 p-3 bg-[#060820] border-t border-white/5">
-                <div className="bg-[#80cc00]/10 border border-[#80cc00]/20 rounded-xl p-3">
-                  <div className="text-[10px] text-[#80cc00] font-semibold uppercase mb-1">Comprar</div>
+              <div className="grid grid-cols-2 gap-2 p-3 bg-[#090D18] border-t border-white/5">
+                <div className="bg-[#26a69a]/10 border border-[#26a69a]/20 rounded-xl p-3">
+                  <div className="text-[10px] text-[#26a69a] font-semibold uppercase mb-1">Comprar</div>
                   <div className="text-xs text-white/40 mb-1">1.00 lote</div>
-                  <div className="text-sm font-bold text-[#80cc00]">1.0850</div>
+                  <div className="text-sm font-bold text-[#26a69a]">1.0850</div>
                 </div>
                 <div className="bg-[#ef5350]/10 border border-[#ef5350]/20 rounded-xl p-3">
                   <div className="text-[10px] text-[#ef5350] font-semibold uppercase mb-1">Vender</div>
@@ -228,36 +228,36 @@ export default function HomePage() {
               <div className="px-3 pb-3 flex items-center justify-between border-t border-white/5 pt-2">
                 <div className="text-[10px] text-white/30">Balance total</div>
                 <div className="text-xs font-bold text-white">$12,840.50</div>
-                <div className="text-[10px] font-bold text-[#80cc00] bg-[#80cc00]/10 px-2 py-0.5 rounded-full">+28.4%</div>
+                <div className="text-[10px] font-bold text-[#C9A84C] bg-[#C9A84C]/10 px-2 py-0.5 rounded-full">+28.4%</div>
               </div>
             </div>
 
             {/* Floating cards */}
-            <div className="absolute -bottom-4 -left-10 bg-[#0a0c1e] border border-[#1a1aff]/30 rounded-2xl px-4 py-3 shadow-2xl flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-[#80cc00]/15 flex items-center justify-center">
-                <TrendingUp className="h-4 w-4 text-[#80cc00]" />
+            <div className="absolute -bottom-4 -left-10 bg-[#0D1120] border border-[#C9A84C]/30 rounded-2xl px-4 py-3 shadow-2xl flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-[#C9A84C]/15 flex items-center justify-center">
+                <TrendingUp className="h-4 w-4 text-[#C9A84C]" />
               </div>
               <div>
                 <div className="text-xs font-bold text-white">Orden ejecutada</div>
                 <div className="text-[10px] text-white/40">EUR/USD · Buy · 1.0850</div>
               </div>
             </div>
-            <div className="absolute -top-4 -right-6 bg-[#0a0c1e] border border-[#80cc00]/25 rounded-2xl px-4 py-3 shadow-2xl">
+            <div className="absolute -top-4 -right-6 bg-[#0D1120] border border-[#C9A84C]/25 rounded-2xl px-4 py-3 shadow-2xl">
               <div className="text-[10px] text-white/40 mb-0.5">P&L Hoy</div>
-              <div className="text-lg font-black text-[#80cc00]">+$2,840</div>
+              <div className="text-lg font-black text-[#C9A84C]">+$2,840</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* ══════════════ TICKER ══════════════ */}
-      <div className="bg-[#1a1aff] py-2.5 overflow-hidden">
+      <div className="bg-[#C9A84C] py-2.5 overflow-hidden">
         <div className="flex gap-10 animate-ticker whitespace-nowrap px-6">
           {[...TICKER_DATA, ...TICKER_DATA, ...TICKER_DATA].map((t, i) => (
             <span key={i} className="inline-flex items-center gap-2 text-xs">
-              <span className="font-bold text-white tracking-wide">{t.symbol}</span>
-              <span className="font-mono text-white/60">{t.price}</span>
-              <span className={`font-mono font-bold ${t.up ? 'text-[#80cc00]' : 'text-red-300'}`}>{t.change}</span>
+              <span className="font-bold text-[#0B0F1A] tracking-wide">{t.symbol}</span>
+              <span className="font-mono text-[#0B0F1A]/70">{t.price}</span>
+              <span className={`font-mono font-bold ${t.up ? 'text-[#0B0F1A]' : 'text-red-800'}`}>{t.change}</span>
             </span>
           ))}
         </div>
@@ -268,7 +268,7 @@ export default function HomePage() {
         <div className="max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-8">
           {STATS.map(s => (
             <div key={s.label} className="text-center">
-              <div className="text-3xl sm:text-4xl font-black text-[#1a1aff] mb-1">{s.value}</div>
+              <div className="text-3xl sm:text-4xl font-black text-[#C9A84C] mb-1">{s.value}</div>
               <div className="text-xs text-gray-500 font-medium">{s.label}</div>
             </div>
           ))}
@@ -279,7 +279,7 @@ export default function HomePage() {
       <section className="py-24 px-4 sm:px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
-            <span className="text-xs font-bold text-[#1a1aff] uppercase tracking-[0.2em] mb-3 block">Nuestros Mercados</span>
+            <span className="text-xs font-bold text-[#C9A84C] uppercase tracking-[0.2em] mb-3 block">Nuestros Mercados</span>
             <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Del forex al cripto,<br />commodities a acciones.</h2>
             <p className="text-gray-500 mt-4 max-w-xl mx-auto">Elige tu mercado, personaliza tu enfoque y opera a tu manera con las herramientas de precisión que necesitas.</p>
           </div>
@@ -309,20 +309,20 @@ export default function HomePage() {
       </section>
 
       {/* ══════════════ TRADE WITH US ══════════════ */}
-      <section className="py-24 px-4 sm:px-6 bg-[#04052e] relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_70%_at_80%_50%,rgba(26,26,255,0.2),transparent)]" />
+      <section className="py-24 px-4 sm:px-6 bg-[#0B0F1A] relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_70%_at_80%_50%,rgba(201,168,76,0.08),transparent)]" />
         <div className="relative max-w-6xl mx-auto">
           <div className="text-center mb-14">
-            <span className="text-xs font-bold text-[#80cc00] uppercase tracking-[0.2em] mb-3 block">Opera con M4 Markets Latam</span>
+            <span className="text-xs font-bold text-[#C9A84C] uppercase tracking-[0.2em] mb-3 block">Opera con Orion Capital</span>
             <h2 className="text-4xl sm:text-5xl font-black text-white">Elección de traders<br />en todo el mundo</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {TRUST_CARDS.map((c, i) => {
               const Icon = c.icon;
               return (
-                <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/8 hover:border-[#80cc00]/30 transition-all group cursor-default">
-                  <div className="w-12 h-12 rounded-xl bg-[#80cc00]/15 flex items-center justify-center mb-4 group-hover:bg-[#80cc00]/25 transition-colors">
-                    <Icon className="h-6 w-6 text-[#80cc00]" />
+                <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/8 hover:border-[#C9A84C]/30 transition-all group cursor-default">
+                  <div className="w-12 h-12 rounded-xl bg-[#C9A84C]/15 flex items-center justify-center mb-4 group-hover:bg-[#C9A84C]/25 transition-colors">
+                    <Icon className="h-6 w-6 text-[#C9A84C]" />
                   </div>
                   <h3 className="font-black text-white text-base mb-2">{c.title}</h3>
                   <p className="text-sm text-white/50 leading-relaxed">{c.desc}</p>
@@ -338,12 +338,12 @@ export default function HomePage() {
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <span className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-3 block">Cómo funciona</span>
-            <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Empieza en <span className="text-[#1a1aff]">3 pasos</span></h2>
+            <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Empieza en <span className="text-[#C9A84C]">3 pasos</span></h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {STEPS.map((s, i) => (
               <div key={i} className="relative text-center group">
-                <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-[#1a1aff]/8 border-2 border-[#1a1aff]/15 text-[#1a1aff] text-3xl font-black mb-5 mx-auto group-hover:border-[#1a1aff]/50 group-hover:bg-[#1a1aff]/12 transition-all">
+                <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-[#C9A84C]/8 border-2 border-[#C9A84C]/25 text-[#C9A84C] text-3xl font-black mb-5 mx-auto group-hover:border-[#C9A84C]/60 group-hover:bg-[#C9A84C]/12 transition-all">
                   {s.n}
                 </div>
                 <h3 className="text-xl font-black text-gray-900 mb-3">{s.title}</h3>
@@ -355,20 +355,20 @@ export default function HomePage() {
       </section>
 
       {/* ══════════════ FEATURES (dark) ══════════════ */}
-      <section className="py-24 px-4 sm:px-6 bg-[#04052e]">
+      <section className="py-24 px-4 sm:px-6 bg-[#0B0F1A]">
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <span className="text-xs font-bold text-[#80cc00] uppercase tracking-[0.2em] mb-4 block">Herramientas y recursos</span>
+              <span className="text-xs font-bold text-[#C9A84C] uppercase tracking-[0.2em] mb-4 block">Herramientas y recursos</span>
               <h2 className="text-4xl sm:text-5xl font-black leading-tight mb-6 text-white">
-                Empieza tu viaje<br /><span className="text-[#80cc00]">con M4 Markets Latam.</span>
+                Empieza tu viaje<br /><span className="text-[#C9A84C]">con Orion Capital.</span>
               </h2>
               <p className="text-white/50 text-lg leading-relaxed mb-8">
                 Todo lo que necesitas para operar como un profesional. Desde gráficos avanzados hasta calendarios económicos y cursos de formación.
               </p>
               <button
                 onClick={() => window.location.href = createPageUrl('Register')}
-                className="flex items-center gap-2 px-7 py-3.5 bg-[#80cc00] hover:bg-[#72b800] text-[#0d0d0d] font-black rounded-full transition-all text-sm shadow-lg shadow-[#80cc00]/20"
+                className="flex items-center gap-2 px-7 py-3.5 bg-[#C9A84C] hover:bg-[#b8943f] text-[#0B0F1A] font-black rounded-full transition-all text-sm shadow-lg shadow-[#C9A84C]/20"
               >
                 Abrir cuenta gratis <ArrowRight className="h-4 w-4" />
               </button>
@@ -398,7 +398,7 @@ export default function HomePage() {
       <section className="py-24 px-4 sm:px-6 bg-white">
         <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
           <div>
-            <span className="text-xs font-bold text-[#1a1aff] uppercase tracking-[0.2em] mb-4 block">Seguridad de fortaleza</span>
+            <span className="text-xs font-bold text-[#C9A84C] uppercase tracking-[0.2em] mb-4 block">Seguridad de fortaleza</span>
             <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-6 leading-tight">
               Trading seguro,<br />tranquilidad total.
             </h2>
@@ -407,7 +407,7 @@ export default function HomePage() {
             </p>
             <Link
               to={createPageUrl('About')}
-              className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#1a1aff] hover:bg-[#1515ee] text-white font-black rounded-full transition-all text-sm shadow-lg shadow-[#1a1aff]/25"
+              className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#C9A84C] hover:bg-[#b8943f] text-[#0B0F1A] font-black rounded-full transition-all text-sm shadow-lg shadow-[#C9A84C]/25"
             >
               Conoce nuestras cuentas <ArrowRight className="h-4 w-4" />
             </Link>
@@ -416,9 +416,9 @@ export default function HomePage() {
             {SECURITY_ITEMS.map((item, i) => {
               const Icon = item.icon;
               return (
-                <div key={i} className="flex items-center gap-4 bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 hover:border-[#1a1aff]/20 hover:bg-[#1a1aff]/3 transition-all group">
-                  <div className="w-10 h-10 rounded-xl bg-[#1a1aff]/10 flex items-center justify-center flex-shrink-0 group-hover:bg-[#1a1aff]/18 transition-colors">
-                    <Icon className="h-5 w-5 text-[#1a1aff]" />
+                <div key={i} className="flex items-center gap-4 bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 hover:border-[#C9A84C]/30 hover:bg-[#C9A84C]/3 transition-all group">
+                  <div className="w-10 h-10 rounded-xl bg-[#C9A84C]/10 flex items-center justify-center flex-shrink-0 group-hover:bg-[#C9A84C]/20 transition-colors">
+                    <Icon className="h-5 w-5 text-[#C9A84C]" />
                   </div>
                   <span className="font-semibold text-gray-800 text-sm">{item.label}</span>
                 </div>
@@ -433,16 +433,16 @@ export default function HomePage() {
         <section className="py-24 px-4 sm:px-6 bg-gray-50">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-14">
-              <span className="text-xs font-bold text-[#1a1aff] uppercase tracking-[0.2em] mb-3 block">Confiado globalmente</span>
+              <span className="text-xs font-bold text-[#C9A84C] uppercase tracking-[0.2em] mb-3 block">Confiado globalmente</span>
               <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Lo que dicen<br />nuestros traders</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {testimonials.slice(0, 6).map((t) => (
-                <div key={t.id} className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all hover:border-[#1a1aff]/15">
+                <div key={t.id} className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all hover:border-[#C9A84C]/20">
                   <StarRating rating={t.rating || 5} />
                   <p className="text-gray-600 text-sm leading-relaxed my-4">"{t.text}"</p>
                   <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1a1aff] to-[#80cc00] flex items-center justify-center text-sm font-black text-white flex-shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#C9A84C] to-[#0B0F1A] flex items-center justify-center text-sm font-black text-white flex-shrink-0">
                       {t.name[0]}
                     </div>
                     <div>
@@ -454,7 +454,7 @@ export default function HomePage() {
               ))}
             </div>
             <div className="text-center mt-8">
-              <Link to={createPageUrl('Testimonials')} className="text-sm text-[#1a1aff] hover:text-[#1515ee] font-bold transition-colors">
+              <Link to={createPageUrl('Testimonials')} className="text-sm text-[#C9A84C] hover:text-[#b8943f] font-bold transition-colors">
                 Ver todos los testimonios →
               </Link>
             </div>
@@ -520,7 +520,7 @@ export default function HomePage() {
             ))}
           </div>
           <div className="text-center mt-8">
-            <Link to={createPageUrl('FAQ')} className="text-sm text-[#1a1aff] hover:text-[#1515ee] font-bold transition-colors">
+            <Link to={createPageUrl('FAQ')} className="text-sm text-[#C9A84C] hover:text-[#b8943f] font-bold transition-colors">
               Ver todas las preguntas →
             </Link>
           </div>
@@ -528,31 +528,31 @@ export default function HomePage() {
       </section>
 
       {/* ══════════════ FINAL CTA ══════════════ */}
-      <section className="relative py-32 px-4 sm:px-6 overflow-hidden bg-[#04052e]">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_70%_at_50%_50%,rgba(26,26,255,0.18),transparent)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_40%_at_85%_15%,rgba(128,204,0,0.1),transparent)]" />
+      <section className="relative py-32 px-4 sm:px-6 overflow-hidden bg-[#0B0F1A]">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_70%_at_50%_50%,rgba(201,168,76,0.10),transparent)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_40%_at_85%_15%,rgba(201,168,76,0.05),transparent)]" />
         <div className="relative max-w-3xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#80cc00]/15 border border-[#80cc00]/25 text-xs text-[#80cc00] font-bold mb-8 uppercase tracking-wide">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#80cc00] animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C]/25 text-xs text-[#C9A84C] font-bold mb-8 uppercase tracking-wide">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#C9A84C] animate-pulse" />
             Plataforma activa · Únete hoy
           </div>
           <h2 className="text-5xl sm:text-6xl font-black mb-5 leading-tight text-white">
-            ¿Listo para operar<br />como un <span className="text-[#80cc00]">profesional?</span>
+            ¿Listo para invertir<br />como un <span className="text-[#C9A84C]">profesional?</span>
           </h2>
           <p className="text-lg text-white/40 mb-10">
             Cuenta demo gratuita activada al instante. Sin esperas, sin depósito previo.
           </p>
           <button
             onClick={() => window.location.href = createPageUrl('Register')}
-            className="group inline-flex items-center gap-3 px-10 py-5 bg-[#80cc00] hover:bg-[#72b800] text-[#0d0d0d] font-black rounded-full text-xl transition-all shadow-2xl shadow-[#80cc00]/20 hover:scale-[1.04]"
+            className="group inline-flex items-center gap-3 px-10 py-5 bg-[#C9A84C] hover:bg-[#b8943f] text-[#0B0F1A] font-black rounded-full text-xl transition-all shadow-2xl shadow-[#C9A84C]/20 hover:scale-[1.04]"
           >
             Abrir cuenta ahora
             <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
           </button>
           <div className="flex items-center justify-center gap-6 mt-8 text-xs text-white/30 flex-wrap">
-            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#80cc00]" />Cuenta demo $10K</span>
-            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#80cc00]" />Spreads desde 0.0 pips</span>
-            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#80cc00]" />Activación inmediata</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#C9A84C]" />Cuenta demo $10K</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#C9A84C]" />Spreads desde 0.0 pips</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#C9A84C]" />Activación inmediata</span>
           </div>
         </div>
       </section>

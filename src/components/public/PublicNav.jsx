@@ -11,29 +11,35 @@ const NAV_LINKS = [
   { label: 'Premios', href: createPageUrl('Awards') },
 ];
 
+// ORION CAPITAL brand palette
+// Primary dark: #0B0F1A   Accent gold: #C9A84C   Accent light: #E8C97A
+
 export default function PublicNav({ currentPage }) {
   const [open, setOpen] = useState(false);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
       {/* Top bar */}
-      <div className="bg-[#1a1aff] py-1.5 px-4 text-center">
-        <p className="text-xs text-white/80 font-medium tracking-wide">
-          <span className="font-bold text-white">LICENCIAS GRUPALES:</span>&nbsp;&nbsp;
-          <span className="text-white/90">FSA</span>&nbsp;&nbsp;·&nbsp;&nbsp;
-          <span className="text-white/90">CySEC</span>&nbsp;&nbsp;·&nbsp;&nbsp;
-          <span className="text-white/90">DFSA</span>
+      <div className="bg-[#C9A84C] py-1.5 px-4 text-center">
+        <p className="text-xs text-[#0B0F1A]/80 font-medium tracking-wide">
+          <span className="font-bold text-[#0B0F1A]">LICENCIAS GRUPALES:</span>&nbsp;&nbsp;
+          <span className="text-[#0B0F1A]/90">FSA</span>&nbsp;&nbsp;·&nbsp;&nbsp;
+          <span className="text-[#0B0F1A]/90">CySEC</span>&nbsp;&nbsp;·&nbsp;&nbsp;
+          <span className="text-[#0B0F1A]/90">DFSA</span>
         </p>
       </div>
 
       {/* Main nav */}
-      <nav className="bg-[#04052e]/95 backdrop-blur-md border-b border-white/[0.06]">
+      <nav className="bg-[#0B0F1A]/97 backdrop-blur-md border-b border-white/[0.06]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
           {/* Logo */}
           <a href={createPageUrl('Home')} className="flex items-center gap-2 flex-shrink-0">
+            <div className="w-8 h-8 rounded-lg bg-[#C9A84C] flex items-center justify-center mr-1">
+              <span className="text-[#0B0F1A] font-black text-xs">OC</span>
+            </div>
             <span className="text-xl font-black tracking-tight">
-              <span className="text-white">M4</span>
-              <span className="text-[#80cc00]"> Markets Latam</span>
+              <span className="text-white">ORION</span>
+              <span className="text-[#C9A84C]"> Capital</span>
             </span>
           </a>
 
@@ -60,7 +66,7 @@ export default function PublicNav({ currentPage }) {
             </a>
             <a
               href={createPageUrl('Register')}
-              className="text-sm font-black px-5 py-2.5 bg-[#80cc00] hover:bg-[#72b800] text-[#0d0d0d] rounded-full transition-all shadow-lg shadow-[#80cc00]/20"
+              className="text-sm font-black px-5 py-2.5 bg-[#C9A84C] hover:bg-[#b8943f] text-[#0B0F1A] rounded-full transition-all shadow-lg shadow-[#C9A84C]/20"
             >
               Abrir Cuenta
             </a>
@@ -77,7 +83,7 @@ export default function PublicNav({ currentPage }) {
 
         {/* Mobile menu */}
         {open && (
-          <div className="md:hidden bg-[#04052e] border-t border-white/[0.06] px-4 py-4 space-y-3">
+          <div className="md:hidden bg-[#0B0F1A] border-t border-white/[0.06] px-4 py-4 space-y-3">
             {NAV_LINKS.map(l => (
               <a
                 key={l.label}
@@ -92,7 +98,7 @@ export default function PublicNav({ currentPage }) {
               <a href={createPageUrl('Acceso')} className="text-sm text-center font-semibold px-4 py-2.5 border border-white/20 text-white/70 rounded-full hover:text-white hover:border-white/40 transition-all">
                 Iniciar sesión
               </a>
-              <a href={createPageUrl('Register')} className="text-sm text-center font-black px-4 py-2.5 bg-[#80cc00] hover:bg-[#72b800] text-[#0d0d0d] rounded-full transition-all">
+              <a href={createPageUrl('Register')} className="text-sm text-center font-black px-4 py-2.5 bg-[#C9A84C] hover:bg-[#b8943f] text-[#0B0F1A] rounded-full transition-all">
                 Abrir Cuenta
               </a>
             </div>
