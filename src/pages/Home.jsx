@@ -8,10 +8,16 @@ import { base44 } from '@/api/base44Client';
 import {
   ArrowRight, Users, Shield, Globe, FileText,
   Star, ChevronDown, CheckCircle2, TrendingUp,
-  BarChart3, Zap, Award, Trophy, Medal, BadgeCheck, Gem, Lock, CreditCard, Banknote
+  BarChart3, Zap, Award, Trophy, Medal, BadgeCheck, Gem, Lock, CreditCard, Banknote,
+  Activity, LineChart, Layers
 } from 'lucide-react';
 
-// ─── STATIC DATA ─────────────────────────────────────────────────────────────
+// ── PALETA ────────────────────────────────────────────────────────────────────
+// Primario oscuro : #0A1628  (azul marino profundo)
+// Acento primario : #00D4FF  (cian eléctrico)
+// Acento secundario: #7B61FF (violeta suave)
+// Superficie media : #0F1E35
+// ─────────────────────────────────────────────────────────────────────────────
 
 const TICKER_DATA = [
   { symbol: 'AAPL', price: '178.52', change: '+1.23%', up: true },
@@ -26,46 +32,46 @@ const TICKER_DATA = [
   { symbol: 'GBPUSD', price: '1.2640', change: '-0.08%', up: false },
 ];
 
-const TRUST_CARDS = [
-  { icon: Users, title: 'Somos Sociales', desc: 'Más de 5,000 traders activos operando en nuestra plataforma cada día' },
-  { icon: FileText, title: 'Somos Fiables', desc: 'Referentes en tecnología de trading educacional desde 2020' },
-  { icon: Shield, title: 'Somos Seguros', desc: 'Triple verificación y protección de cuentas con estándares institucionales' },
-  { icon: Globe, title: 'Somos Globales', desc: 'Operamos en más de 50 países con soporte multilingüe 24/7' },
-];
-
 const STATS = [
-  { value: '0.0', label: 'Spreads desde pips' },
+  { value: '50+', label: 'Instrumentos globales' },
   { value: '<5ms', label: 'Velocidad de ejecución' },
-  { value: '$5', label: 'Depósito mínimo demo' },
   { value: '1:500', label: 'Apalancamiento máx.' },
-];
-
-const FEATURES = [
-  { icon: BarChart3, title: 'Gráficos profesionales', desc: 'Velas japonesas, indicadores técnicos y múltiples marcos temporales. Una interfaz idéntica a la de los brokers reales del mercado.', accent: '#1a1aff', tag: 'Análisis técnico' },
-  { icon: Zap, title: 'Ejecución ultrarrápida', desc: 'Órdenes procesadas en milisegundos mediante conexión directa a los mercados. Opera sin slippage y con precios reales al instante.', accent: '#80cc00', tag: 'Ultra-rápido' },
-  { icon: TrendingUp, title: 'Métricas avanzadas', desc: 'Curva de capital, tasa de acierto, drawdown máximo y P&L detallado. Análisis institucional completo de tu rendimiento como trader.', accent: '#7C3AED', tag: 'Analítica pro' },
-  { icon: Shield, title: 'Cuenta demo gratuita', desc: '$10,000 en cuenta demo para practicar estrategias reales sin arriesgar capital. Actívate al instante, sin depósito previo requerido.', accent: '#f59e0b', tag: 'Sin riesgo' },
+  { value: '24/5', label: 'Soporte especializado' },
 ];
 
 const MARKETS = [
-  { icon: TrendingUp, label: 'Criptomonedas', desc: 'Opera el valor de las criptomonedas más populares del mercado', symbols: ['BTC/USD', 'ETH/USD', 'SOL/USD'], color: '#1a1aff', bg: '#1a1aff15' },
-  { icon: BarChart3, label: 'Forex', desc: 'Opera el valor de una divisa frente a otra en tiempo real', symbols: ['EUR/USD', 'GBP/USD', 'USD/JPY'], color: '#80cc00', bg: '#80cc0015' },
-  { icon: Globe, label: 'Materias Primas', desc: 'Opera el valor de las commodities más importantes del mundo', symbols: ['XAUUSD', 'XAGUSD', 'WTI'], color: '#f59e0b', bg: '#f59e0b15' },
-  { icon: Zap, label: 'Índices', desc: 'Opera cestas de acciones de los principales mercados globales', symbols: ['SPX500', 'NAS100', 'GER40'], color: '#7C3AED', bg: '#7C3AED15' },
+  { icon: Activity, label: 'Criptomonedas', desc: 'Opera BTC, ETH, SOL y más con alta liquidez y sin comisiones ocultas', symbols: ['BTC/USD', 'ETH/USD', 'SOL/USD'], color: '#00D4FF', bg: '#00D4FF12' },
+  { icon: BarChart3, label: 'Forex', desc: 'Los pares de divisas más líquidos del mundo en tiempo real', symbols: ['EUR/USD', 'GBP/USD', 'USD/JPY'], color: '#7B61FF', bg: '#7B61FF12' },
+  { icon: Globe, label: 'Materias Primas', desc: 'Oro, plata, petróleo y más. Diversifica tu portafolio global', symbols: ['XAUUSD', 'XAGUSD', 'WTI'], color: '#00D4FF', bg: '#00D4FF12' },
+  { icon: LineChart, label: 'Índices bursátiles', desc: 'SP500, Nasdaq, DAX — los grandes índices en una sola plataforma', symbols: ['SPX500', 'NAS100', 'GER40'], color: '#7B61FF', bg: '#7B61FF12' },
+];
+
+const FEATURES = [
+  { icon: BarChart3, title: 'Análisis técnico avanzado', desc: 'Velas japonesas, indicadores institucionales y múltiples temporalidades para operar con precisión quirúrgica.', accent: '#00D4FF', tag: 'Gráficos Pro' },
+  { icon: Zap, title: 'Ejecución sin retrasos', desc: 'Órdenes procesadas en milisegundos. Opera con precio exacto, sin slippage ni requotes en ninguna condición.', accent: '#7B61FF', tag: 'Ultra-rápido' },
+  { icon: TrendingUp, title: 'Rendimiento detallado', desc: 'Curva de equity, ratio de acierto, drawdown y P&L completo. Métricas que los mejores traders del mundo usan.', accent: '#00D4FF', tag: 'Analítica' },
+  { icon: Shield, title: 'Demo $10,000 al instante', desc: 'Practica estrategias reales sin arriesgar un solo centavo. Actívate en segundos, sin papeleo ni depósito.', accent: '#7B61FF', tag: 'Sin riesgo' },
+];
+
+const TRUST_CARDS = [
+  { icon: Users, title: '+5,000 traders activos', desc: 'Una comunidad global de inversores que confían en nuestra tecnología cada día' },
+  { icon: Layers, title: 'Regulado y auditado', desc: 'Infraestructura con estándares FSA, CySEC y DFSA para la máxima protección' },
+  { icon: Shield, title: 'Fondos segregados', desc: 'Tu capital siempre separado de los fondos operativos con protección total' },
+  { icon: Globe, title: 'Presencia en 50+ países', desc: 'Operamos globalmente con soporte multilingüe disponible 24 horas, 5 días' },
 ];
 
 const STEPS = [
-  { n: '01', title: 'Abre tu cuenta', desc: 'Registro en 30 segundos. Cuenta demo con $10,000 activada al instante, sin depósito ni documentación previa.' },
-  { n: '02', title: 'Elige tu mercado', desc: 'Accede a criptos, forex, commodities e índices con precios en tiempo real y herramientas institucionales.' },
-  { n: '03', title: 'Opera y mejora', desc: 'Ejecuta operaciones, analiza tu P&L y perfecciona tu estrategia con métricas de nivel profesional.' },
+  { n: '01', title: 'Crea tu cuenta', desc: 'Registro express en menos de 30 segundos. Cuenta demo activa al instante con $10,000 sin depósito.' },
+  { n: '02', title: 'Explora los mercados', desc: 'Accede a cripto, forex, commodities e índices con precios reales y herramientas profesionales.' },
+  { n: '03', title: 'Opera y escala', desc: 'Ejecuta tus estrategias, analiza tu rendimiento y lleva tu trading al siguiente nivel.' },
 ];
 
 const SECURITY_ITEMS = [
-  { icon: Lock, label: 'Tus fondos están seguros y protegidos' },
-  { icon: Shield, label: 'Sin cargos ocultos ni letra pequeña' },
-  { icon: CreditCard, label: 'Fondos en cuentas segregadas' },
-  { icon: Zap, label: 'Depósitos instantáneos y retiros rápidos' },
-  { icon: Banknote, label: 'Alianzas con bancos de primer nivel' },
+  { icon: Lock, label: 'Encriptación bancaria de extremo a extremo' },
+  { icon: Shield, label: 'Protección de saldo negativo garantizada' },
+  { icon: CreditCard, label: 'Capital en cuentas completamente segregadas' },
+  { icon: Zap, label: 'Depósitos y retiros procesados en tiempo récord' },
+  { icon: Banknote, label: 'Alianzas con instituciones financieras de primer nivel' },
 ];
 
 const CANDLES = [
@@ -81,13 +87,11 @@ function StarRating({ rating }) {
   return (
     <div className="flex gap-0.5">
       {[1,2,3,4,5].map(i => (
-        <Star key={i} className={`h-3.5 w-3.5 ${i <= rating ? 'text-[#80cc00] fill-[#80cc00]' : 'text-gray-200 fill-gray-200'}`} />
+        <Star key={i} className={`h-3.5 w-3.5 ${i <= rating ? 'fill-[#00D4FF] text-[#00D4FF]' : 'text-gray-200 fill-gray-200'}`} />
       ))}
     </div>
   );
 }
-
-// ─── PAGE ─────────────────────────────────────────────────────────────────────
 
 export default function HomePage() {
   const { data: testimonials = [] } = useQuery({
@@ -117,83 +121,93 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden font-inter">
+    <div className="min-h-screen bg-[#0A1628] text-white overflow-x-hidden font-inter">
       <PublicNav currentPage="Home" />
 
       {/* ══════════════ HERO ══════════════ */}
-      <section className="relative min-h-[90vh] flex items-center bg-[#0B0F1A] overflow-hidden">
-        {/* Background effects */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_60%_40%,rgba(201,168,76,0.15),transparent)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_50%_at_20%_80%,rgba(201,168,76,0.06),transparent)]" />
-        <div className="absolute inset-0 opacity-[0.04] bg-[linear-gradient(rgba(255,255,255,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.5)_1px,transparent_1px)] bg-[size:80px_80px]" />
+      <section className="relative min-h-screen flex items-center bg-[#0A1628] overflow-hidden">
+        {/* Gradient blobs */}
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#00D4FF]/8 rounded-full blur-[120px] -translate-y-1/4 translate-x-1/4" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#7B61FF]/8 rounded-full blur-[100px] translate-y-1/4 -translate-x-1/4" />
+        <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(rgba(0,212,255,0.6)_1px,transparent_1px),linear-gradient(90deg,rgba(0,212,255,0.6)_1px,transparent_1px)] bg-[size:70px_70px]" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full grid lg:grid-cols-2 gap-12 items-center py-24">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full grid lg:grid-cols-2 gap-16 items-center pt-28 pb-20">
           {/* Left: copy */}
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C]/25 text-xs text-[#C9A84C] font-bold mb-8 tracking-wide uppercase">
-              <span className="w-2 h-2 rounded-full bg-[#C9A84C] animate-pulse" />
-              En Vivo · Mercados en tiempo real
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#00D4FF]/10 border border-[#00D4FF]/20 text-xs text-[#00D4FF] font-bold mb-8 tracking-wide uppercase">
+              <span className="w-2 h-2 rounded-full bg-[#00D4FF] animate-pulse" />
+              Mercados en tiempo real · 50+ instrumentos
             </div>
 
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.0] tracking-tight mb-6 text-white">
-              Invierte con<br />precisión,<br />
-              <span className="text-[#C9A84C]">crece con visión.</span>
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.0] tracking-tight mb-6">
+              Domina los<br />mercados<br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00D4FF] to-[#7B61FF]">con ventaja real.</span>
             </h1>
 
-            <p className="text-lg sm:text-xl text-white/55 leading-relaxed mb-10 max-w-lg">
-              Tecnología de trading de nivel institucional al alcance de cualquier inversor. Spreads desde 0.0 pips, ejecución ultrarrápida y herramientas profesionales.
+            <p className="text-lg sm:text-xl text-white/50 leading-relaxed mb-10 max-w-lg">
+              Tecnología institucional, spreads competitivos y herramientas de análisis profesional. Todo en una sola plataforma diseñada para inversores serios.
             </p>
 
-            <div className="flex flex-wrap gap-3 mb-10">
+            <div className="flex flex-wrap gap-3 mb-12">
               <button
                 onClick={() => window.location.href = createPageUrl('Register')}
-                className="group flex items-center gap-2 px-8 py-4 bg-[#C9A84C] hover:bg-[#b8943f] text-[#0B0F1A] font-black rounded-full transition-all text-base shadow-xl shadow-[#C9A84C]/20 hover:scale-[1.03]"
+                className="group flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#00D4FF] to-[#00AACC] hover:from-[#00BBEE] hover:to-[#009AB8] text-[#0A1628] font-black rounded-full transition-all text-base shadow-xl shadow-[#00D4FF]/20 hover:scale-[1.03]"
               >
-                Abrir Cuenta
+                Empezar ahora
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </button>
               <Link
                 to={createPageUrl('Register')}
-                className="flex items-center gap-2 px-6 py-4 bg-transparent text-white/70 font-semibold rounded-full border border-white/15 hover:border-white/35 hover:text-white transition-all text-base"
+                className="flex items-center gap-2 px-6 py-4 text-white/60 font-semibold rounded-full border border-white/15 hover:border-[#00D4FF]/40 hover:text-[#00D4FF] transition-all text-base"
               >
-                Cuenta demo gratuita
+                Demo gratuita →
               </Link>
             </div>
 
-            <div className="text-xs text-white/30 font-medium">
-              El trading de CFDs conlleva un riesgo significativo de pérdida de capital.
+            {/* Micro-stats */}
+            <div className="flex flex-wrap gap-6">
+              {[
+                { v: '$10,000', l: 'Demo sin depósito' },
+                { v: '0.0 pips', l: 'Spreads mínimos' },
+                { v: '1:500', l: 'Apalancamiento' },
+              ].map(s => (
+                <div key={s.l}>
+                  <div className="text-lg font-black text-white">{s.v}</div>
+                  <div className="text-xs text-white/35 font-medium">{s.l}</div>
+                </div>
+              ))}
             </div>
           </div>
 
           {/* Right: platform mockup */}
           <div className="relative hidden lg:block">
-            <div className="absolute -inset-6 bg-[#C9A84C]/8 rounded-3xl blur-3xl" />
-            <div className="relative bg-[#0D1120] border border-[#C9A84C]/20 rounded-2xl shadow-2xl overflow-hidden">
+            <div className="absolute -inset-6 bg-[#00D4FF]/5 rounded-3xl blur-3xl" />
+            <div className="relative bg-[#0F1E35] border border-[#00D4FF]/15 rounded-2xl shadow-2xl overflow-hidden">
               {/* Window chrome */}
-              <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5 bg-[#090D18]">
+              <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5 bg-[#0A1628]">
                 <div className="w-2.5 h-2.5 rounded-full bg-[#ef5350]/70" />
                 <div className="w-2.5 h-2.5 rounded-full bg-[#f59e0b]/70" />
-                <div className="w-2.5 h-2.5 rounded-full bg-[#C9A84C]/70" />
+                <div className="w-2.5 h-2.5 rounded-full bg-[#00D4FF]/70" />
                 <div className="ml-3 flex-1 h-5 bg-white/5 rounded-md px-2 flex items-center">
                   <span className="text-[10px] text-white/25">orioncapital.io/portal/charts</span>
                 </div>
               </div>
-              {/* Header bar */}
-              <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/5 bg-[#090D18]">
+              {/* Header */}
+              <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/5 bg-[#0A1628]">
                 <div className="flex items-center gap-3">
-                  <span className="text-sm font-bold text-white">EUR/USD</span>
-                  <span className="text-[10px] text-white/30">Euro / Dólar</span>
-                  <span className="text-lg font-mono font-black text-white">1.0850</span>
-                  <span className="text-xs font-mono font-bold text-[#C9A84C] bg-[#C9A84C]/10 px-2 py-0.5 rounded">▲ +0.12%</span>
+                  <span className="text-sm font-bold text-white">BTC/USD</span>
+                  <span className="text-[10px] text-white/30">Bitcoin</span>
+                  <span className="text-lg font-mono font-black text-white">62,450</span>
+                  <span className="text-xs font-mono font-bold text-[#00D4FF] bg-[#00D4FF]/10 px-2 py-0.5 rounded">▲ +2.14%</span>
                 </div>
                 <div className="flex gap-1 text-[10px] text-white/30">
                   {['1m','5m','1h','1D','1W'].map(t => (
-                    <button key={t} className={`px-2 py-0.5 rounded ${t === '1D' ? 'bg-[#C9A84C]/20 text-[#E8C97A]' : 'hover:bg-white/5'}`}>{t}</button>
+                    <button key={t} className={`px-2 py-0.5 rounded ${t === '1D' ? 'bg-[#00D4FF]/15 text-[#00D4FF]' : 'hover:bg-white/5'}`}>{t}</button>
                   ))}
                 </div>
               </div>
               {/* Chart */}
-              <div className="relative h-44 bg-[#090D18] px-4 pt-4 pb-1">
+              <div className="relative h-44 bg-[#0A1628] px-4 pt-4 pb-1">
                 {[0,25,50,75,100].map(p => (
                   <div key={p} className="absolute left-4 right-0 border-t border-white/[0.04]" style={{ top: `${100 - p}%` }} />
                 ))}
@@ -201,105 +215,105 @@ export default function HomePage() {
                   {CANDLES.map((c, i) => {
                     const bodyH = Math.abs(c.c - c.o);
                     const bodyTop = 100 - Math.max(c.o, c.c);
-                    const color = c.up ? '#C9A84C' : '#ef5350';
+                    const color = c.up ? '#00D4FF' : '#ef5350';
                     return (
                       <div key={i} className="flex-1 relative flex flex-col items-center" style={{ height: '100%' }}>
-                        <div className="absolute left-1/2 -translate-x-1/2 w-px" style={{ top: `${100 - c.h}%`, height: `${c.h - c.l}%`, background: color, opacity: 0.5 }} />
-                        <div className="absolute left-0.5 right-0.5 rounded-sm" style={{ top: `${bodyTop}%`, height: `${Math.max(bodyH, 1.5)}%`, background: color, opacity: 0.85 }} />
+                        <div className="absolute left-1/2 -translate-x-1/2 w-px" style={{ top: `${100 - c.h}%`, height: `${c.h - c.l}%`, background: color, opacity: 0.4 }} />
+                        <div className="absolute left-0.5 right-0.5 rounded-sm" style={{ top: `${bodyTop}%`, height: `${Math.max(bodyH, 1.5)}%`, background: color, opacity: 0.8 }} />
                       </div>
                     );
                   })}
                 </div>
               </div>
               {/* Trade panel */}
-              <div className="grid grid-cols-2 gap-2 p-3 bg-[#090D18] border-t border-white/5">
-                <div className="bg-[#26a69a]/10 border border-[#26a69a]/20 rounded-xl p-3">
-                  <div className="text-[10px] text-[#26a69a] font-semibold uppercase mb-1">Comprar</div>
+              <div className="grid grid-cols-2 gap-2 p-3 bg-[#0A1628] border-t border-white/5">
+                <div className="bg-[#00D4FF]/8 border border-[#00D4FF]/20 rounded-xl p-3">
+                  <div className="text-[10px] text-[#00D4FF] font-semibold uppercase mb-1">Comprar</div>
                   <div className="text-xs text-white/40 mb-1">1.00 lote</div>
-                  <div className="text-sm font-bold text-[#26a69a]">1.0850</div>
+                  <div className="text-sm font-bold text-[#00D4FF]">62,450</div>
                 </div>
-                <div className="bg-[#ef5350]/10 border border-[#ef5350]/20 rounded-xl p-3">
+                <div className="bg-[#ef5350]/8 border border-[#ef5350]/20 rounded-xl p-3">
                   <div className="text-[10px] text-[#ef5350] font-semibold uppercase mb-1">Vender</div>
                   <div className="text-xs text-white/40 mb-1">0.50 lote</div>
-                  <div className="text-sm font-bold text-[#ef5350]">1.0848</div>
+                  <div className="text-sm font-bold text-[#ef5350]">62,440</div>
                 </div>
               </div>
               {/* Equity */}
               <div className="px-3 pb-3 flex items-center justify-between border-t border-white/5 pt-2">
-                <div className="text-[10px] text-white/30">Balance total</div>
-                <div className="text-xs font-bold text-white">$12,840.50</div>
-                <div className="text-[10px] font-bold text-[#C9A84C] bg-[#C9A84C]/10 px-2 py-0.5 rounded-full">+28.4%</div>
+                <div className="text-[10px] text-white/30">Equity</div>
+                <div className="text-xs font-bold text-white">$14,230.80</div>
+                <div className="text-[10px] font-bold text-[#00D4FF] bg-[#00D4FF]/10 px-2 py-0.5 rounded-full">+42.3%</div>
               </div>
             </div>
 
-            {/* Floating cards */}
-            <div className="absolute -bottom-4 -left-10 bg-[#0D1120] border border-[#C9A84C]/30 rounded-2xl px-4 py-3 shadow-2xl flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-[#C9A84C]/15 flex items-center justify-center">
-                <TrendingUp className="h-4 w-4 text-[#C9A84C]" />
+            {/* Floating badges */}
+            <div className="absolute -bottom-4 -left-10 bg-[#0F1E35] border border-[#00D4FF]/20 rounded-2xl px-4 py-3 shadow-2xl flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-[#00D4FF]/15 flex items-center justify-center">
+                <CheckCircle2 className="h-4 w-4 text-[#00D4FF]" />
               </div>
               <div>
                 <div className="text-xs font-bold text-white">Orden ejecutada</div>
-                <div className="text-[10px] text-white/40">EUR/USD · Buy · 1.0850</div>
+                <div className="text-[10px] text-white/40">BTC/USD · Buy · 62,450</div>
               </div>
             </div>
-            <div className="absolute -top-4 -right-6 bg-[#0D1120] border border-[#C9A84C]/25 rounded-2xl px-4 py-3 shadow-2xl">
-              <div className="text-[10px] text-white/40 mb-0.5">P&L Hoy</div>
-              <div className="text-lg font-black text-[#C9A84C]">+$2,840</div>
+            <div className="absolute -top-4 -right-6 bg-[#0F1E35] border border-[#7B61FF]/25 rounded-2xl px-4 py-3 shadow-2xl">
+              <div className="text-[10px] text-white/40 mb-0.5">Ganancia del día</div>
+              <div className="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-[#00D4FF] to-[#7B61FF]">+$4,230</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* ══════════════ TICKER ══════════════ */}
-      <div className="bg-[#C9A84C] py-2.5 overflow-hidden">
+      <div className="bg-[#0F1E35] border-y border-[#00D4FF]/10 py-2.5 overflow-hidden">
         <div className="flex gap-10 animate-ticker whitespace-nowrap px-6">
           {[...TICKER_DATA, ...TICKER_DATA, ...TICKER_DATA].map((t, i) => (
             <span key={i} className="inline-flex items-center gap-2 text-xs">
-              <span className="font-bold text-[#0B0F1A] tracking-wide">{t.symbol}</span>
-              <span className="font-mono text-[#0B0F1A]/70">{t.price}</span>
-              <span className={`font-mono font-bold ${t.up ? 'text-[#0B0F1A]' : 'text-red-800'}`}>{t.change}</span>
+              <span className="font-bold text-[#00D4FF] tracking-wide">{t.symbol}</span>
+              <span className="font-mono text-white/50">{t.price}</span>
+              <span className={`font-mono font-bold ${t.up ? 'text-[#00D4FF]' : 'text-[#ef5350]'}`}>{t.change}</span>
             </span>
           ))}
         </div>
       </div>
 
       {/* ══════════════ STATS BAND ══════════════ */}
-      <div className="bg-white border-b border-gray-100 py-12 px-4">
+      <div className="bg-[#0A1628] py-14 px-4 border-b border-white/5">
         <div className="max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-8">
           {STATS.map(s => (
             <div key={s.label} className="text-center">
-              <div className="text-3xl sm:text-4xl font-black text-[#C9A84C] mb-1">{s.value}</div>
-              <div className="text-xs text-gray-500 font-medium">{s.label}</div>
+              <div className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#00D4FF] to-[#7B61FF] mb-1">{s.value}</div>
+              <div className="text-xs text-white/40 font-medium">{s.label}</div>
             </div>
           ))}
         </div>
       </div>
 
       {/* ══════════════ MARKETS ══════════════ */}
-      <section className="py-24 px-4 sm:px-6 bg-gray-50">
+      <section className="py-24 px-4 sm:px-6 bg-[#0A1628]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
-            <span className="text-xs font-bold text-[#C9A84C] uppercase tracking-[0.2em] mb-3 block">Nuestros Mercados</span>
-            <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Del forex al cripto,<br />commodities a acciones.</h2>
-            <p className="text-gray-500 mt-4 max-w-xl mx-auto">Elige tu mercado, personaliza tu enfoque y opera a tu manera con las herramientas de precisión que necesitas.</p>
+            <span className="text-xs font-bold text-[#00D4FF] uppercase tracking-[0.2em] mb-3 block">Mercados disponibles</span>
+            <h2 className="text-4xl sm:text-5xl font-black text-white">Opera cualquier activo,<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00D4FF] to-[#7B61FF]">en un solo lugar.</span></h2>
+            <p className="text-white/40 mt-4 max-w-xl mx-auto">Cripto, Forex, Commodities e Índices. Más de 50 instrumentos con precios en vivo y spreads institucionales.</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {MARKETS.map((m, i) => {
               const MIcon = m.icon;
               return (
-                <div key={i} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-xl hover:border-[#1a1aff]/20 transition-all group cursor-pointer">
+                <div key={i} className="bg-[#0F1E35] border border-white/8 rounded-2xl p-6 hover:border-[#00D4FF]/30 hover:bg-[#152030] transition-all group cursor-pointer">
                   <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform" style={{ background: m.bg }}>
                     <MIcon className="h-6 w-6" style={{ color: m.color }} />
                   </div>
-                  <h3 className="font-black text-gray-900 text-base mb-2">{m.label}</h3>
-                  <p className="text-xs text-gray-500 leading-relaxed mb-4">{m.desc}</p>
+                  <h3 className="font-black text-white text-base mb-2">{m.label}</h3>
+                  <p className="text-xs text-white/40 leading-relaxed mb-4">{m.desc}</p>
                   <div className="flex flex-wrap gap-1.5">
                     {m.symbols.map(s => (
-                      <span key={s} className="text-[10px] px-2 py-1 bg-gray-50 border border-gray-100 rounded-lg text-gray-500 font-mono font-semibold">{s}</span>
+                      <span key={s} className="text-[10px] px-2 py-1 bg-white/5 border border-white/8 rounded-lg text-white/50 font-mono font-semibold">{s}</span>
                     ))}
                   </div>
-                  <div className="mt-4 flex items-center gap-1 text-xs font-bold" style={{ color: m.color }}>
-                    Ver más <ArrowRight className="h-3 w-3" />
+                  <div className="mt-4 flex items-center gap-1 text-xs font-bold text-[#00D4FF]">
+                    Explorar <ArrowRight className="h-3 w-3" />
                   </div>
                 </div>
               );
@@ -308,24 +322,23 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ══════════════ TRADE WITH US ══════════════ */}
-      <section className="py-24 px-4 sm:px-6 bg-[#0B0F1A] relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_70%_at_80%_50%,rgba(201,168,76,0.08),transparent)]" />
-        <div className="relative max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <span className="text-xs font-bold text-[#C9A84C] uppercase tracking-[0.2em] mb-3 block">Opera con Orion Capital</span>
-            <h2 className="text-4xl sm:text-5xl font-black text-white">Elección de traders<br />en todo el mundo</h2>
+      {/* ══════════════ TRUST CARDS ══════════════ */}
+      <section className="py-20 px-4 sm:px-6 bg-[#0F1E35]">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <span className="text-xs font-bold text-[#7B61FF] uppercase tracking-[0.2em] mb-3 block">¿Por qué Orion Capital?</span>
+            <h2 className="text-4xl sm:text-5xl font-black text-white">La elección de inversores<br />exigentes en todo el mundo</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {TRUST_CARDS.map((c, i) => {
               const Icon = c.icon;
               return (
-                <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/8 hover:border-[#C9A84C]/30 transition-all group cursor-default">
-                  <div className="w-12 h-12 rounded-xl bg-[#C9A84C]/15 flex items-center justify-center mb-4 group-hover:bg-[#C9A84C]/25 transition-colors">
-                    <Icon className="h-6 w-6 text-[#C9A84C]" />
+                <div key={i} className="relative bg-[#0A1628] border border-white/8 rounded-2xl p-6 hover:border-[#7B61FF]/30 transition-all group">
+                  <div className="w-12 h-12 rounded-xl bg-[#7B61FF]/12 flex items-center justify-center mb-4 group-hover:bg-[#7B61FF]/22 transition-colors">
+                    <Icon className="h-6 w-6 text-[#7B61FF]" />
                   </div>
                   <h3 className="font-black text-white text-base mb-2">{c.title}</h3>
-                  <p className="text-sm text-white/50 leading-relaxed">{c.desc}</p>
+                  <p className="text-sm text-white/40 leading-relaxed">{c.desc}</p>
                 </div>
               );
             })}
@@ -334,58 +347,69 @@ export default function HomePage() {
       </section>
 
       {/* ══════════════ HOW IT WORKS ══════════════ */}
-      <section className="py-24 px-4 sm:px-6 bg-white">
+      <section className="py-24 px-4 sm:px-6 bg-[#0A1628]">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-3 block">Cómo funciona</span>
-            <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Empieza en <span className="text-[#C9A84C]">3 pasos</span></h2>
+            <span className="text-xs font-bold text-white/30 uppercase tracking-[0.2em] mb-3 block">Simple. Rápido. Efectivo.</span>
+            <h2 className="text-4xl sm:text-5xl font-black text-white">Empieza en <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00D4FF] to-[#7B61FF]">3 pasos</span></h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {STEPS.map((s, i) => (
               <div key={i} className="relative text-center group">
-                <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-[#C9A84C]/8 border-2 border-[#C9A84C]/25 text-[#C9A84C] text-3xl font-black mb-5 mx-auto group-hover:border-[#C9A84C]/60 group-hover:bg-[#C9A84C]/12 transition-all">
+                {i < 2 && (
+                  <div className="hidden md:block absolute top-10 left-[calc(50%+44px)] right-[-calc(50%-44px)] h-px bg-gradient-to-r from-[#00D4FF]/30 to-transparent" />
+                )}
+                <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-[#00D4FF]/12 to-[#7B61FF]/12 border border-[#00D4FF]/20 text-[#00D4FF] text-3xl font-black mb-5 mx-auto group-hover:border-[#00D4FF]/50 group-hover:from-[#00D4FF]/20 group-hover:to-[#7B61FF]/20 transition-all">
                   {s.n}
                 </div>
-                <h3 className="text-xl font-black text-gray-900 mb-3">{s.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed max-w-xs mx-auto">{s.desc}</p>
+                <h3 className="text-xl font-black text-white mb-3">{s.title}</h3>
+                <p className="text-sm text-white/40 leading-relaxed max-w-xs mx-auto">{s.desc}</p>
               </div>
             ))}
+          </div>
+          <div className="text-center mt-12">
+            <button
+              onClick={() => window.location.href = createPageUrl('Register')}
+              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#00D4FF] to-[#7B61FF] text-white font-black rounded-full transition-all hover:opacity-90 hover:scale-[1.02] shadow-xl shadow-[#00D4FF]/15"
+            >
+              Crear mi cuenta ahora <ArrowRight className="h-4 w-4" />
+            </button>
           </div>
         </div>
       </section>
 
-      {/* ══════════════ FEATURES (dark) ══════════════ */}
-      <section className="py-24 px-4 sm:px-6 bg-[#0B0F1A]">
+      {/* ══════════════ FEATURES ══════════════ */}
+      <section className="py-24 px-4 sm:px-6 bg-[#0F1E35]">
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <span className="text-xs font-bold text-[#C9A84C] uppercase tracking-[0.2em] mb-4 block">Herramientas y recursos</span>
+              <span className="text-xs font-bold text-[#00D4FF] uppercase tracking-[0.2em] mb-4 block">Plataforma de última generación</span>
               <h2 className="text-4xl sm:text-5xl font-black leading-tight mb-6 text-white">
-                Empieza tu viaje<br /><span className="text-[#C9A84C]">con Orion Capital.</span>
+                Todo lo que un<br />inversor profesional<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00D4FF] to-[#7B61FF]">necesita.</span>
               </h2>
-              <p className="text-white/50 text-lg leading-relaxed mb-8">
-                Todo lo que necesitas para operar como un profesional. Desde gráficos avanzados hasta calendarios económicos y cursos de formación.
+              <p className="text-white/45 text-lg leading-relaxed mb-8">
+                Desde gráficos técnicos avanzados hasta análisis de rendimiento institucional. Orion Capital reúne las herramientas que marcan la diferencia.
               </p>
               <button
                 onClick={() => window.location.href = createPageUrl('Register')}
-                className="flex items-center gap-2 px-7 py-3.5 bg-[#C9A84C] hover:bg-[#b8943f] text-[#0B0F1A] font-black rounded-full transition-all text-sm shadow-lg shadow-[#C9A84C]/20"
+                className="flex items-center gap-2 px-7 py-3.5 bg-[#00D4FF] hover:bg-[#00BBDD] text-[#0A1628] font-black rounded-full transition-all text-sm shadow-lg shadow-[#00D4FF]/20"
               >
-                Abrir cuenta gratis <ArrowRight className="h-4 w-4" />
+                Explorar la plataforma <ArrowRight className="h-4 w-4" />
               </button>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {FEATURES.map((f, i) => {
                 const Icon = f.icon;
                 return (
-                  <div key={i} className="bg-white/[0.04] border border-white/[0.08] rounded-2xl p-5 hover:border-white/15 hover:bg-white/[0.06] transition-all group">
+                  <div key={i} className="bg-[#0A1628] border border-white/8 rounded-2xl p-5 hover:border-[#00D4FF]/20 transition-all group">
                     <div className="flex items-center gap-2 mb-3">
-                      <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: `${f.accent}18` }}>
+                      <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: `${f.accent}15` }}>
                         <Icon className="h-4 w-4" style={{ color: f.accent }} />
                       </div>
-                      <span className="text-[10px] px-2 py-0.5 rounded-full font-bold" style={{ background: `${f.accent}18`, color: f.accent }}>{f.tag}</span>
+                      <span className="text-[10px] px-2 py-0.5 rounded-full font-bold" style={{ background: `${f.accent}15`, color: f.accent }}>{f.tag}</span>
                     </div>
                     <h3 className="font-black text-white text-sm mb-2">{f.title}</h3>
-                    <p className="text-xs text-white/45 leading-relaxed">{f.desc}</p>
+                    <p className="text-xs text-white/40 leading-relaxed">{f.desc}</p>
                   </div>
                 );
               })}
@@ -395,32 +419,33 @@ export default function HomePage() {
       </section>
 
       {/* ══════════════ SECURITY ══════════════ */}
-      <section className="py-24 px-4 sm:px-6 bg-white">
+      <section className="py-24 px-4 sm:px-6 bg-[#0A1628]">
         <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
           <div>
-            <span className="text-xs font-bold text-[#C9A84C] uppercase tracking-[0.2em] mb-4 block">Seguridad de fortaleza</span>
-            <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-6 leading-tight">
-              Trading seguro,<br />tranquilidad total.
+            <span className="text-xs font-bold text-[#7B61FF] uppercase tracking-[0.2em] mb-4 block">Seguridad de nivel bancario</span>
+            <h2 className="text-4xl sm:text-5xl font-black text-white mb-6 leading-tight">
+              Tu capital,<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00D4FF] to-[#7B61FF]">siempre protegido.</span>
             </h2>
-            <p className="text-gray-500 text-lg leading-relaxed mb-10">
-              Tu capital merece protección de nivel militar y gestión transparente. Nuestra tecnología de vanguardia garantiza ejecución al instante y te ayuda a identificar las mejores oportunidades con precisión.
+            <p className="text-white/45 text-lg leading-relaxed mb-10">
+              Operamos bajo estándares de seguridad institucional. Tus fondos están completamente segregados, auditados y protegidos con encriptación de grado militar.
             </p>
             <Link
               to={createPageUrl('About')}
-              className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#C9A84C] hover:bg-[#b8943f] text-[#0B0F1A] font-black rounded-full transition-all text-sm shadow-lg shadow-[#C9A84C]/25"
+              className="inline-flex items-center gap-2 px-7 py-3.5 border border-[#00D4FF]/30 text-[#00D4FF] hover:bg-[#00D4FF]/10 font-black rounded-full transition-all text-sm"
             >
-              Conoce nuestras cuentas <ArrowRight className="h-4 w-4" />
+              Conoce más sobre nosotros <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
           <div className="grid grid-cols-1 gap-3">
             {SECURITY_ITEMS.map((item, i) => {
               const Icon = item.icon;
               return (
-                <div key={i} className="flex items-center gap-4 bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 hover:border-[#C9A84C]/30 hover:bg-[#C9A84C]/3 transition-all group">
-                  <div className="w-10 h-10 rounded-xl bg-[#C9A84C]/10 flex items-center justify-center flex-shrink-0 group-hover:bg-[#C9A84C]/20 transition-colors">
-                    <Icon className="h-5 w-5 text-[#C9A84C]" />
+                <div key={i} className="flex items-center gap-4 bg-[#0F1E35] border border-white/8 rounded-2xl px-5 py-4 hover:border-[#00D4FF]/25 transition-all group">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#00D4FF]/12 to-[#7B61FF]/12 flex items-center justify-center flex-shrink-0">
+                    <Icon className="h-5 w-5 text-[#00D4FF]" />
                   </div>
-                  <span className="font-semibold text-gray-800 text-sm">{item.label}</span>
+                  <span className="font-semibold text-white/70 text-sm group-hover:text-white transition-colors">{item.label}</span>
+                  <CheckCircle2 className="h-4 w-4 text-[#00D4FF]/50 ml-auto flex-shrink-0" />
                 </div>
               );
             })}
@@ -430,31 +455,31 @@ export default function HomePage() {
 
       {/* ══════════════ TESTIMONIALS ══════════════ */}
       {testimonials.length > 0 && (
-        <section className="py-24 px-4 sm:px-6 bg-gray-50">
+        <section className="py-24 px-4 sm:px-6 bg-[#0F1E35]">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-14">
-              <span className="text-xs font-bold text-[#C9A84C] uppercase tracking-[0.2em] mb-3 block">Confiado globalmente</span>
-              <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Lo que dicen<br />nuestros traders</h2>
+              <span className="text-xs font-bold text-[#00D4FF] uppercase tracking-[0.2em] mb-3 block">Opiniones reales</span>
+              <h2 className="text-4xl sm:text-5xl font-black text-white">Lo que dicen<br />nuestros inversores</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {testimonials.slice(0, 6).map((t) => (
-                <div key={t.id} className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all hover:border-[#C9A84C]/20">
+                <div key={t.id} className="bg-[#0A1628] border border-white/8 rounded-2xl p-6 hover:border-[#00D4FF]/20 transition-all">
                   <StarRating rating={t.rating || 5} />
-                  <p className="text-gray-600 text-sm leading-relaxed my-4">"{t.text}"</p>
-                  <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#C9A84C] to-[#0B0F1A] flex items-center justify-center text-sm font-black text-white flex-shrink-0">
+                  <p className="text-white/55 text-sm leading-relaxed my-4">"{t.text}"</p>
+                  <div className="flex items-center gap-3 pt-4 border-t border-white/8">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#00D4FF] to-[#7B61FF] flex items-center justify-center text-sm font-black text-white flex-shrink-0">
                       {t.name[0]}
                     </div>
                     <div>
-                      <div className="text-sm font-bold text-gray-900">{t.name}</div>
-                      <div className="text-xs text-gray-400">{t.role}{t.company ? ` · ${t.company}` : ''}</div>
+                      <div className="text-sm font-bold text-white">{t.name}</div>
+                      <div className="text-xs text-white/35">{t.role}{t.company ? ` · ${t.company}` : ''}</div>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
             <div className="text-center mt-8">
-              <Link to={createPageUrl('Testimonials')} className="text-sm text-[#C9A84C] hover:text-[#b8943f] font-bold transition-colors">
+              <Link to={createPageUrl('Testimonials')} className="text-sm text-[#00D4FF] hover:text-[#00BBDD] font-bold transition-colors">
                 Ver todos los testimonios →
               </Link>
             </div>
@@ -464,29 +489,29 @@ export default function HomePage() {
 
       {/* ══════════════ AWARDS ══════════════ */}
       {awards.length > 0 && (
-        <section className="py-20 px-4 sm:px-6 bg-white">
+        <section className="py-20 px-4 sm:px-6 bg-[#0A1628]">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-14">
-              <span className="text-xs font-bold text-amber-500 uppercase tracking-[0.2em] mb-3 block">Reconocimientos del grupo</span>
-              <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Premios & Excelencia</h2>
+              <span className="text-xs font-bold text-[#7B61FF] uppercase tracking-[0.2em] mb-3 block">Reconocimientos del grupo</span>
+              <h2 className="text-4xl sm:text-5xl font-black text-white">Premios & Excelencia</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {awards.slice(0, 6).map((a, idx) => {
                 const awardIcons = [Trophy, Medal, BadgeCheck, Gem, Award, Star];
-                const awardColors = ['#f59e0b', '#1a1aff', '#80cc00', '#7C3AED', '#ef5350', '#06b6d4'];
-                const awardBgs = ['#f59e0b15', '#1a1aff15', '#80cc0015', '#7C3AED15', '#ef535015', '#06b6d415'];
+                const awardColors = ['#00D4FF', '#7B61FF', '#00D4FF', '#7B61FF', '#00D4FF', '#7B61FF'];
+                const awardBgs = ['#00D4FF12', '#7B61FF12', '#00D4FF12', '#7B61FF12', '#00D4FF12', '#7B61FF12'];
                 const AIcon = awardIcons[idx % awardIcons.length];
                 const aColor = awardColors[idx % awardColors.length];
                 const aBg = awardBgs[idx % awardBgs.length];
                 return (
-                  <div key={a.id} className="flex items-start gap-4 bg-white border border-gray-100 rounded-2xl p-5 hover:shadow-lg transition-all group cursor-default">
-                    <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform border" style={{ background: aBg, borderColor: aColor + '30' }}>
+                  <div key={a.id} className="flex items-start gap-4 bg-[#0F1E35] border border-white/8 rounded-2xl p-5 hover:border-[#00D4FF]/20 transition-all group">
+                    <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform" style={{ background: aBg, border: `1px solid ${aColor}30` }}>
                       <AIcon className="h-5 w-5" style={{ color: aColor }} />
                     </div>
                     <div>
-                      <div className="font-bold text-gray-900 text-sm mb-0.5">{a.title}</div>
+                      <div className="font-bold text-white text-sm mb-0.5">{a.title}</div>
                       <div className="text-xs font-bold" style={{ color: aColor }}>{a.issuer} · {a.year}</div>
-                      {a.description && <p className="text-xs text-gray-400 mt-1.5 leading-relaxed line-clamp-2">{a.description}</p>}
+                      {a.description && <p className="text-xs text-white/35 mt-1.5 leading-relaxed line-clamp-2">{a.description}</p>}
                     </div>
                   </div>
                 );
@@ -497,30 +522,30 @@ export default function HomePage() {
       )}
 
       {/* ══════════════ FAQ ══════════════ */}
-      <section className="py-24 px-4 sm:px-6 bg-gray-50">
+      <section className="py-24 px-4 sm:px-6 bg-[#0F1E35]">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-14">
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-3 block">FAQ</span>
-            <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Preguntas<br />frecuentes</h2>
+            <span className="text-xs font-bold text-white/25 uppercase tracking-[0.2em] mb-3 block">Soporte</span>
+            <h2 className="text-4xl sm:text-5xl font-black text-white">Preguntas<br />frecuentes</h2>
           </div>
-          <div className="space-y-1 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-            {displayFaqs.map((f, idx) => (
-              <div key={f.id} className={idx > 0 ? 'border-t border-gray-100' : ''}>
+          <div className="space-y-2">
+            {displayFaqs.map((f) => (
+              <div key={f.id} className="bg-[#0A1628] border border-white/8 rounded-2xl overflow-hidden hover:border-[#00D4FF]/20 transition-all">
                 <button
                   onClick={() => setOpenFaq(openFaq === f.id ? null : f.id)}
-                  className="w-full flex items-center justify-between px-6 py-5 text-left hover:bg-gray-50 transition-colors"
+                  className="w-full flex items-center justify-between px-6 py-5 text-left"
                 >
-                  <span className="font-bold text-gray-900 pr-4">{f.question}</span>
-                  <ChevronDown className={`h-4 w-4 text-gray-400 flex-shrink-0 transition-transform duration-300 ${openFaq === f.id ? 'rotate-180 text-[#1a1aff]' : ''}`} />
+                  <span className="font-bold text-white/85 pr-4">{f.question}</span>
+                  <ChevronDown className={`h-4 w-4 text-white/30 flex-shrink-0 transition-transform duration-300 ${openFaq === f.id ? 'rotate-180 text-[#00D4FF]' : ''}`} />
                 </button>
                 {openFaq === f.id && (
-                  <div className="px-6 pb-5 text-sm text-gray-500 leading-relaxed">{f.answer}</div>
+                  <div className="px-6 pb-5 text-sm text-white/45 leading-relaxed border-t border-white/5 pt-3">{f.answer}</div>
                 )}
               </div>
             ))}
           </div>
           <div className="text-center mt-8">
-            <Link to={createPageUrl('FAQ')} className="text-sm text-[#C9A84C] hover:text-[#b8943f] font-bold transition-colors">
+            <Link to={createPageUrl('FAQ')} className="text-sm text-[#00D4FF] hover:text-[#00BBDD] font-bold transition-colors">
               Ver todas las preguntas →
             </Link>
           </div>
@@ -528,32 +553,38 @@ export default function HomePage() {
       </section>
 
       {/* ══════════════ FINAL CTA ══════════════ */}
-      <section className="relative py-32 px-4 sm:px-6 overflow-hidden bg-[#0B0F1A]">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_70%_at_50%_50%,rgba(201,168,76,0.10),transparent)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_40%_at_85%_15%,rgba(201,168,76,0.05),transparent)]" />
+      <section className="relative py-32 px-4 sm:px-6 overflow-hidden bg-[#0A1628]">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_50%_50%,rgba(0,212,255,0.08),transparent)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_40%_at_80%_20%,rgba(123,97,255,0.06),transparent)]" />
+        {/* Decorative ring */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="w-[600px] h-[600px] rounded-full border border-[#00D4FF]/5" />
+          <div className="absolute w-[400px] h-[400px] rounded-full border border-[#7B61FF]/5" />
+        </div>
         <div className="relative max-w-3xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C]/25 text-xs text-[#C9A84C] font-bold mb-8 uppercase tracking-wide">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#C9A84C] animate-pulse" />
-            Plataforma activa · Únete hoy
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#00D4FF]/10 border border-[#00D4FF]/20 text-xs text-[#00D4FF] font-bold mb-8 uppercase tracking-wide">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#00D4FF] animate-pulse" />
+            Únete a +5,000 inversores globales
           </div>
           <h2 className="text-5xl sm:text-6xl font-black mb-5 leading-tight text-white">
-            ¿Listo para invertir<br />como un <span className="text-[#C9A84C]">profesional?</span>
+            Tu ventaja en los<br />mercados empieza<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00D4FF] to-[#7B61FF]">aquí y ahora.</span>
           </h2>
-          <p className="text-lg text-white/40 mb-10">
-            Cuenta demo gratuita activada al instante. Sin esperas, sin depósito previo.
+          <p className="text-lg text-white/35 mb-10">
+            Demo gratuita de $10,000 activada al instante. Sin depósito, sin papeleo.
           </p>
           <button
             onClick={() => window.location.href = createPageUrl('Register')}
-            className="group inline-flex items-center gap-3 px-10 py-5 bg-[#C9A84C] hover:bg-[#b8943f] text-[#0B0F1A] font-black rounded-full text-xl transition-all shadow-2xl shadow-[#C9A84C]/20 hover:scale-[1.04]"
+            className="group inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-[#00D4FF] to-[#7B61FF] text-white font-black rounded-full text-xl transition-all hover:opacity-90 hover:scale-[1.03] shadow-2xl shadow-[#00D4FF]/15"
           >
-            Abrir cuenta ahora
+            Abrir cuenta gratis
             <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
           </button>
-          <div className="flex items-center justify-center gap-6 mt-8 text-xs text-white/30 flex-wrap">
-            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#C9A84C]" />Cuenta demo $10K</span>
-            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#C9A84C]" />Spreads desde 0.0 pips</span>
-            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#C9A84C]" />Activación inmediata</span>
+          <div className="flex items-center justify-center gap-6 mt-8 text-xs text-white/25 flex-wrap">
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#00D4FF]/60" />Sin depósito inicial</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#00D4FF]/60" />Activación inmediata</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#00D4FF]/60" />50+ instrumentos</span>
           </div>
+          <p className="text-xs text-white/15 mt-6">El trading de CFDs conlleva un riesgo significativo de pérdida de capital.</p>
         </div>
       </section>
 
