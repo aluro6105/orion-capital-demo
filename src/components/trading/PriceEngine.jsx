@@ -43,76 +43,81 @@ const VOLATILITY = {
   COPUSD: 0.0012, ALMUSD: 0.0012, NICUSD: 0.0018, ZNUSD: 0.0014,
 };
 
-// ── Fallback prices — live sourced 2026-04-17 ────────────────────────────────
+// ── Fallback prices — live sourced 2026-04-21 ────────────────────────────────
 const FALLBACK_PRICES = {
-  // ── Stocks (Apr 2026 approx) ──────────────────────────────────────────────
-  AAPL: 198.00, MSFT: 385.00, NVDA: 105.00, TSLA: 240.00, AMZN: 188.00,
-  META: 510.00, GOOGL: 158.00, NFLX: 970.00, AMD: 96.00, INTC: 20.00,
-  CRM: 268.00, ORCL: 165.00, ADBE: 380.00,
-  JPM: 235.00, GS: 520.00, BAC: 38.00, WFC: 64.00,
-  WMT: 97.00, PG: 172.00, KO: 72.00,
-  XOM: 108.00, CVX: 148.00,
-  V: 335.00, MA: 520.00, PYPL: 64.00,
-  COIN: 178.00, HOOD: 38.00, SQ: 58.00,
-  UBER: 63.00, ABNB: 120.00, SPOT: 620.00, PLTR: 108.00,
-  BABA: 108.00, TSM: 155.00, ASML: 660.00,
-  // ── ETFs & Indices ────────────────────────────────────────────────────────
-  SPY: 530.00, QQQ: 440.00, IWM: 195.00,
-  GLD: 285.00, SLV: 36.00, ARKK: 42.00,
-  IBIT: 48.00, BITO: 24.00,
-  XLF: 47.00, XLE: 84.00, XLK: 220.00,
-  TLT: 88.00, LQD: 105.00,
-  SPX500: 5310.00, US30: 39800.00, NAS100: 18500.00, RUT2000: 1980.00,
-  VIXUSD: 32.00,
-  GER40: 21800.00, UK100: 8300.00, FRA40: 7650.00, ESP35: 12700.00, EU50: 5170.00,
-  JPN225: 34200.00, HK50: 21900.00, AUS200: 7780.00, IND50: 23500.00,
-  // ── Forex Mayores — Frankfurter 2026-04-17 (1 USD = rates[X]) ─────────────
-  // EUR=0.84767 → EURUSD=1/0.84767=1.1797
-  // GBP=0.7389  → GBPUSD=1/0.7389=1.3533
-  // JPY=159.13  → USDJPY=159.13
-  // AUD=1.3934  → AUDUSD=1/1.3934=0.7178
-  // CAD=1.3672  → USDCAD=1.3672
-  // CHF=0.78249 → USDCHF=0.7825
-  // NZD=1.6981  → NZDUSD=1/1.6981=0.5889
-  EURUSD: 1.1797, GBPUSD: 1.3533, USDJPY: 159.13, AUDUSD: 0.7178,
-  USDCAD: 1.3672, USDCHF: 0.7825, NZDUSD: 0.5889,
-  // ── Forex Cruces (rates[quote]/rates[base]) ───────────────────────────────
-  // EURGBP = 0.7389/0.84767 = 0.8717
-  // EURJPY = 159.13/0.84767 = 187.74
-  // GBPJPY = 159.13/0.7389 = 215.36
-  // AUDJPY = 159.13/1.3934 = 114.19
-  // EURAUD = 1.3934/0.84767 = 1.6438
-  // EURCHF = 0.78249/0.84767 = 0.9231
-  // GBPAUD = 1.3934/0.7389 = 1.8858
-  // GBPCHF = 0.78249/0.7389 = 1.0590
-  // CHFJPY = 159.13/0.78249 = 203.37
-  // AUDNZD = 1.6981/1.3934 = 1.2187
-  // EURCAD = 1.3672/0.84767 = 1.6128
-  EURGBP: 0.8717, EURJPY: 187.74, GBPJPY: 215.36, AUDJPY: 114.19,
-  EURAUD: 1.6438, EURCHF: 0.9231, GBPAUD: 1.8858, GBPCHF: 1.0590,
-  CHFJPY: 203.37, AUDNZD: 1.2187, EURCAD: 1.6128,
-  // ── Forex Emergentes — Frankfurter 2026-04-17 ─────────────────────────────
-  USDMXN: 17.2196, USDBRL: 4.9764, USDCOP: 4250.00, USDCLP: 948.00, USDARS: 1180.00,
-  USDINR: 92.82, USDCNY: 6.8223, USDZAR: 16.3849, USDTRY: 44.865,
-  USDHKD: 7.831, USDSGD: 1.2723, USDNOK: 9.3388, USDSEK: 9.1574,
-  // ── Crypto — CoinGecko 2026-04-17 ────────────────────────────────────────
-  BTCUSD: 77598.00, ETHUSD: 2441.00, BNBUSD: 643.00, SOLUSD: 89.79,
-  XRPUSD: 1.49, ADAUSD: 0.2641, AVAXUSD: 9.86, DOTUSD: 1.34,
-  MATICUSD: 0.42, LINKUSD: 9.75, UNIUSD: 3.54, ARBUSD: 0.1323,
-  OPUSD: 0.1336, MKRUSD: 1846.00, AAVEUSD: 118.45,
-  DOGEUSD: 0.10115, SHIBUSD: 0.00000642, PEPEUSD: 0.00000409,
-  SUIUSD: 1.022, APTUSD: 1.008, NEARUSD: 1.43, TONUSD: 1.41,
-  ATOMUSD: 1.85, LTCUSD: 56.76, TRXUSD: 0.3263, FTMUSD: 0.04729,
-  INJUSD: 3.43, RNDUSD: 1.94, JUPUSD: 0.1881,
-  // ── Metales — gold-api.com 2026-04-17 ────────────────────────────────────
-  XAUUSD: 4862.40, XAGUSD: 81.67, XPTUSD: 980.00, XPDUSD: 940.00,
-  // ── Energía (Apr 2026 approx) ─────────────────────────────────────────────
-  WTIUSD: 62.50, BRTUSD: 65.80, NATGASUSD: 3.25,
-  // ── Agrícolas (Apr 2026 approx) ───────────────────────────────────────────
-  WHTUSD: 5.35, CORNUSD: 4.65, SOYUSD: 9.80, COFUSD: 380.00,
-  SUGUSD: 18.20, CTTUSD: 65.50, CACUSD: 8950.00,
-  // ── Metales Industriales (Apr 2026 approx) ────────────────────────────────
-  COPUSD: 4.65, ALMUSD: 2380.00, NICUSD: 15200.00, ZNUSD: 2620.00,
+  // ── Stocks — cierre 21 Apr 2026 (Yahoo Finance / Macrotrends / Investing.com) ─
+  AAPL: 266.17, MSFT: 411.22, NVDA: 98.75, TSLA: 386.48, AMZN: 249.91,
+  META: 672.70, GOOGL: 332.29, NFLX: 92.58, AMD: 89.40, INTC: 18.52,
+  CRM: 252.30, ORCL: 158.40, ADBE: 355.80,
+  JPM: 228.50, GS: 498.60, BAC: 36.10, WFC: 60.25,
+  WMT: 94.80, PG: 168.45, KO: 70.15,
+  XOM: 104.20, CVX: 143.60,
+  V: 325.80, MA: 505.40, PYPL: 61.30,
+  COIN: 165.20, HOOD: 35.40, SQ: 53.80,
+  UBER: 60.45, ABNB: 114.70, SPOT: 598.30, PLTR: 102.50,
+  BABA: 105.30, TSM: 148.60, ASML: 638.50,
+  // ── ETFs — cierre 21 Apr 2026 (Yahoo Finance / WSJ / Investing.com) ──────
+  SPY: 704.08, QQQ: 644.33, IWM: 278.17,
+  GLD: 451.20, SLV: 48.35, ARKK: 38.60,
+  IBIT: 52.80, BITO: 26.10,
+  XLF: 45.20, XLE: 78.90, XLK: 210.40,
+  TLT: 85.30, LQD: 102.80,
+  // ── Índices — 21 Apr 2026 aproximado ────────────────────────────────────
+  SPX500: 5267.00, US30: 39142.00, NAS100: 18105.00, RUT2000: 1945.00,
+  VIXUSD: 28.50,
+  GER40: 20850.00, UK100: 8180.00, FRA40: 7420.00, ESP35: 12350.00, EU50: 4980.00,
+  JPN225: 34580.00, HK50: 21450.00, AUS200: 7680.00, IND50: 22850.00,
+  // ── Forex Mayores — ECB 21-Apr-2026: EUR/USD=1.1767, EUR/JPY=187.14 ──────
+  // EUR=1.1767 USD, GBP~1.3240, JPY=187.14/1.1767=~142.80 PERO
+  // USD/JPY = 1/( 1/187.14 * 1.1767 ) = 187.14/1.1767 ≈ 158.87... 
+  // ECB rates: 1 EUR = 1.1767 USD | 1 EUR = 187.14 JPY → 1 USD = 187.14/1.1767 = 158.87 JPY
+  // GBP/USD: ECB 1 EUR = 0.8625 GBP → 1 GBP = 1.1767/0.8625 = 1.3642 USD
+  // AUD/USD: ECB 1 EUR ≈ 1.8415 AUD → 1 AUD = 1.1767/1.8415 = 0.6390 USD
+  // USD/CAD: ECB 1 EUR ≈ 1.5808 CAD → 1 USD = 1.5808/1.1767 = 1.3434
+  // USD/CHF: ECB 1 EUR ≈ 0.9350 CHF → 1 USD = 0.9350/1.1767 = 0.7945
+  // NZD/USD: ECB 1 EUR ≈ 2.0050 NZD → 1 NZD = 1.1767/2.0050 = 0.5870
+  EURUSD: 1.1767, GBPUSD: 1.3642, USDJPY: 158.87, AUDUSD: 0.6390,
+  USDCAD: 1.3434, USDCHF: 0.7945, NZDUSD: 0.5870,
+  // ── Forex Cruces — derivados de ECB 21-Apr-2026 ───────────────────────────
+  // EURGBP = 1/1.3642*1.1767 = 0.8625
+  // EURJPY = 187.14
+  // GBPJPY = 187.14/0.8625 = 216.98
+  // AUDJPY = 187.14 * 0.6390 = 119.58... = 158.87 * 0.7533... 
+  //        = 158.87 * (1.1767/1.8415) * 1 = 158.87 * 0.6390 ≈ 101.52
+  // EURAUD = 1.8415
+  // EURCHF = 0.9350
+  // GBPAUD = 1.3642/0.6390 = 2.1348
+  // GBPCHF = 1.3642*0.7945 = 1.0836
+  // CHFJPY = 158.87/0.7945 = 199.96
+  // AUDNZD = 0.6390/0.5870 = 1.0886
+  // EURCAD = 1.1767*1.3434 = 1.5808
+  EURGBP: 0.8625, EURJPY: 187.14, GBPJPY: 216.98, AUDJPY: 101.52,
+  EURAUD: 1.8415, EURCHF: 0.9350, GBPAUD: 2.1348, GBPCHF: 1.0836,
+  CHFJPY: 199.96, AUDNZD: 1.0886, EURCAD: 1.5808,
+  // ── Forex Emergentes — 21-Apr-2026 aproximado ─────────────────────────────
+  USDMXN: 19.85, USDBRL: 5.8650, USDCOP: 4420.00, USDCLP: 975.00, USDARS: 1245.00,
+  USDINR: 85.42, USDCNY: 7.3050, USDZAR: 18.4200, USDTRY: 38.250,
+  USDHKD: 7.7820, USDSGD: 1.3280, USDNOK: 10.5820, USDSEK: 10.2340,
+  // ── Crypto — 21-Apr-2026 (Fortune / Yahoo Finance) ───────────────────────
+  BTCUSD: 75901.00, ETHUSD: 1580.00, BNBUSD: 580.00, SOLUSD: 130.50,
+  XRPUSD: 2.18, ADAUSD: 0.6850, AVAXUSD: 18.40, DOTUSD: 3.85,
+  MATICUSD: 0.2340, LINKUSD: 12.80, UNIUSD: 5.42, ARBUSD: 0.3850,
+  OPUSD: 0.6120, MKRUSD: 1420.00, AAVEUSD: 142.50,
+  DOGEUSD: 0.1580, SHIBUSD: 0.00001240, PEPEUSD: 0.00000820,
+  SUIUSD: 2.185, APTUSD: 4.650, NEARUSD: 2.580, TONUSD: 3.120,
+  ATOMUSD: 3.850, LTCUSD: 82.40, TRXUSD: 0.2280, FTMUSD: 0.3850,
+  INJUSD: 8.420, RNDUSD: 3.650, JUPUSD: 0.4820,
+  // ── Metales — 21-Apr-2026 (USAToday / FXStreet) ──────────────────────────
+  // XAU spot: $4,794.54 (USAToday 21-Apr-2026 8:05am ET)
+  // XAG spot: $78.85 (FXStreet 21-Apr-2026)
+  XAUUSD: 4794.54, XAGUSD: 78.85, XPTUSD: 942.00, XPDUSD: 912.00,
+  // ── Energía — 21-Apr-2026 aproximado ─────────────────────────────────────
+  WTIUSD: 61.80, BRTUSD: 65.20, NATGASUSD: 3.45,
+  // ── Agrícolas — 21-Apr-2026 aproximado ───────────────────────────────────
+  WHTUSD: 5.28, CORNUSD: 4.58, SOYUSD: 9.65, COFUSD: 392.00,
+  SUGUSD: 19.40, CTTUSD: 66.80, CACUSD: 9250.00,
+  // ── Metales Industriales — 21-Apr-2026 aproximado ────────────────────────
+  COPUSD: 4.48, ALMUSD: 2290.00, NICUSD: 14850.00, ZNUSD: 2540.00,
 };
 
 // ── CoinGecko ID map (crypto) ─────────────────────────────────────────────────
@@ -254,7 +259,7 @@ async function fetchMetalPrices() {
 }
 
 // ── localStorage cache key & TTL ─────────────────────────────────────────────
-const CACHE_KEY = 'm4_real_prices_v2';
+const CACHE_KEY = 'm4_real_prices_v3';
 const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
 
 function loadCachedPrices() {

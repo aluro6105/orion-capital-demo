@@ -30,10 +30,10 @@ export default function PortalSidebar({ currentPage, onClose }) {
       {/* Logo */}
       <div className="flex items-center justify-between h-14 px-4 border-b border-[#1e2130]">
         <Link to={createPageUrl('Dashboard')} className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#2196F3] to-[#1565C0] flex items-center justify-center">
-            <BarChart3 className="h-4 w-4 text-white" />
+          <div className="w-7 h-7 rounded-lg bg-[#1E40AF] flex items-center justify-center flex-shrink-0">
+            <span className="text-white font-black text-[10px]">OC</span>
           </div>
-          <span className="text-sm font-bold text-white tracking-widest">NEXUS</span>
+          <span className="text-sm font-bold text-white tracking-tight">Orion Capital</span>
         </Link>
         {onClose && (
           <button onClick={onClose} className="text-[#787b86] hover:text-white lg:hidden">
@@ -71,7 +71,7 @@ export default function PortalSidebar({ currentPage, onClose }) {
       {/* Footer */}
       <div className="px-3 py-3 border-t border-[#1e2130]">
         <div className="text-[10px] text-[#4a4f6a] text-center">
-          NEXUS Trading Platform
+          Orion Capital · Trading Platform
         </div>
       </div>
     </div>
