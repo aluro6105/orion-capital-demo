@@ -37,7 +37,7 @@ const TICKER_DATA = [
 ];
 
 const STATS = [
-  { value: '$120M+', label: 'Volumen mensual operado' },
+  { value: '$24M+', label: 'Volumen mensual operado' },
   { value: '184', label: 'Instrumentos disponibles' },
   { value: '20+', label: 'Países con operaciones' },
   { value: '6+', label: 'Años de trayectoria' },

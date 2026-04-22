@@ -147,7 +147,14 @@ function MockupCard({ items }) {
 }
 
 export default function ProductPage() {
-  const [activeTab, setActiveTab] = React.useState('trading');
+  const getInitialTab = () => {
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get('tab');
+    if (tab === 'mercados' || tab === 'plataforma') return tab;
+    return 'trading';
+  };
+
+  const [activeTab, setActiveTab] = useState(getInitialTab);
 
   const TABS = [
     { id: 'trading', label: 'Trading' },

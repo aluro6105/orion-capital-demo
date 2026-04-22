@@ -3,9 +3,9 @@ import { createPageUrl } from '@/utils';
 import { Menu, X } from 'lucide-react';
 
 const NAV_LINKS = [
-  { label: 'Trading', href: createPageUrl('Product') },
-  { label: 'Mercados', href: createPageUrl('Product') },
-  { label: 'Plataforma', href: createPageUrl('Product') },
+  { label: 'Trading', href: createPageUrl('Product') + '?tab=trading' },
+  { label: 'Mercados', href: createPageUrl('Product') + '?tab=mercados' },
+  { label: 'Plataforma', href: createPageUrl('Product') + '?tab=plataforma' },
   { label: 'Sobre Nosotros', href: createPageUrl('About') },
   { label: 'Premios', href: createPageUrl('Awards') },
 ];

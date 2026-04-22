@@ -129,42 +129,44 @@ export default function AboutPage() {
       <PublicNav currentPage="About" />
 
       {/* ══════════ HERO ══════════ */}
-      <section className="relative min-h-[65vh] flex flex-col items-center justify-center text-center bg-[#1E40AF] overflow-hidden px-4 pt-28 pb-20">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_70%_at_50%_40%,rgba(255,255,255,0.08),transparent)]" />
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/3 translate-x-1/3" />
-        <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(rgba(255,255,255,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.5)_1px,transparent_1px)] bg-[size:70px_70px]" />
+      <section className="relative min-h-[60vh] flex flex-col items-center justify-center text-center bg-white overflow-hidden px-4 pt-28 pb-20">
+        <div className="absolute inset-0 opacity-[0.025] bg-[linear-gradient(#000_1px,transparent_1px),linear-gradient(90deg,#000_1px,transparent_1px)] bg-[size:60px_60px]" />
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#EFF6FF] to-transparent pointer-events-none" />
 
         <div className="relative max-w-4xl mx-auto">
-          <p className="text-xs font-bold text-blue-200 uppercase tracking-[0.25em] mb-4">Acerca de Orion Capital</p>
-          <h1 className="text-5xl sm:text-7xl font-black leading-none tracking-tight mb-6 text-white">
-            ACERCA DE<br /><span className="text-blue-200">ORION CAPITAL</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#EFF6FF] border border-[#BFDBFE] text-xs text-[#1E40AF] font-semibold mb-6 tracking-wide">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#1E40AF]" />
+            Acerca de Orion Capital
+          </div>
+          <h1 className="text-5xl sm:text-7xl font-black leading-none tracking-tight mb-6 text-gray-900">
+            ACERCA DE<br /><span className="text-[#1E40AF]">ORION CAPITAL</span>
           </h1>
-          <p className="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto mb-6 leading-relaxed">
+          <p className="text-lg sm:text-xl text-gray-500 max-w-2xl mx-auto mb-6 leading-relaxed">
             Los Traders Empoderados Rinden Mejor
           </p>
-          <p className="text-white/50 text-base max-w-2xl mx-auto mb-10 leading-relaxed">
-            Orion Capital te ayuda a navegar los mercados financieros con el conocimiento, la tecnología, las ideas estratégicas y el soporte que necesitas para operar con mayor confianza y consistencia.
+          <p className="text-gray-400 text-base max-w-2xl mx-auto mb-10 leading-relaxed">
+            Orion Capital te ayuda a navegar los mercados financieros con el conocimiento, la tecnología y el soporte que necesitas para operar con mayor confianza y consistencia.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <button
               onClick={() => window.location.href = createPageUrl('Register')}
-              className="group inline-flex items-center gap-2 px-8 py-4 bg-white hover:bg-gray-50 text-[#1E40AF] font-black rounded-lg transition-all shadow-xl hover:scale-[1.03]"
+              className="group inline-flex items-center gap-2 px-8 py-4 bg-[#1E40AF] hover:bg-[#1E3A8A] text-white font-black rounded-lg transition-all shadow-lg hover:scale-[1.03]"
             >
               Abrir Cuenta <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </button>
             <Link
               to={createPageUrl('Register')}
-              className="inline-flex items-center gap-2 px-6 py-4 text-white/70 font-semibold rounded-lg border border-white/25 hover:border-white/50 hover:text-white transition-all"
+              className="inline-flex items-center gap-2 px-6 py-4 text-[#1E40AF] font-semibold rounded-lg border-2 border-[#1E40AF]/20 hover:border-[#1E40AF]/50 hover:bg-[#EFF6FF] transition-all"
             >
               Prueba una cuenta demo sin riesgo
             </Link>
           </div>
-          <p className="text-xs text-white/25 mt-6">Operar con CFDs implica un riesgo significativo de pérdida de capital.</p>
+          <p className="text-xs text-gray-400 mt-6">Operar con CFDs implica un riesgo significativo de pérdida de capital.</p>
         </div>
       </section>
 
       {/* ══════════ STATS BAND ══════════ */}
-      <div className="bg-[#1E3A8A] py-10 px-4">
+      <div className="bg-[#1E40AF] py-10 px-4">
         <div className="max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-8">
           {STATS.map(s => (
             <div key={s.l} className="text-center">
@@ -282,13 +284,12 @@ export default function AboutPage() {
       </section>
 
       {/* ══════════ PRESENCIA GLOBAL ══════════ */}
-      <section className="py-24 px-4 bg-[#1E40AF] relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_50%,rgba(255,255,255,0.06),transparent)]" />
+      <section className="py-24 px-4 bg-[#F8FAFC] relative overflow-hidden">
         <div className="relative max-w-6xl mx-auto text-center">
-          <span className="text-xs font-bold text-blue-200 uppercase tracking-[0.2em] mb-4 block">Alcance regional</span>
-          <h2 className="text-4xl sm:text-5xl font-black text-white mb-6">Nuestra Presencia</h2>
-          <p className="text-white/50 max-w-2xl mx-auto mb-12 text-lg">
-            Descubre por qué traders de más de 20 países confían en Orion Capital como su plataforma de referencia.
+          <span className="text-xs font-bold text-[#1E40AF] uppercase tracking-[0.2em] mb-4 block">Alcance regional</span>
+          <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-6">Nuestra Presencia</h2>
+          <p className="text-gray-500 max-w-2xl mx-auto mb-12 text-lg">
+            Traders de más de 20 países confían en Orion Capital como su plataforma de referencia.
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {[
@@ -299,12 +300,12 @@ export default function AboutPage() {
             ].map((item, i) => {
               const Icon = item.icon;
               return (
-                <div key={i} className="bg-white/[0.07] border border-white/[0.12] rounded-2xl p-6 hover:border-white/25 transition-all group text-center">
-                  <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-4 mx-auto group-hover:bg-white/15 transition-colors">
-                    <Icon className="h-6 w-6 text-white" />
+                <div key={i} className="bg-white border border-gray-200 rounded-2xl p-6 hover:border-[#1E40AF]/30 hover:shadow-md transition-all group text-center">
+                  <div className="w-12 h-12 rounded-xl bg-[#EFF6FF] flex items-center justify-center mb-4 mx-auto group-hover:bg-[#DBEAFE] transition-colors">
+                    <Icon className="h-6 w-6 text-[#1E40AF]" />
                   </div>
-                  <h3 className="font-black text-white text-sm mb-2">{item.label}</h3>
-                  <p className="text-xs text-white/50 leading-relaxed">{item.desc}</p>
+                  <h3 className="font-black text-gray-900 text-sm mb-2">{item.label}</h3>
+                  <p className="text-xs text-gray-500 leading-relaxed">{item.desc}</p>
                 </div>
               );
             })}
@@ -400,25 +401,24 @@ export default function AboutPage() {
       </section>
 
       {/* ══════════ 3 PASOS ══════════ */}
-      <section className="py-24 px-4 bg-[#1E40AF] relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_50%_50%,rgba(255,255,255,0.06),transparent)]" />
+      <section className="py-24 px-4 bg-white relative overflow-hidden">
         <div className="relative max-w-5xl mx-auto">
           <div className="text-center mb-16">
-            <span className="text-xs font-bold text-blue-200 uppercase tracking-[0.2em] mb-3 block">Simple y rápido</span>
-            <h2 className="text-4xl sm:text-5xl font-black text-white">3 Pasos para<br />Abrir tu Cuenta</h2>
-            <p className="text-white/50 mt-4 max-w-lg mx-auto">¿Listo para empezar? Abrir tu cuenta es un proceso sencillo.</p>
+            <span className="text-xs font-bold text-[#1E40AF] uppercase tracking-[0.2em] mb-3 block">Simple y rápido</span>
+            <h2 className="text-4xl sm:text-5xl font-black text-gray-900">3 Pasos para<br />Abrir tu Cuenta</h2>
+            <p className="text-gray-500 mt-4 max-w-lg mx-auto">¿Listo para empezar? Abrir tu cuenta es un proceso sencillo.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {STEPS.map((s, i) => (
               <div key={i} className="relative text-center group">
                 {i < STEPS.length - 1 && (
-                  <div className="hidden md:block absolute top-10 left-[calc(50%+40px)] right-[-calc(50%-40px)] h-px bg-white/20" />
+                  <div className="hidden md:block absolute top-10 left-[calc(50%+40px)] right-[-calc(50%-40px)] h-px bg-gray-200" />
                 )}
-                <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white/10 border-2 border-white/20 text-white text-3xl font-black mb-6 mx-auto group-hover:border-white/50 group-hover:bg-white/15 transition-all">
+                <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-[#EFF6FF] border-2 border-[#BFDBFE] text-[#1E40AF] text-3xl font-black mb-6 mx-auto group-hover:border-[#1E40AF]/60 group-hover:bg-[#DBEAFE] transition-all">
                   {s.n}
                 </div>
-                <h3 className="text-xl font-black text-white mb-3">{s.title}</h3>
-                <p className="text-sm text-white/50 leading-relaxed max-w-xs mx-auto">{s.desc}</p>
+                <h3 className="text-xl font-black text-gray-900 mb-3">{s.title}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed max-w-xs mx-auto">{s.desc}</p>
               </div>
             ))}
           </div>
@@ -426,19 +426,20 @@ export default function AboutPage() {
       </section>
 
       {/* ══════════ FINAL CTA ══════════ */}
-      <section className="relative py-28 px-4 text-center overflow-hidden bg-white">
+      <section className="relative py-28 px-4 text-center overflow-hidden bg-[#1E40AF]">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_50%,rgba(255,255,255,0.06),transparent)]" />
         <div className="relative max-w-2xl mx-auto">
-          <h2 className="text-4xl sm:text-5xl font-black mb-4 text-gray-900 leading-tight">
-            ¿Listo para operar<br /><span className="text-[#1E40AF]">con Orion Capital?</span>
+          <h2 className="text-4xl sm:text-5xl font-black mb-4 text-white leading-tight">
+            ¿Listo para operar<br />con Orion Capital?
           </h2>
-          <p className="text-gray-500 mb-10 text-lg">Cuenta demo gratuita con $10,000 activada al instante. Sin riesgo real.</p>
+          <p className="text-white/60 mb-10 text-lg">Cuenta demo gratuita con $10,000 activada al instante. Sin riesgo real.</p>
           <button
             onClick={() => window.location.href = createPageUrl('Register')}
-            className="group inline-flex items-center gap-2 px-10 py-5 bg-[#1E40AF] hover:bg-[#1E3A8A] text-white font-black rounded-lg text-lg transition-all shadow-2xl shadow-[#1E40AF]/20 hover:scale-[1.03]"
+            className="group inline-flex items-center gap-2 px-10 py-5 bg-white hover:bg-gray-50 text-[#1E40AF] font-black rounded-lg text-lg transition-all shadow-xl hover:scale-[1.03]"
           >
             Abrir Cuenta Gratis <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
           </button>
-          <p className="text-xs text-gray-400 mt-6">Operar con CFDs implica un riesgo significativo de pérdida de capital.</p>
+          <p className="text-xs text-white/30 mt-6">Operar con CFDs implica un riesgo significativo de pérdida de capital.</p>
         </div>
       </section>
 
