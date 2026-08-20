@@ -1,0 +1,27 @@
+{
+  "name": "AdminSettings",
+  "type": "object",
+  "properties": {
+    "cash_default": {
+      "type": "number",
+      "default": 100000
+    },
+    "fee_type": {
+      "type": "string",
+      "enum": [
+        "fixed",
+        "percentage"
+      ],
+      "default": "fixed"
+    },
+    "fee_value": {
+      "type": "number",
+      "default": 0
+    },
+    "max_ws_symbols_per_user": {
+      "type": "number",
+      "default": 20
+    }
+  },
+  "required": []
+}

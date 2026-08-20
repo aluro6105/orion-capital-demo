@@ -1,0 +1,44 @@
+{
+  "name": "KycDocument",
+  "type": "object",
+  "properties": {
+    "account_id": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "doc_type": {
+      "type": "string",
+      "enum": [
+        "passport",
+        "national_id",
+        "drivers_license",
+        "proof_of_address",
+        "selfie"
+      ]
+    },
+    "file_url": {
+      "type": "string"
+    },
+    "file_name": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending"
+    },
+    "rejection_reason": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "account_id",
+    "doc_type"
+  ]
+}

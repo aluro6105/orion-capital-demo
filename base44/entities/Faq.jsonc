@@ -1,0 +1,35 @@
+{
+  "name": "Faq",
+  "type": "object",
+  "properties": {
+    "category": {
+      "type": "string",
+      "enum": [
+        "cuenta",
+        "mercado",
+        "trading",
+        "seguridad",
+        "precios"
+      ],
+      "default": "cuenta"
+    },
+    "question": {
+      "type": "string"
+    },
+    "answer": {
+      "type": "string"
+    },
+    "order_index": {
+      "type": "number",
+      "default": 0
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "question",
+    "answer"
+  ]
+}

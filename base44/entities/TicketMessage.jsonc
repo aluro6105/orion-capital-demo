@@ -1,0 +1,32 @@
+{
+  "name": "TicketMessage",
+  "type": "object",
+  "properties": {
+    "ticket_id": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "sender_role": {
+      "type": "string",
+      "enum": [
+        "user",
+        "support"
+      ]
+    },
+    "sender_name": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "attachment_url": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "ticket_id",
+    "message"
+  ]
+}

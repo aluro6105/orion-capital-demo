@@ -1,0 +1,67 @@
+{
+  "name": "BrokerTrade",
+  "type": "object",
+  "properties": {
+    "account_id": {
+      "type": "string"
+    },
+    "account_type": {
+      "type": "string",
+      "enum": [
+        "DEMO",
+        "REAL"
+      ]
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "symbol": {
+      "type": "string"
+    },
+    "instrument_name": {
+      "type": "string"
+    },
+    "side": {
+      "type": "string",
+      "enum": [
+        "buy",
+        "sell"
+      ]
+    },
+    "order_type": {
+      "type": "string",
+      "enum": [
+        "market",
+        "limit"
+      ],
+      "default": "market"
+    },
+    "qty": {
+      "type": "number"
+    },
+    "price": {
+      "type": "number"
+    },
+    "fee": {
+      "type": "number",
+      "default": 0
+    },
+    "total": {
+      "type": "number"
+    },
+    "realized_pnl": {
+      "type": "number",
+      "default": 0
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "account_id",
+    "symbol",
+    "side",
+    "qty",
+    "price"
+  ]
+}

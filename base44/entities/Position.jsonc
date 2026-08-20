@@ -1,0 +1,24 @@
+{
+  "name": "Position",
+  "type": "object",
+  "properties": {
+    "instrument_id": {
+      "type": "string"
+    },
+    "symbol": {
+      "type": "string"
+    },
+    "qty": {
+      "type": "number",
+      "default": 0
+    },
+    "avg_price": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "instrument_id",
+    "symbol"
+  ]
+}

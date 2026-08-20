@@ -1,0 +1,27 @@
+{
+  "name": "Account",
+  "type": "object",
+  "properties": {
+    "base_currency": {
+      "type": "string",
+      "default": "USD"
+    },
+    "starting_cash": {
+      "type": "number",
+      "default": 100000
+    },
+    "current_cash": {
+      "type": "number",
+      "default": 100000
+    },
+    "timezone": {
+      "type": "string",
+      "default": "America/New_York"
+    },
+    "country": {
+      "type": "string",
+      "default": "US"
+    }
+  },
+  "required": []
+}

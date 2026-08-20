@@ -1,0 +1,36 @@
+{
+  "name": "Testimonial",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string"
+    },
+    "company": {
+      "type": "string"
+    },
+    "rating": {
+      "type": "number",
+      "default": 5
+    },
+    "text": {
+      "type": "string"
+    },
+    "avatar_url": {
+      "type": "string"
+    },
+    "use_case": {
+      "type": "string"
+    },
+    "approved": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "name",
+    "text"
+  ]
+}

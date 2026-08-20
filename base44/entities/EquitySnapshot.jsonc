@@ -1,0 +1,29 @@
+{
+  "name": "EquitySnapshot",
+  "type": "object",
+  "properties": {
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "equity": {
+      "type": "number"
+    },
+    "cash": {
+      "type": "number"
+    },
+    "realized_pnl": {
+      "type": "number",
+      "default": 0
+    },
+    "unrealized_pnl": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "date",
+    "equity",
+    "cash"
+  ]
+}

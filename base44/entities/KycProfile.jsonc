@@ -1,0 +1,88 @@
+{
+  "name": "KycProfile",
+  "type": "object",
+  "properties": {
+    "account_id": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "not_started",
+        "in_review",
+        "approved",
+        "action_required"
+      ],
+      "default": "not_started"
+    },
+    "legal_first_name": {
+      "type": "string"
+    },
+    "legal_last_name": {
+      "type": "string"
+    },
+    "date_of_birth": {
+      "type": "string"
+    },
+    "nationality": {
+      "type": "string"
+    },
+    "country_of_residence": {
+      "type": "string"
+    },
+    "address_line1": {
+      "type": "string"
+    },
+    "address_line2": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "postal_code": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "employment_status": {
+      "type": "string"
+    },
+    "annual_income": {
+      "type": "string"
+    },
+    "trading_experience": {
+      "type": "string",
+      "enum": [
+        "none",
+        "beginner",
+        "intermediate",
+        "advanced"
+      ]
+    },
+    "risk_tolerance": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "submitted_at": {
+      "type": "string"
+    },
+    "reviewed_at": {
+      "type": "string"
+    },
+    "rejection_reason": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "account_id",
+    "user_id"
+  ]
+}

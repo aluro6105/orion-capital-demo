@@ -1,0 +1,49 @@
+{
+  "name": "Instrument",
+  "type": "object",
+  "properties": {
+    "symbol": {
+      "type": "string",
+      "description": "Trading symbol e.g. AAPL"
+    },
+    "name": {
+      "type": "string",
+      "description": "Full name e.g. Apple Inc."
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "stock",
+        "etf",
+        "forex",
+        "crypto"
+      ],
+      "description": "Instrument type"
+    },
+    "currency": {
+      "type": "string",
+      "default": "USD"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "provider_symbol": {
+      "type": "string",
+      "description": "Symbol used by data provider"
+    },
+    "base_price": {
+      "type": "number",
+      "description": "Reference base price for simulation"
+    },
+    "is_featured": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "symbol",
+    "name",
+    "type"
+  ]
+}

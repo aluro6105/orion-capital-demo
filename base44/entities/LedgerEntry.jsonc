@@ -1,0 +1,58 @@
+{
+  "name": "LedgerEntry",
+  "type": "object",
+  "properties": {
+    "account_id": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "deposit",
+        "withdrawal",
+        "fee",
+        "adjustment",
+        "trade_buy",
+        "trade_sell",
+        "virtual_add"
+      ]
+    },
+    "amount": {
+      "type": "number"
+    },
+    "currency": {
+      "type": "string",
+      "default": "USD"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "completed",
+        "rejected",
+        "cancelled"
+      ],
+      "default": "pending"
+    },
+    "reference": {
+      "type": "string"
+    },
+    "method": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "admin_notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "account_id",
+    "type",
+    "amount"
+  ]
+}

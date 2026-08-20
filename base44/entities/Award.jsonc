@@ -1,0 +1,41 @@
+{
+  "name": "Award",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "year": {
+      "type": "number"
+    },
+    "issuer": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "logo_url": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "innovation",
+        "education",
+        "technology",
+        "community",
+        "best_platform"
+      ],
+      "default": "innovation"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "title",
+    "year",
+    "issuer"
+  ]
+}
